@@ -16,7 +16,7 @@ and, {keyword_and, keyword_and}, EXPR_VALUE
 begin, {keyword_begin, keyword_begin}, EXPR_BEG
 break, {keyword_break, keyword_break}, EXPR_MID
 case, {keyword_case, keyword_case}, EXPR_VALUE
-match, {keyword_match, keyword_match}, EXPR_VALUE
+match, {keyword_patern, keyword_patern}, EXPR_VALUE
 class, {keyword_class, keyword_class}, EXPR_CLASS
 def, {keyword_def, keyword_def}, EXPR_FNAME
 defined?, {keyword_defined, keyword_defined}, EXPR_ARG

@@ -176,7 +176,7 @@ rb_reserved_word (str, len)
 #line 32 "defs/keywords"
       {"module", {keyword_module, keyword_module}, EXPR_VALUE},
 #line 19 "defs/keywords"
-      {"match", {keyword_match, keyword_match}, EXPR_VALUE},
+      {"match", {keyword_patern, keyword_patern}, EXPR_VALUE},
 #line 16 "defs/keywords"
       {"begin", {keyword_begin, keyword_begin}, EXPR_BEG},
 #line 10 "defs/keywords"

@@ -622,7 +622,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 	keyword_elsif
 	keyword_else
 	keyword_case
-        keyword_match
+        keyword_patern
 	keyword_when
 	keyword_while
 	keyword_until
@@ -1839,7 +1839,7 @@ op		: '|'		{ ifndef_ripper($$ = '|'); }
 reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_BEGIN | keyword_END
 		| keyword_alias | keyword_and | keyword_begin
-		| keyword_break | keyword_case| keyword_match | keyword_class 
+		| keyword_break | keyword_case| keyword_patern | keyword_class 
                 | keyword_def
 		| keyword_defined | keyword_do | keyword_else | keyword_elsif
 		| keyword_end | keyword_ensure | keyword_false
@@ -2770,7 +2770,7 @@ primary		: literal
 			$$ = dispatch2(until, $3, $6);
 		    %*/
 		    }
-                | k_match expr_value opt_terms
+                | k_patern expr_value opt_terms
                   case_body
                   k_end
                     {
@@ -3075,7 +3075,7 @@ k_case		: keyword_case
 			if (RTEST(ruby_verbose)) token_info_push(parser, "case");
 #endif
 		    }
-k_match         : keyword_match
+k_patern         : keyword_patern
                   {
 #ifndef RIPPER
                   if (RTEST(ruby_verbose)) token_info_push(parser, "match");
@@ -10038,7 +10038,7 @@ static const struct kw_assoc {
     {keyword_elsif,	"elsif"},
     {keyword_else,	"else"},
     {keyword_case,	"case"},
-    {keyword_match,     "match"},
+    {keyword_patern,     "match"},
     {keyword_when,	"when"},
     {keyword_while,	"while"},
     {keyword_until,	"until"},
