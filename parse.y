@@ -2775,7 +2775,7 @@ primary		: literal
                   k_end
                     {
 		    /*%%%*/
-			$$ = NEW_CASE($2, $4);
+			$$ = NEW_PATERN($2, $4);
 			fixpos($$, $2);
 		    /*%
 			$$ = dispatch2(case, $2, $4);

@@ -34,8 +34,8 @@ enum node_type {
 #define NODE_IF          NODE_IF
     NODE_CASE,
 #define NODE_CASE        NODE_CASE
-    NODE_MATCH,
-#define NODE_MATCH       NODE_MATCH
+    NODE_PATERN,
+#define NODE_PATERN       NODE_PATERN
     NODE_WHEN,
 #define NODE_WHEN        NODE_WHEN
     NODE_OPT_N,
@@ -368,7 +368,7 @@ typedef struct RNode {
 #define NEW_IF(c,t,e) NEW_NODE(NODE_IF,c,t,e)
 #define NEW_UNLESS(c,t,e) NEW_IF(c,e,t)
 #define NEW_CASE(h,b) NEW_NODE(NODE_CASE,h,b,0)
-#define NEW_MATCH(h,b) NEW_NODE(NODE_MATCH,h,b,0)
+#define NEW_PATERN(h,b) NEW_NODE(NODE_MATCH,h,b,0)
 #define NEW_WHEN(c,t,e) NEW_NODE(NODE_WHEN,c,t,e)
 #define NEW_OPT_N(b) NEW_NODE(NODE_OPT_N,0,b,0)
 #define NEW_WHILE(c,b,n) NEW_NODE(NODE_WHILE,c,b,n)
