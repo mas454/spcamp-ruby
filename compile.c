@@ -2250,9 +2250,6 @@ compile_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    if (opt_p && nd_type(node->nd_head) != NODE_LIT) {
 		opt_p = Qfalse;
 	    }
-	    /* if(nd_type(node->nd_head) == NODE_LVAR){
-	      NEW_LIT(node->nd_head->nd_vid);
-	      } */
 	    COMPILE_(anchor, "array element", node->nd_head, poped);
 	    node = node->nd_next;
 	}
@@ -2328,6 +2325,7 @@ when_vals(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALUE s
 	else {
 	    special_literals = Qfalse;
 	}
+
 	COMPILE(cond_seq, "when cond", val);
 	ADD_INSN1(cond_seq, nd_line(val), topn, INT2FIX(1));
 	ADD_SEND(cond_seq, nd_line(val), ID2SYM(idEqq), INT2FIX(1));
