@@ -2229,6 +2229,70 @@ compile_branch_condition(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * cond,
     }
     return COMPILE_OK;
 }
+static int
+compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
+	       VALUE opt_p, int poped)
+{
+    NODE *node = node_root;
+    int len = node->nd_alen, line = nd_line(node), i=0;
+    DECL_ANCHOR(anchor);
+    
+    INIT_ANCHOR(anchor);
+    
+    if (nd_type(node) != NODE_ZARRAY) {
+	while (node) {
+	    if (nd_type(node) != NODE_ARRAY) {
+		rb_bug("compile_array: This node is not NODE_ARRAY, but %s",
+		       ruby_node_name(nd_type(node)));
+	    }
+	    
+	    i++;
+	    if (opt_p && nd_type(node->nd_head) != NODE_LIT) {
+		opt_p = Qfalse;
+	    }
+	    //printf("head: %d node: %d\n",nd_type(node->nd_head), NODE_LVAR);
+	    if(nd_type(node->nd_head)-1==NODE_LVAR){
+	      
+	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_vid));
+	      ADD_INSN1(anchor, nd_line(node->nd_head), putobject, ID2SYM(node->nd_head->nd_vid));
+	      //COMPILE_(anchor, "array element", NEW_LIT(node->nd_head->nd_vid), poped);
+	    }else{
+	  
+	      COMPILE_(anchor, "array element", node->nd_head, poped);
+	    }
+	    node = node->nd_next;
+	}
+    }
+
+    if (len != i) {
+	if (0) {
+	    rb_bug("node error: compile_array (%d: %d-%d)",
+		   (int)nd_line(node_root), len, i);
+	}
+	len = i;
+    }
+
+    if (opt_p == Qtrue) {
+	if (!poped) {
+	    VALUE ary = rb_ary_tmp_new(len);
+	    node = node_root;
+	    while (node) {
+		rb_ary_push(ary, node->nd_head->nd_lit);
+		node = node->nd_next;
+	    }
+
+	    iseq_add_mark_object_compile_time(iseq, ary);
+	    ADD_INSN1(ret, nd_line(node_root), duparray, ary);
+	}
+    }
+    else {
+	if (!poped) {
+	    ADD_INSN1(anchor, line, newarray, INT2FIX(len));
+	}
+	APPEND_LIST(ret, anchor);
+    }
+    return len;
+}
 
 static int
 compile_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
@@ -2237,7 +2301,7 @@ compile_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
     NODE *node = node_root;
     int len = node->nd_alen, line = nd_line(node), i=0;
     DECL_ANCHOR(anchor);
-
+    
     INIT_ANCHOR(anchor);
     if (nd_type(node) != NODE_ZARRAY) {
 	while (node) {
@@ -2306,6 +2370,37 @@ case_when_optimizable_literal(NODE * node)
 	return node->nd_lit;
     }
     return Qfalse;
+}
+
+static VALUE
+when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALUE sp_lit)
+{
+  
+    while (vals) {
+	VALUE lit;
+	NODE* val;
+
+	val = vals->nd_head;
+
+	if (sp_lit &&
+	    (lit = case_when_optimizable_literal(val)) != Qfalse) {
+	    rb_ary_push(sp_lit, lit);
+	    rb_ary_push(sp_lit, (VALUE)(l1) | 1);
+	}
+	else {
+	    sp_lit = Qfalse;
+	}
+	if(nd_type(val)== NODE_ARRAY){
+	  compile_patern_array_(iseq, cond_seq, val, Qtrue, 0);
+	}else{
+	  COMPILE(cond_seq, "when cond", val);
+        }
+	ADD_INSN1(cond_seq, nd_line(val), topn, INT2FIX(1));
+	ADD_SEND(cond_seq, nd_line(val), ID2SYM(idEqq), INT2FIX(1));
+	ADD_INSNL(cond_seq, nd_line(val), branchif, l1);
+	vals = vals->nd_next;
+    }
+    return sp_lit;
 }
 
 static VALUE
@@ -3020,13 +3115,13 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    COMPILE_(ret, "when", node->nd_body, poped);
 	    break;
 	}
-	COMPILE(head, "case base", node->nd_head);
+	COMPILE(head, "match base", node->nd_head);
 
 	node = node->nd_body;
 	type = nd_type(node);
 
 	if (type != NODE_WHEN) {
-	    COMPILE_ERROR((ERROR_ARGS "NODE_CASE: unexpected node. must be NODE_WHEN, but %s", ruby_node_name(type)));
+	    COMPILE_ERROR((ERROR_ARGS "NODE_PATERN: unexpected node. must be NODE_WHEN, but %s", ruby_node_name(type)));
 	}
 
 	endlabel = NEW_LABEL(nd_line(node));
@@ -3047,7 +3142,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    if (vals) {
 		switch (nd_type(vals)) {
 		  case NODE_ARRAY:
-		    special_literals = when_vals(iseq, cond_seq, vals, l1, special_literals);
+		    special_literals = when_vals_ar(iseq, cond_seq, vals, l1, special_literals);
 		    break;
 		  case NODE_SPLAT:
 		  case NODE_ARGSCAT:
@@ -3058,12 +3153,12 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 		    ADD_INSNL(cond_seq, nd_line(vals), branchif, l1);
 		    break;
 		  default:
-		    rb_bug("NODE_CASE: unknown node (%s)",
+		    rb_bug("NODE_PATERN: unknown node (%s)",
 			   ruby_node_name(nd_type(vals)));
 		}
 	    }
 	    else {
-		rb_bug("NODE_CASE: must be NODE_ARRAY, but 0");
+		rb_bug("NODE_PATERN: must be NODE_ARRAY, but 0");
 	    }
 
 	    node = node->nd_next;
@@ -4363,7 +4458,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	if (!poped) {
 	    ID id = node->nd_vid;
 	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
-
+	    
 	    debugs("id: %s idx: %d\n", rb_id2name(id), idx);
 	    ADD_INSN1(ret, nd_line(node), getlocal, INT2FIX(idx));
 	}
