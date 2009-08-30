@@ -333,6 +333,7 @@ rb_iseq_new_with_bopt_and_opt(NODE *node, VALUE name, VALUE filename,
     iseq->self = self;
 
     prepare_iseq_build(iseq, name, filename, parent, type, bopt, option);
+   
     rb_iseq_compile_node(self, node);
     cleanup_iseq_build(iseq);
     return self;

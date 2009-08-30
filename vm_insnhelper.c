@@ -566,6 +566,7 @@ vm_call_method(rb_thread_t * const th, rb_control_frame_t * const cfp,
 		int stat = NOEX_PRIVATE;
 
 		if (flag & VM_CALL_VCALL_BIT) {
+		  
 		    stat |= NOEX_VCALL;
 		}
 		val = vm_method_missing(th, id, recv, num, blockptr, stat);
@@ -598,6 +599,7 @@ vm_call_method(rb_thread_t * const th, rb_control_frame_t * const cfp,
 	/* method missing */
 	int stat = 0;
 	if (flag & VM_CALL_VCALL_BIT) {
+	  //printf("NOEX_VCALL\n");
 	    stat |= NOEX_VCALL;
 	}
 	if (flag & VM_CALL_SUPER_BIT) {

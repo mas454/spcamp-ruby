@@ -2229,6 +2229,15 @@ compile_branch_condition(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * cond,
     }
     return COMPILE_OK;
 }
+static void var2sym(NODE* n){
+  n->flags = 0;
+  n->flags |= T_NODE;
+  nd_set_type(n, NODE_LIT);
+  
+  n->u1.value = ID2SYM(n->nd_vid);
+  n->u2.value = 0;
+  n->u3.value = 0;
+}
 static int
 compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	       VALUE opt_p, int poped)
@@ -2254,8 +2263,9 @@ compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    if(nd_type(node->nd_head)-1==NODE_LVAR){
 	      
 	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_vid));
-	      ADD_INSN1(anchor, nd_line(node->nd_head), putobject, ID2SYM(node->nd_head->nd_vid));
-	      //COMPILE_(anchor, "array element", NEW_LIT(node->nd_head->nd_vid), poped);
+	      var2sym(node->nd_head);
+	      //ADD_INSN1(anchor, nd_line(node->nd_head), putobject, ID2SYM(node->nd_head->nd_vid));
+	      ADD_INSN1(anchor, nd_line(node->nd_head), putobject, node->nd_head->nd_lit);
 	    }else{
 	  
 	      COMPILE_(anchor, "array element", node->nd_head, poped);
@@ -2375,7 +2385,7 @@ case_when_optimizable_literal(NODE * node)
 static VALUE
 when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALUE sp_lit)
 {
-  
+
     while (vals) {
 	VALUE lit;
 	NODE* val;
