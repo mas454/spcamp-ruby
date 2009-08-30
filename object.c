@@ -31,7 +31,7 @@ VALUE rb_cNilClass;
 VALUE rb_cTrueClass;
 VALUE rb_cFalseClass;
 
-static ID id_eq, id_eql, id_match, id_inspect, id_init_copy;
+static ID id_peq, id_eq, id_eql, id_match, id_inspect, id_init_copy, id_patern_match;
 
 /*
  *  call-seq:
@@ -41,12 +41,26 @@ static ID id_eq, id_eql, id_match, id_inspect, id_init_copy;
  *  as calling  <code>#==</code>, but typically overridden by descendents
  *  to provide meaningful semantics in <code>case</code> statements.
  */
+VALUE
+rb_pmatch(VALUE obj1, VALUE obj2){
+  if (obj1 == obj2) return Qtrue;
+  return Qfalse;
+}
+
+VALUE
+rb_patern_match(VALUE obj1, VALUE obj2)
+{
+  VALUE result;
+  if (obj1 == obj2) return Qtrue;
+  result = rb_funcall(obj1, id_peq, 1, obj2);
+  if (RTEST(result)) return Qtrue;
+  return Qfalse;
+}
 
 VALUE
 rb_equal(VALUE obj1, VALUE obj2)
 {
     VALUE result;
-
     if (obj1 == obj2) return Qtrue;
     result = rb_funcall(obj1, id_eq, 1, obj2);
     if (RTEST(result)) return Qtrue;
@@ -2513,6 +2527,8 @@ Init_Object(void)
 
     rb_define_method(rb_mKernel, "nil?", rb_false, 0);
     rb_define_method(rb_mKernel, "===", rb_equal, 1); 
+    rb_define_method(rb_mKernel, "patern-match", rb_patern_match, 1);
+    rb_define_method(rb_mKernel, "p-match", rb_pmatch, 1);
     rb_define_method(rb_mKernel, "=~", rb_obj_match, 1);
     rb_define_method(rb_mKernel, "!~", rb_obj_not_match, 1);
     rb_define_method(rb_mKernel, "eql?", rb_obj_equal, 1);
@@ -2650,8 +2666,10 @@ Init_Object(void)
     rb_undef_method(CLASS_OF(rb_cFalseClass), "new");
     rb_define_global_const("FALSE", Qfalse);
 
+    id_peq = rb_intern("p-match");
     id_eq = rb_intern("==");
     id_eql = rb_intern("eql?");
+    id_patern_match = rb_intern("patern-match");
     id_match = rb_intern("=~");
     id_inspect = rb_intern("inspect");
     id_init_copy = rb_intern("initialize_copy");

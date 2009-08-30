@@ -2230,11 +2230,27 @@ compile_branch_condition(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * cond,
     return COMPILE_OK;
 }
 static void var2sym(NODE* n){
+  //unsigned long flag=n->flags;
+  switch(nd_type(n)-1){
+   case NODE_CALL:
+   case NODE_VCALL:
+   case NODE_FCALL:
+   case NODE_ATTRASGN:
+     n->u1.value = ID2SYM(n->nd_mid);
+    break;
+   default:
+    n->u1.value = ID2SYM(n->nd_vid);
+  }
   n->flags = 0;
   n->flags |= T_NODE;
   nd_set_type(n, NODE_LIT);
-  
-  n->u1.value = ID2SYM(n->nd_vid);
+
+  /*if(flag==NODE_FCALL){
+    n->u1.value = ID2SYM(n->nd_mid);
+    printf("id: %s\n", rb_id2name(n->nd_mid));
+  }else{
+    n->u1.value = ID2SYM(n->nd_vid);
+    }*/
   n->u2.value = 0;
   n->u3.value = 0;
 }
@@ -2256,19 +2272,34 @@ compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    }
 	    
 	    i++;
-	    if (opt_p && nd_type(node->nd_head) != NODE_LIT) {
-		opt_p = Qfalse;
+	    
+	   switch(nd_type(node->nd_head)-1){
+	    case NODE_LVAR:
+	    case NODE_CALL:
+	    case NODE_VCALL:
+	    case NODE_FCALL:
+	      //case NODE_ATTRASGN:
+	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_mid));
+	      var2sym(node->nd_head);
+	    default:
+	      COMPILE_(anchor, "array element", node->nd_head, poped);
 	    }
-	    //printf("head: %d node: %d\n",nd_type(node->nd_head), NODE_LVAR);
-	    if(nd_type(node->nd_head)-1==NODE_LVAR){
+
+	    /*if(nd_type(node->nd_head)-1==NODE_LVAR){
 	      
 	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_vid));
 	      var2sym(node->nd_head);
+	      
 	      //ADD_INSN1(anchor, nd_line(node->nd_head), putobject, ID2SYM(node->nd_head->nd_vid));
-	      ADD_INSN1(anchor, nd_line(node->nd_head), putobject, node->nd_head->nd_lit);
-	    }else{
-	  
 	      COMPILE_(anchor, "array element", node->nd_head, poped);
+	    }else{
+	      printf("test\n");
+	      COMPILE_(anchor, "array element", node->nd_head, poped);
+	      }*/
+
+
+	    if (opt_p && nd_type(node->nd_head) != NODE_LIT) {
+		opt_p = Qfalse;
 	    }
 	    node = node->nd_next;
 	}
@@ -2405,8 +2436,11 @@ when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALU
 	}else{
 	  COMPILE(cond_seq, "when cond", val);
         }
+	
 	ADD_INSN1(cond_seq, nd_line(val), topn, INT2FIX(1));
-	ADD_SEND(cond_seq, nd_line(val), ID2SYM(idEqq), INT2FIX(1));
+	//ADD_SEND(cond_seq, nd_line(val), ID2SYM(idEqq), INT2FIX(1));
+	ADD_SEND(cond_seq, nd_line(val), ID2SYM(rb_intern("patern-match")), INT2FIX(1));
+	
 	ADD_INSNL(cond_seq, nd_line(val), branchif, l1);
 	vals = vals->nd_next;
     }

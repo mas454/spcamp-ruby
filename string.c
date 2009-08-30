@@ -6885,6 +6885,11 @@ sym_equal(VALUE sym1, VALUE sym2)
     if (sym1 == sym2) return Qtrue;
     return Qfalse;
 }
+static VALUE
+patern_equal(VALUE sym1, VALUE sym2)
+{
+    return Qtrue;
+}
 
 
 static int
@@ -7253,6 +7258,7 @@ Init_String(void)
     rb_define_singleton_method(rb_cSymbol, "all_symbols", rb_sym_all_symbols, 0); /* in parse.y */
 
     rb_define_method(rb_cSymbol, "==", sym_equal, 1);
+    rb_define_method(rb_cSymbol, "p-match", patern_equal,1); 
     rb_define_method(rb_cSymbol, "inspect", sym_inspect, 0);
     rb_define_method(rb_cSymbol, "to_s", rb_sym_to_s, 0);
     rb_define_method(rb_cSymbol, "id2name", rb_sym_to_s, 0);

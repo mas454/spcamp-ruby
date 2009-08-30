@@ -607,10 +607,12 @@ vm_call_method(rb_thread_t * const th, rb_control_frame_t * const cfp,
 	}
 	if (id == idMethodMissing) {
 	    VALUE *argv = ALLOCA_N(VALUE, num);
+	    
 	    vm_method_missing_args(th, argv, num - 1, 0, stat);
 	    rb_raise_method_missing(th, num, argv, recv, stat);
 	}
 	else {
+	  //printf("NOEX_VCALL\n");
 	    val = vm_method_missing(th, id, recv, num, blockptr, stat);
 	}
     }

@@ -27,6 +27,7 @@ static ID id_cmp;
 #define ARY_DEFAULT_SIZE 16
 #define ARY_MAX_SIZE (LONG_MAX / sizeof(VALUE))
 
+
 void
 rb_mem_clear(register VALUE *mem, register long size)
 {
@@ -2650,6 +2651,25 @@ rb_ary_rassoc(VALUE ary, VALUE value)
     }
     return Qnil;
 }
+VALUE patern_match(VALUE obj1, VALUE obj2){
+  VALUE result;
+  if (obj1 == obj2) return Qtrue;
+  result = rb_funcall(obj1, rb_intern("p-match"), 1, obj2);
+  if (RTEST(result)) return Qtrue;
+  return Qfalse;
+}
+static VALUE
+recursive_patern(VALUE ary1, VALUE ary2, int recur)
+{
+    long i;
+
+    if (recur) return Qtrue; /* Subtle! */
+    for (i=0; i<RARRAY_LEN(ary1); i++) {
+	if (!patern_match(rb_ary_elt(ary1, i), rb_ary_elt(ary2, i)))
+	    return Qfalse;
+    }
+    return Qtrue;
+}
 
 static VALUE
 recursive_equal(VALUE ary1, VALUE ary2, int recur)
@@ -2677,7 +2697,19 @@ recursive_equal(VALUE ary1, VALUE ary2, int recur)
  *     [ "a", "c", 7 ] == [ "a", "d", "f" ]   #=> false
  *
  */
-
+static VALUE
+rb_patern_match(VALUE ary1, VALUE ary2)
+{
+  if(ary1 == ary2) return Qtrue;
+  if(TYPE(ary2) != T_ARRAY) {
+    if (!rb_respond_to(ary2, rb_intern("to_ary"))) {
+      return Qfalse;
+    }
+    return rb_equal(ary2, ary1);
+  }
+  if (RARRAY_LEN(ary1) != RARRAY_LEN(ary2)) return Qfalse;
+  return rb_exec_recursive_paired(recursive_patern, ary1, ary2, ary2);
+}
 static VALUE
 rb_ary_equal(VALUE ary1, VALUE ary2)
 {
@@ -3801,6 +3833,7 @@ Init_Array(void)
     rb_define_method(rb_cArray, "frozen?",  rb_ary_frozen_p, 0);
 
     rb_define_method(rb_cArray, "==", rb_ary_equal, 1);
+    rb_define_method(rb_cArray, "patern-match",rb_patern_match,1);
     rb_define_method(rb_cArray, "eql?", rb_ary_eql, 1);
     rb_define_method(rb_cArray, "hash", rb_ary_hash, 0);
 
