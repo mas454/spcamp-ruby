@@ -1,6 +1,5 @@
 # -*- coding: utf-8  -*
-x=6
-#puts RubyVM::InstructionSequence.compile_file(__FILE__).disasm
+#x=6
 match [1,2,3,9,4,5,6] #今のRubyで実行できるけど
   when [1,2,3,x,4,5,6]
     puts "にゃー" #ここには来ない
@@ -9,4 +8,4 @@ match [1,2,3,9,4,5,6] #今のRubyで実行できるけど
   else
 end
 
-#puts RubyVM::InstructionSequence.compile_file(__FILE__).disasm
+puts RubyVM::InstructionSequence.compile_file(__FILE__).disasm

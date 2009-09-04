@@ -2275,11 +2275,11 @@ compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    
 	   switch(nd_type(node->nd_head)-1){
 	    case NODE_LVAR:
-	    case NODE_CALL:
-	    case NODE_VCALL:
-	    case NODE_FCALL:
+	      //case NODE_CALL:
+	      // case NODE_VCALL:
+	      case NODE_FCALL:
 	      //case NODE_ATTRASGN:
-	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_mid));
+	      
 	      var2sym(node->nd_head);
 	    default:
 	      COMPILE_(anchor, "array element", node->nd_head, poped);

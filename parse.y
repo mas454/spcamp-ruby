@@ -671,8 +671,8 @@ static void token_info_pop(struct parser_params*, const char *token);
 %type <node> top_compstmt top_stmts top_stmt
 %type <node> bodystmt compstmt stmts stmt expr arg primary command command_call method_call
 %type <node> expr_value arg_value primary_value
-%type <node> if_tail opt_else case_body cases opt_rescue exc_list exc_var opt_ensure
-%type <node> args call_args opt_call_args
+%type <node> if_tail opt_else patern_body matches case_body cases opt_rescue exc_list exc_var opt_ensure
+%type <node> args call_args opt_call_args patern_args
 %type <node> paren_args opt_paren_args
 %type <node> command_args aref_args opt_block_arg block_arg var_ref var_lhs
 %type <node> mrhs superclass block_call block_command
@@ -2458,6 +2458,15 @@ opt_block_arg	: ',' block_arg
 			$$ = 0;
 		    }
 		;
+patern_args     : arg_value
+                    {
+		    /*%%%*/
+			$$ = NEW_LIST($1);
+		    /*%
+			$$ = arg_add(arg_new(), $1);
+		    %*/
+		    }
+                ;
 
 args		: arg_value
 		    {
@@ -2555,6 +2564,7 @@ primary		: literal
 		| tFID
 		    {
 		    /*%%%*/
+		     
 			$$ = NEW_FCALL($1, 0);
 		    /*%
 			$$ = method_arg(dispatch1(fcall, $1), arg_new());
@@ -2700,6 +2710,7 @@ primary		: literal
 		| operation brace_block
 		    {
 		    /*%%%*/
+		       
 			$2->nd_iter = NEW_FCALL($1, 0);
 			$$ = $2;
 			fixpos($2->nd_iter, $2);
@@ -2771,7 +2782,7 @@ primary		: literal
 		    %*/
 		    }
                 | k_patern expr_value opt_terms
-                  case_body
+                  patern_body
                   k_end
                     {
 		    /*%%%*/
@@ -3589,6 +3600,7 @@ block_call	: command do_block
 method_call	: operation paren_args
 		    {
 		    /*%%%*/
+		      
 			$$ = NEW_FCALL($1, $2);
 			fixpos($$, $2);
 		    /*%
@@ -3664,7 +3676,7 @@ method_call	: operation paren_args
 		| primary_value '[' opt_call_args rbracket
 		    {
 		    /*%%%*/
-			if ($1 && nd_type($1) == NODE_SELF)
+		      if ($1 && nd_type($1) == NODE_SELF)
 			    $$ = NEW_FCALL(tAREF, $3);
 			else
 			    $$ = NEW_CALL($1, tAREF, $3);
@@ -3716,6 +3728,17 @@ brace_block	: '{'
 		    %*/
 		    }
 		;
+patern_body      : keyword_when patern_args then
+		  compstmt
+		  matches
+		    {
+		    /*%%%*/
+			$$ = NEW_WHEN($2, $4, $5);
+		    /*%
+			$$ = dispatch3(when, $2, $4, escape_Qundef($5));
+		    %*/
+		    }
+		;
 
 case_body	: keyword_when args then
 		  compstmt
@@ -3732,7 +3755,9 @@ case_body	: keyword_when args then
 cases		: opt_else
 		| case_body
 		;
-
+matches         : opt_else
+                | patern_body
+                ;
 opt_rescue	: keyword_rescue exc_list exc_var then
 		  compstmt
 		  opt_rescue
@@ -4182,6 +4207,7 @@ variable	: tIDENTIFIER
 var_ref		: variable
 		    {
 		    /*%%%*/
+		      
 			if (!($$ = gettable($1))) $$ = NEW_BEGIN(0);
 		    /*%
 			$$ = dispatch1(var_ref, $1);
@@ -8020,8 +8046,9 @@ gettable_gen(struct parser_params *parser, ID id)
     }
     else if (is_local_id(id)) {
 	if (dyna_in_block() && dvar_defined(id)) return NEW_DVAR(id);
-	if (local_id(id)) return NEW_LVAR(id);
+	if (local_id(id))return NEW_LVAR(id);
 	/* method call without arguments */
+	//printf("id: %s\n", rb_id2name(id));
 	return NEW_VCALL(id);
     }
     else if (is_global_id(id)) {
