@@ -473,7 +473,7 @@ static int lvar_defined_gen(struct parser_params*, ID);
 #endif
 #define nd_paren(node) (char)((node)->u2.id >> CHAR_BIT*2)
 #define nd_nest u3.cnt
-
+int patern_match_set=0;
 /****** Ripper *******/
 
 #ifdef RIPPER
@@ -658,6 +658,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 	keyword__LINE__
 	keyword__FILE__
 	keyword__ENCODING__
+        
 
 %token <id>   tIDENTIFIER tFID tGVAR tIVAR tCONSTANT tCVAR tLABEL
 %token <node> tINTEGER tFLOAT tSTRING_CONTENT tCHAR
@@ -669,9 +670,9 @@ static void token_info_pop(struct parser_params*, const char *token);
 %type <node> words qwords word_list qword_list word
 %type <node> literal numeric dsym cpath
 %type <node> top_compstmt top_stmts top_stmt
-%type <node> bodystmt compstmt stmts stmt expr arg primary command command_call method_call
-%type <node> expr_value arg_value primary_value
-%type <node> if_tail opt_else patern_body matches case_body cases opt_rescue exc_list exc_var opt_ensure
+%type <node> bodystmt compstmt stmts stmt expr parg arg mprimary primary command command_call method_call
+%type <node> expr_value parg_value arg_value primary_value
+%type <node> if_tail opt_else patern_body matches case_body cases opt_rescue exc_list exc_var opt_ensure k_patern_when
 %type <node> args call_args opt_call_args patern_args
 %type <node> paren_args opt_paren_args
 %type <node> command_args aref_args opt_block_arg block_arg var_ref var_lhs
@@ -1850,7 +1851,11 @@ reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_when | keyword_yield | keyword_if | keyword_unless
 		| keyword_while | keyword_until
 		;
-
+parg            : mprimary
+		    {
+			$$ = $1;
+		    }
+		; 
 arg		: lhs '=' arg
 		    {
 		    /*%%%*/
@@ -2325,7 +2330,17 @@ arg		: lhs '=' arg
 			$$ = $1;
 		    }
 		;
-
+parg_value     : parg
+                    {
+		    /*%%%*/
+			value_expr($1);
+			$$ = $1;
+		        if (!$$) $$ = NEW_NIL();
+		    /*%
+			$$ = $1;
+		    %*/
+		    }
+		;
 arg_value	: arg
 		    {
 		    /*%%%*/
@@ -2458,9 +2473,10 @@ opt_block_arg	: ',' block_arg
 			$$ = 0;
 		    }
 		;
-patern_args     : arg_value
+patern_args     : parg_value
                     {
 		    /*%%%*/
+		      patern_match_set=0;
 			$$ = NEW_LIST($1);
 		    /*%
 			$$ = arg_add(arg_new(), $1);
@@ -2552,7 +2568,20 @@ mrhs		: args ',' arg_value
 		    %*/
 		    }
 		;
-
+mprimary        : tLBRACK aref_args ']'
+		    {
+		    /*%%%*/
+			if ($2 == 0) {
+			    $$ = NEW_ZARRAY(); /* zero length array*/
+			}
+			else {
+			    $$ = $2;
+			}
+		    /*%
+			$$ = dispatch1(array, escape_Qundef($2));
+		    %*/
+		    }
+                ;
 primary		: literal
 		| strings
 		| xstring
@@ -3728,9 +3757,14 @@ brace_block	: '{'
 		    %*/
 		    }
 		;
-patern_body      : keyword_when patern_args then
-		  compstmt
-		  matches
+k_patern_when    : keyword_when
+                    {
+                        patern_match_set=1;
+                    }
+
+patern_body      : k_patern_when patern_args then
+		     compstmt
+		     matches
 		    {
 		    /*%%%*/
 			$$ = NEW_WHEN($2, $4, $5);
@@ -8046,6 +8080,11 @@ gettable_gen(struct parser_params *parser, ID id)
     }
     else if (is_local_id(id)) {
 	if (dyna_in_block() && dvar_defined(id)) return NEW_DVAR(id);
+	if(patern_match_set == 1){
+	  assignable(id, 0);
+	  printf("id: %s\n", rb_id2name(id));
+	  return NEW_LIT(ID2SYM(id));
+	}
 	if (local_id(id))return NEW_LVAR(id);
 	/* method call without arguments */
 	//printf("id: %s\n", rb_id2name(id));
