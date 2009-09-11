@@ -1180,6 +1180,7 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 		| lhs '=' mrhs
 		    {
 		    /*%%%*/
+		      
 			value_expr($3);
 			$$ = node_assign($1, $3);
 		    /*%
@@ -1189,6 +1190,7 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 		| mlhs '=' arg_value
 		    {
 		    /*%%%*/
+		      
 			$1->nd_value = $3;
 			$$ = $1;
 		    /*%
@@ -1197,6 +1199,7 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 		    }
 		| mlhs '=' mrhs
 		    {
+		     
 		    /*%%%*/
 			$1->nd_value = $3;
 			$$ = $1;
@@ -1859,6 +1862,7 @@ parg            : mprimary
 arg		: lhs '=' arg
 		    {
 		    /*%%%*/
+		      
 			value_expr($3);
 			$$ = node_assign($1, $3);
 		    /*%
@@ -2815,8 +2819,9 @@ primary		: literal
                   k_end
                     {
 		    /*%%%*/
-			$$ = NEW_PATERN($2, $4);
-			fixpos($$, $2);
+		      ID id= rb_intern("headcond");
+		      $$ = NEW_PATERN(assignable(id,$2), $4);
+		      fixpos($$, $2);
 		    /*%
 			$$ = dispatch2(case, $2, $4);
 		    %*/
@@ -4532,6 +4537,7 @@ f_arg		: f_arg_item
 f_opt		: tIDENTIFIER '=' arg_value
 		    {
 		    /*%%%*/
+		      
 			if (!is_local_id($1))
 			    yyerror("formal argument must be local variable");
 			shadowing_lvar($1);
@@ -4546,6 +4552,7 @@ f_opt		: tIDENTIFIER '=' arg_value
 f_block_opt	: tIDENTIFIER '=' primary_value
 		    {
 		    /*%%%*/
+		      
 			if (!is_local_id($1))
 			    yyerror("formal argument must be local variable");
 			shadowing_lvar($1);
@@ -8082,10 +8089,13 @@ gettable_gen(struct parser_params *parser, ID id)
 	if (dyna_in_block() && dvar_defined(id)) return NEW_DVAR(id);
 	if(patern_match_set == 1){
 	  assignable(id, 0);
-	  printf("id: %s\n", rb_id2name(id));
+	  //printf("id: %s\n", rb_id2name(id));
 	  return NEW_LIT(ID2SYM(id));
 	}
-	if (local_id(id))return NEW_LVAR(id);
+	if (local_id(id)){ 
+	  //printf("local id: %s\n", rb_id2name(id));
+	  return NEW_LVAR(id);}
+	
 	/* method call without arguments */
 	//printf("id: %s\n", rb_id2name(id));
 	return NEW_VCALL(id);
@@ -8132,6 +8142,7 @@ assignable_gen(struct parser_params *parser, ID id, NODE *val)
 	yyerror("Can't assign to __ENCODING__");
     }
     else if (is_local_id(id)) {
+      
 	if (dyna_in_block()) {
 	    if (dvar_curr(id)) {
 		return NEW_DASGN_CURR(id, val);
@@ -8140,9 +8151,11 @@ assignable_gen(struct parser_params *parser, ID id, NODE *val)
 		return NEW_DASGN(id, val);
 	    }
 	    else if (local_id(id)) {
-		return NEW_LASGN(id, val);
+	      //printf("id: %s\n", rb_id2name(id));
+	      return NEW_LASGN(id, val);
 	    }
 	    else{
+	      //printf("id: %s\n", rb_id2name(id));
 		dyna_var(id);
 		return NEW_DASGN_CURR(id, val);
 	    }
@@ -8150,7 +8163,9 @@ assignable_gen(struct parser_params *parser, ID id, NODE *val)
 	else {
 	    if (!local_id(id)) {
 		local_var(id);
+		
 	    }
+	    
 	    return NEW_LASGN(id, val);
 	}
     }

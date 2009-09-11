@@ -2412,6 +2412,7 @@ case_when_optimizable_literal(NODE * node)
     }
     return Qfalse;
 }
+//static void
 
 static VALUE
 when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALUE sp_lit)
@@ -2438,7 +2439,6 @@ when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALU
         }
 	
 	ADD_INSN1(cond_seq, nd_line(val), topn, INT2FIX(1));
-	//ADD_SEND(cond_seq, nd_line(val), ID2SYM(idEqq), INT2FIX(1));
 	ADD_SEND(cond_seq, nd_line(val), ID2SYM(rb_intern("patern-match")), INT2FIX(1));
 	
 	ADD_INSNL(cond_seq, nd_line(val), branchif, l1);
@@ -3151,7 +3151,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	DECL_ANCHOR(body_seq);
 	DECL_ANCHOR(cond_seq);
 	VALUE special_literals = rb_ary_tmp_new(1);
-
+	
 	INIT_ANCHOR(head);
 	INIT_ANCHOR(body_seq);
 	INIT_ANCHOR(cond_seq);
@@ -3177,10 +3177,10 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    LABEL *l1;
 
 	    l1 = NEW_LABEL(nd_line(node));
-	    ADD_LABEL(body_seq, l1);
+	    /*ADD_LABEL(body_seq, l1);
 	    ADD_INSN(body_seq, nd_line(node), pop);
 	    COMPILE_(body_seq, "when body", node->nd_body, poped);
-	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);
+	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);*/
 
 	    vals = node->nd_head;
 	    if (vals) {
@@ -3204,6 +3204,11 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    else {
 		rb_bug("NODE_PATERN: must be NODE_ARRAY, but 0");
 	    }
+
+	    ADD_LABEL(body_seq, l1);
+	    ADD_INSN(body_seq, nd_line(node), pop);
+	    COMPILE_(body_seq, "when body", node->nd_body, poped);
+	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);
 
 	    node = node->nd_next;
 	    if (!node) {
