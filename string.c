@@ -6888,11 +6888,11 @@ sym_equal(VALUE sym1, VALUE sym2)
 static VALUE
 patern_equal(VALUE sym1, VALUE sym2)
 {
-  VALUE str;
+  /*VALUE str;
   if(TYPE(sym1)==T_SYMBOL){
     str=rb_id2str(SYM2ID(sym1));
     rb_define_variable((char *)RSTRING_PTR(str), &sym2);
-  }
+    }*/
   
     return Qtrue;
 }

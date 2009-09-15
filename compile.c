@@ -428,7 +428,7 @@ rb_iseq_compile_node(VALUE self, NODE *node)
 	iseq_set_local_table(iseq, 0);
     }
     else if (nd_type(node) == NODE_SCOPE) {
-	/* iseq type of top, method, class, block */
+    /* iseq type of top, method, class, block */
 	iseq_set_local_table(iseq, node->nd_tbl);
 	iseq_set_arguments(iseq, ret, node->nd_args);
 
@@ -441,7 +441,7 @@ rb_iseq_compile_node(VALUE self, NODE *node)
 	    COMPILE(ret, "block body", node->nd_body);
 	    ADD_LABEL(ret, end);
 
-	    /* wide range catch handler must put at last */
+	    /* wide range catch handler must put at last*/ 
 	    ADD_CATCH_ENTRY(CATCH_TYPE_REDO, start, end, 0, start);
 	    ADD_CATCH_ENTRY(CATCH_TYPE_NEXT, start, end, 0, end);
 	    break;
@@ -991,32 +991,54 @@ static int
 get_dyna_var_idx_at_raw(rb_iseq_t *iseq, ID id)
 {
     int i;
-
+    /*printf("IN\n");
+      printf("ID: %s\n", rb_id2name(id));*/
     for (i = 0; i < iseq->local_table_size; i++) {
+      //printf("id: %s\n", rb_id2name(iseq->local_table[i]));
 	if (iseq->local_table[i] == id) {
+	  //printf("trueOUT\n");
 	    return i;
 	}
     }
+    // printf("falseOUT\n");
     return -1;
 }
 
 static int
 get_local_var_idx(rb_iseq_t *iseq, ID id)
 {
+  
     int idx = get_dyna_var_idx_at_raw(iseq->local_iseq, id);
 
     if (idx < 0) {
-	rb_bug("get_local_var_idx: %d", idx);
+      rb_bug("get_local_var_idx: %d %s", idx, rb_id2name(id));
     }
 
     return idx;
 }
+static int
+get_match_var_idx(rb_iseq_t *iseq, ID id){
+  int lv = 0, idx = -1;
+    
+    while (iseq) {
+	idx = get_dyna_var_idx_at_raw(iseq, id);
+	if (idx >= 0) {
+	    break;
+	}
+	iseq = iseq->parent_iseq;
+	lv++;
+    }
 
+    if (idx < 0) {
+	rb_bug("get_dyna_var_idx: -1");
+    }
+    return idx;
+}
 static int
 get_dyna_var_idx(rb_iseq_t *iseq, ID id, int *level, int *ls)
 {
     int lv = 0, idx = -1;
-
+    
     while (iseq) {
 	idx = get_dyna_var_idx_at_raw(iseq, id);
 	if (idx >= 0) {
@@ -2273,33 +2295,20 @@ compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    
 	    i++;
 	    
-	   switch(nd_type(node->nd_head)-1){
+	   switch(nd_type(node->nd_head)){
 	    case NODE_LVAR:
 	      //case NODE_CALL:
-	      // case NODE_VCALL:
-	      case NODE_FCALL:
+		//case NODE_VCALL:
+	    case NODE_FCALL:
 	      //case NODE_ATTRASGN:
-	      
 	      var2sym(node->nd_head);
 	    default:
 	      COMPILE_(anchor, "array element", node->nd_head, poped);
 	    }
 
-	    /*if(nd_type(node->nd_head)-1==NODE_LVAR){
-	      
-	      //printf("id: %s\n", rb_id2name(node->nd_head->nd_vid));
-	      var2sym(node->nd_head);
-	      
-	      //ADD_INSN1(anchor, nd_line(node->nd_head), putobject, ID2SYM(node->nd_head->nd_vid));
-	      COMPILE_(anchor, "array element", node->nd_head, poped);
-	    }else{
-	      printf("test\n");
-	      COMPILE_(anchor, "array element", node->nd_head, poped);
-	      }*/
-
 
 	    if (opt_p && nd_type(node->nd_head) != NODE_LIT) {
-		opt_p = Qfalse;
+	      opt_p = Qfalse;
 	    }
 	    node = node->nd_next;
 	}
@@ -2412,8 +2421,35 @@ case_when_optimizable_literal(NODE * node)
     }
     return Qfalse;
 }
-//static void
-
+static void
+paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
+  NODE *node = node_root;
+  int len = node->nd_alen, line = nd_line(node), i=0;
+  
+    if (nd_type(node) != NODE_ZARRAY) {
+	while (node) {
+	    if (nd_type(node->nd_head) == NODE_LIT) {
+	      
+	      if(SYMBOL_P(node->nd_head->nd_lit)){
+		//printf("%s\n", (char *)RSTRING_PTR(rb_id2str(SYM2ID(node->nd_head->nd_lit))));
+		ID id = SYM2ID(node->nd_head->nd_lit);
+		ID match_id = rb_intern("matchcond");
+		int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+		int mc_idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, match_id);
+		
+		ADD_INSN1(body_seq, line, getlocal, INT2FIX(mc_idx));
+		ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
+		ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")), INT2FIX(1));
+		ADD_INSN1(body_seq, line, setlocal, INT2FIX(idx));
+		//ADD_INSN(body_seq, 0, pop);
+	      }
+	    }
+	    node = node->nd_next;
+	    i++;
+	}
+    }
+    return;
+}
 static VALUE
 when_vals_ar(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *l1, VALUE sp_lit)
 {
@@ -3207,6 +3243,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 
 	    ADD_LABEL(body_seq, l1);
 	    ADD_INSN(body_seq, nd_line(node), pop);
+	    paternmatch_setlocal(iseq, body_seq, vals->nd_head);
 	    COMPILE_(body_seq, "when body", node->nd_body, poped);
 	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);
 
@@ -3896,6 +3933,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
 
 	debugs("lvar: %s idx: %d\n", rb_id2name(id), idx);
+	//printf("lvar: %s idx: %d\n", rb_id2name(id), idx);
 	COMPILE(ret, "rvalue", node->nd_value);
 
 	if (!poped) {
@@ -3916,7 +3954,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	}
 
 	idx = get_dyna_var_idx(iseq, node->nd_vid, &lv, &ls);
-
+	//printf("NODE_DASGN(_CURR): id (%s) %d lv:%d ls:%d\n", rb_id2name(node->nd_vid), idx, lv,ls);
 	if (idx < 0) {
 	    rb_bug("NODE_DASGN(_CURR): unknown id (%s)", rb_id2name(node->nd_vid));
 	}
@@ -4507,8 +4545,8 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	if (!poped) {
 	    ID id = node->nd_vid;
 	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
-	    
 	    debugs("id: %s idx: %d\n", rb_id2name(id), idx);
+	    
 	    ADD_INSN1(ret, nd_line(node), getlocal, INT2FIX(idx));
 	}
 	break;

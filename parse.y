@@ -2112,6 +2112,10 @@ arg		: lhs '=' arg
 			$$ = dispatch3(binary, $1, ID2SYM('%'), $3);
 		    %*/
 		    }
+               | arg fname arg
+                   {
+		     $$ = call_bin_op($1, fname, $3);
+		   }
 		| arg tPOW arg
 		    {
 		    /*%%%*/
@@ -2819,7 +2823,10 @@ primary		: literal
                   k_end
                     {
 		    /*%%%*/
-		      ID id= rb_intern("headcond");
+		      ID id= rb_intern("matchcond");
+		      if (!local_id(id)) {
+			local_var(id);
+		      }
 		      $$ = NEW_PATERN(assignable(id,$2), $4);
 		      fixpos($$, $2);
 		    /*%
@@ -8088,13 +8095,17 @@ gettable_gen(struct parser_params *parser, ID id)
     else if (is_local_id(id)) {
 	if (dyna_in_block() && dvar_defined(id)) return NEW_DVAR(id);
 	if(patern_match_set == 1){
-	  assignable(id, 0);
+	  if(!local_id(id)){
+	    local_var(id);
+	  }
+	  //assignable(id, 0);
 	  //printf("id: %s\n", rb_id2name(id));
 	  return NEW_LIT(ID2SYM(id));
-	}
+	  }
 	if (local_id(id)){ 
 	  //printf("local id: %s\n", rb_id2name(id));
-	  return NEW_LVAR(id);}
+	  return NEW_LVAR(id);
+	}
 	
 	/* method call without arguments */
 	//printf("id: %s\n", rb_id2name(id));
@@ -8145,25 +8156,26 @@ assignable_gen(struct parser_params *parser, ID id, NODE *val)
       
 	if (dyna_in_block()) {
 	    if (dvar_curr(id)) {
+	      //printf("dvar_curr: %s\n", rb_id2name(id));
 		return NEW_DASGN_CURR(id, val);
 	    }
 	    else if (dvar_defined(id)) {
+	      //printf("dvar_defined: %s\n", rb_id2name(id));
 		return NEW_DASGN(id, val);
 	    }
 	    else if (local_id(id)) {
-	      //printf("id: %s\n", rb_id2name(id));
 	      return NEW_LASGN(id, val);
 	    }
 	    else{
-	      //printf("id: %s\n", rb_id2name(id));
+	      //printf("else: %s\n", rb_id2name(id));
 		dyna_var(id);
 		return NEW_DASGN_CURR(id, val);
 	    }
 	}
 	else {
+
 	    if (!local_id(id)) {
 		local_var(id);
-		
 	    }
 	    
 	    return NEW_LASGN(id, val);
