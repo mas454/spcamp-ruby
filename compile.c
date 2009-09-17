@@ -1000,7 +1000,7 @@ get_dyna_var_idx_at_raw(rb_iseq_t *iseq, ID id)
 	    return i;
 	}
     }
-    printf("falseOUT\n");
+    //printf("falseOUT\n");
     return -1;
 }
 
@@ -1019,6 +1019,7 @@ get_local_var_idx(rb_iseq_t *iseq, ID id)
 static int
 get_match_var_idx(rb_iseq_t *iseq, ID id){
   int idx = get_dyna_var_idx_at_raw(iseq->local_iseq, id);
+  //printf("get_local_var_idx: %d %s\n", idx, rb_id2name(id));
   return idx;
 }
 static int
@@ -2240,11 +2241,12 @@ compile_branch_condition(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * cond,
 }
 static void var2sym(NODE* n){
   //unsigned long flag=n->flags;
-  switch(nd_type(n)-1){
+  switch(nd_type(n)){
    case NODE_CALL:
    case NODE_VCALL:
-   case NODE_FCALL:
-   case NODE_ATTRASGN:
+  case NODE_DASGN:
+  case NODE_DASGN_CURR:
+  case NODE_LASGN:
      n->u1.value = ID2SYM(n->nd_mid);
     break;
    default:
@@ -2281,13 +2283,14 @@ compile_patern_array_(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 	    }
 	    
 	    i++;
-	    
+	    //printf("nd_type: %d\n", nd_type(node->nd_head));
 	   switch(nd_type(node->nd_head)){
 	    case NODE_LVAR:
-	      //case NODE_CALL:
-		//case NODE_VCALL:
+	    case NODE_DVAR:
+	    //case NODE_DASGN_CURR:
 	    case NODE_FCALL:
 	      //case NODE_ATTRASGN:
+	      //printf("test: %s", rb_id2name(node->nd_head));
 	      var2sym(node->nd_head);
 	    default:
 	      COMPILE_(anchor, "array element", node->nd_head, poped);
@@ -2441,7 +2444,7 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 		  ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")),INT2FIX(1));
 
 		  idx = get_dyna_var_idx(iseq, id, &lv, &ls);
-		  ADD_INSN2(body_seq, line, getdynamic, INT2FIX(ls - idx), INT2FIX(lv));
+		  ADD_INSN2(body_seq, line, setdynamic, INT2FIX(ls - idx), INT2FIX(lv));
 		}
 		//ADD_INSN(body_seq, 0, pop);
 	      }
