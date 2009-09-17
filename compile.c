@@ -1000,7 +1000,7 @@ get_dyna_var_idx_at_raw(rb_iseq_t *iseq, ID id)
 	    return i;
 	}
     }
-    // printf("falseOUT\n");
+    printf("falseOUT\n");
     return -1;
 }
 
@@ -1018,21 +1018,8 @@ get_local_var_idx(rb_iseq_t *iseq, ID id)
 }
 static int
 get_match_var_idx(rb_iseq_t *iseq, ID id){
-  int lv = 0, idx = -1;
-    
-    while (iseq) {
-	idx = get_dyna_var_idx_at_raw(iseq, id);
-	if (idx >= 0) {
-	    break;
-	}
-	iseq = iseq->parent_iseq;
-	lv++;
-    }
-
-    if (idx < 0) {
-	rb_bug("get_dyna_var_idx: -1");
-    }
-    return idx;
+  int idx = get_dyna_var_idx_at_raw(iseq->local_iseq, id);
+  return idx;
 }
 static int
 get_dyna_var_idx(rb_iseq_t *iseq, ID id, int *level, int *ls)
@@ -2431,16 +2418,31 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 	    if (nd_type(node->nd_head) == NODE_LIT) {
 	      
 	      if(SYMBOL_P(node->nd_head->nd_lit)){
-		//printf("%s\n", (char *)RSTRING_PTR(rb_id2str(SYM2ID(node->nd_head->nd_lit))));
+		
 		ID id = SYM2ID(node->nd_head->nd_lit);
 		ID match_id = rb_intern("matchcond");
-		int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
-		int mc_idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, match_id);
 		
-		ADD_INSN1(body_seq, line, getlocal, INT2FIX(mc_idx));
-		ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
-		ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")), INT2FIX(1));
-		ADD_INSN1(body_seq, line, setlocal, INT2FIX(idx));
+		int local = get_match_var_idx(iseq, id);
+		
+		if(local >= 0){
+		  int idx = iseq->local_iseq->local_size - local;
+		  int mc_idx =iseq->local_iseq->local_size - get_match_var_idx(iseq, match_id);
+		
+		  ADD_INSN1(body_seq, line, getlocal, INT2FIX(mc_idx));
+		  ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
+		  ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")), INT2FIX(1));
+		  ADD_INSN1(body_seq, line, setlocal, INT2FIX(idx));
+		} else {
+		  int idx, lv, ls;
+
+		  idx = get_dyna_var_idx(iseq, match_id, &lv, &ls);
+		  ADD_INSN2(body_seq, line, getdynamic, INT2FIX(ls - idx), INT2FIX(lv));
+		  ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
+		  ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")),INT2FIX(1));
+
+		  idx = get_dyna_var_idx(iseq, id, &lv, &ls);
+		  ADD_INSN2(body_seq, line, getdynamic, INT2FIX(ls - idx), INT2FIX(lv));
+		}
 		//ADD_INSN(body_seq, 0, pop);
 	      }
 	    }
@@ -3954,7 +3956,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	}
 
 	idx = get_dyna_var_idx(iseq, node->nd_vid, &lv, &ls);
-	//printf("NODE_DASGN(_CURR): id (%s) %d lv:%d ls:%d\n", rb_id2name(node->nd_vid), idx, lv,ls);
+
 	if (idx < 0) {
 	    rb_bug("NODE_DASGN(_CURR): unknown id (%s)", rb_id2name(node->nd_vid));
 	}

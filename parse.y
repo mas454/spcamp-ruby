@@ -2112,10 +2112,6 @@ arg		: lhs '=' arg
 			$$ = dispatch3(binary, $1, ID2SYM('%'), $3);
 		    %*/
 		    }
-               | arg fname arg
-                   {
-		     $$ = call_bin_op($1, fname, $3);
-		   }
 		| arg tPOW arg
 		    {
 		    /*%%%*/
@@ -2333,10 +2329,12 @@ arg		: lhs '=' arg
 			$$ = dispatch3(ifop, $1, $3, $6);
 		    %*/
 		    }
+                
 		| primary
 		    {
 			$$ = $1;
 		    }
+
 		;
 parg_value     : parg
                     {
