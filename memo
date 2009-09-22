@@ -1,0 +1,17 @@
+ NEW_LIT(ID2SYM($1)
+#define NEW_LIT(l) NEW_NODE(NODE_LIT,l,0,0)
+#define NEW_NODE(t,a0,a1,a2) rb_node_newnode((t),(VALUE)(a0),(VALUE)(a1),(VALUE)(a2))
+
+case NODE_ARRAY:{
+	compile_array_(iseq, ret, node, Qtrue, poped);
+	break;
+      }
+
+ case NODE_LIT:{
+	debugp_param("lit", node->nd_lit);
+	if (!poped) {
+	    ADD_INSN1(ret, nd_line(node), putobject, node->nd_lit);
+	}
+	break;
+      }
+iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)

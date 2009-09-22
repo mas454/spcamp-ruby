@@ -1,0 +1,973 @@
+blockinlining.c:    if (iseq->argc > 1 || iseq->arg_simple == 0) {
+blockinlining.c:    if (iseq->cached_special_block_builder) {
+blockinlining.c:	if (iseq->cached_special_block_builder == builder) {
+blockinlining.c:	    return iseq->cached_special_block;
+blockinlining.c:	iseq->cached_special_block_builder = (void *)1;
+blockinlining.c:    if (iseq->parent_iseq) {
+blockinlining.c:	parent = iseq->parent_iseq->self;
+blockinlining.c:    iseqval = rb_iseq_new_with_bopt(iseq->node, iseq->name, iseq->filename,
+blockinlining.c:				      parent, iseq->type,
+blockinlining.c:    iseq->cached_special_block = iseqval;
+blockinlining.c:    iseq->cached_special_block_builder = builder;
+blockinlining.c:    if (iseq->argc == 0) {
+blockinlining.c:	iseq->argc += 2;
+blockinlining.c:	iseq->argc++;
+blockinlining.c:    if (iseq->argc == 0) {
+blockinlining.c:	iseq->argc += 2;
+blockinlining.c:	iseq->argc++;
+blockinlining.c:    if (iseq->argc == 0) {
+blockinlining.c:	iseq->argc += 2;
+blockinlining.c:	iseq->argc++;
+compile.c:#define compile_debug iseq->compile_data->option->debug_level
+compile.c:  new_child_iseq(iseq, node, name, iseq->self, type)
+compile.c:  new_child_iseq(iseq, iseq->node, iseq->name, iseq->parent_iseq, iseq->type, sym)
+compile.c:      if ((event) == RUBY_EVENT_LINE && iseq->coverage && \
+compile.c:	  RARRAY_PTR(iseq->coverage)[(line) - 1] == Qnil) { \
+compile.c:	  RARRAY_PTR(iseq->coverage)[(line) - 1] = INT2FIX(0); \
+compile.c:      if (iseq->compile_data->option->trace_instruction) { \
+compile.c:    (rb_ary_push(iseq->compile_data->catch_table_ary,		\
+compile.c:  GET_THREAD()->errinfo = iseq->compile_data->err_info;  \
+compile.c:  iseq->compile_data->err_info = GET_THREAD()->errinfo; \
+compile.c:#define gl_node_level iseq->compile_data->node_level
+compile.c:	rb_ary_push(iseq->mark_ary, v);
+compile.c:#define ruby_sourcefile		RSTRING_PTR(iseq->filename)
+compile.c:	rb_ary_push(iseq->compile_data->mark_ary, v);
+compile.c:	switch (iseq->type) {
+compile.c:	    LABEL *start = iseq->compile_data->start_label = NEW_LABEL(0);
+compile.c:	    LABEL *end = iseq->compile_data->end_label = NEW_LABEL(0);
+compile.c:	switch (iseq->type) {
+compile.c:    if (iseq->type == ISEQ_TYPE_RESCUE || iseq->type == ISEQ_TYPE_ENSURE) {
+compile.c:	ADD_INSN(ret, iseq->compile_data->last_line, leave);
+compile.c:    iseq->iseq_encoded = ALLOC_N(VALUE, iseq->iseq_size);
+compile.c:    MEMCPY(iseq->iseq_encoded, iseq->iseq, VALUE, iseq->iseq_size);
+compile.c:    for (i = 0; i < iseq->iseq_size; /* */ ) {
+compile.c:	int insn = iseq->iseq_encoded[i];
+compile.c:	iseq->iseq_encoded[i] = (VALUE)table[insn];
+compile.c:    iseq->iseq_encoded = iseq->iseq;
+compile.c:	iseq->compile_data->storage_current;
+compile.c:	storage = iseq->compile_data->storage_current = storage->next;
+compile.c:    labelobj->label_no = iseq->compile_data->label_no++;
+compile.c:    ret = rb_iseq_new_with_opt(node, name, iseq_filename(iseq->self),
+compile.c:			       parent, type, iseq->compile_data->option);
+compile.c:    if (iseq->compile_data->option->instructions_unification) {
+compile.c:    if (iseq->compile_data->option->stack_caching) {
+compile.c:	VALUE str = rb_iseq_disasm(iseq->self);
+compile.c:    iseq->local_table = (ID *)ALLOC_N(ID *, 1);
+compile.c:    iseq->local_table_size = 1;
+compile.c:    iseq->local_size = iseq->local_table_size + 1;
+compile.c:    iseq->local_table[0] = id_dollar_bang;
+compile.c:    for (i = 0; i < iseq->local_table_size; i++) {
+compile.c:	if (iseq->local_table[i] == id) {
+compile.c:    int idx = get_dyna_var_idx_at_raw(iseq->local_iseq, id);
+compile.c:	iseq = iseq->parent_iseq;
+compile.c:    *ls = iseq->local_size;
+compile.c:	iseq->argc = node_args->nd_frml;
+compile.c:	debugs("  - argc: %d\n", iseq->argc);
+compile.c:		iseq->arg_post_start = get_dyna_var_idx_at_raw(iseq, post_start_id);
+compile.c:		iseq->arg_post_len = node_aux->nd_plen;
+compile.c:	    iseq->arg_opts = i;
+compile.c:	    iseq->arg_opt_table = ALLOC_N(VALUE, i);
+compile.c:	    MEMCPY(iseq->arg_opt_table, RARRAY_PTR(labels), VALUE, i);
+compile.c:		iseq->arg_opt_table[j] &= ~1;
+compile.c:	    iseq->arg_opts = 0;
+compile.c:	    iseq->arg_rest = get_dyna_var_idx_at_raw(iseq, rest_id);
+compile.c:	    if (iseq->arg_rest == -1) {
+compile.c:	    if (iseq->arg_post_start == 0) {
+compile.c:		iseq->arg_post_start = iseq->arg_rest + 1;
+compile.c:	    iseq->arg_block = get_dyna_var_idx_at_raw(iseq, block_id);
+compile.c:	if (iseq->arg_opts != 0 || iseq->arg_post_len != 0 ||
+compile.c:	    iseq->arg_rest != -1 || iseq->arg_block != -1) {
+compile.c:	    iseq->arg_simple = 0;
+compile.c:	    if (iseq->arg_block != -1) {
+compile.c:		iseq->arg_size = iseq->arg_block + 1;
+compile.c:	    else if (iseq->arg_post_len) {
+compile.c:		iseq->arg_size = iseq->arg_post_start + iseq->arg_post_len;
+compile.c:	    else if (iseq->arg_rest != -1) {
+compile.c:		iseq->arg_size = iseq->arg_rest + 1;
+compile.c:	    else if (iseq->arg_opts) {
+compile.c:		iseq->arg_size = iseq->argc + iseq->arg_opts - 1;
+compile.c:		iseq->arg_size = iseq->argc;
+compile.c:	    iseq->arg_simple = 1;
+compile.c:	    iseq->arg_size = iseq->argc;
+compile.c:	if (iseq->type == ISEQ_TYPE_BLOCK) {
+compile.c:	    if (iseq->arg_opts == 0 && iseq->arg_post_len == 0 && iseq->arg_rest == -1) {
+compile.c:		if (iseq->argc == 1 && last_comma == 0) {
+compile.c:		    iseq->arg_simple |= 0x02;
+compile.c:	iseq->arg_simple = 1;
+compile.c:	iseq->local_table = (ID *)ALLOC_N(ID *, size);
+compile.c:	MEMCPY(iseq->local_table, tbl, ID *, size);
+compile.c:    iseq->local_size = iseq->local_table_size = size;
+compile.c:    iseq->local_size += 1;
+compile.c:    debugs("iseq_set_local_table: %d, %d\n", iseq->local_size, iseq->local_table_size);
+compile.c:	    rb_compile_error(RSTRING_PTR(iseq->filename), line,
+compile.c:		    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:				rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:				    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:				    rb_compile_warning(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:			rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:	rb_bug("SP is not 0 on %s (%d)\n", RSTRING_PTR(iseq->name), sp);
+compile.c:    iseq->iseq = (void *)generated_iseq;
+compile.c:    iseq->iseq_size = pos;
+compile.c:    iseq->insn_info_table = insn_info_table;
+compile.c:    iseq->insn_info_size = k;
+compile.c:    iseq->stack_max = stack_max;
+compile.c:    tlen = RARRAY_LEN(iseq->compile_data->catch_table_ary);
+compile.c:    tptr = RARRAY_PTR(iseq->compile_data->catch_table_ary);
+compile.c:    iseq->catch_table = tlen ? ALLOC_N(struct iseq_catch_table_entry, tlen) : 0;
+compile.c:    iseq->catch_table_size = tlen;
+compile.c:	entry = &iseq->catch_table[i];
+compile.c:    iseq->compile_data->catch_table_ary = 0;	/* free */
+compile.c:    if (iseq->arg_opts != 0) {
+compile.c:	for (i = 0; i < iseq->arg_opts; i++) {
+compile.c:	    iseq->arg_opt_table[i] =
+compile.c:		label_get_position((LABEL *)iseq->arg_opt_table[i]);
+compile.c:    const int do_peepholeopt = iseq->compile_data->option->peephole_optimization;
+compile.c:    const int do_tailcallopt = iseq->compile_data->option->tailcall_optimization;
+compile.c:    const int do_si = iseq->compile_data->option->specialized_instruction;
+compile.c:    const int do_ou = iseq->compile_data->option->operands_unification;
+compile.c:		rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:			    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c:		//int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c:							   iseq->name),
+compile.c:    if (iseq->parent_iseq != 0) {
+compile.c:    enl->prev = iseq->compile_data->ensure_node_stack;	/* prev */
+compile.c:    iseq->compile_data->ensure_node_stack = enl;
+compile.c:	iseq->compile_data->ensure_node_stack;
+compile.c:	    iseq->compile_data->ensure_node_stack = enlp->prev;
+compile.c:    iseq->compile_data->ensure_node_stack = prev_enlp;
+compile.c:	    ADD_INSN(ret, iseq->compile_data->last_line, putnil);
+compile.c:    iseq->compile_data->last_line = nd_line(node);
+compile.c:	LABEL *prev_start_label = iseq->compile_data->start_label;
+compile.c:	LABEL *prev_end_label = iseq->compile_data->end_label;
+compile.c:	LABEL *prev_redo_label = iseq->compile_data->redo_label;
+compile.c:	VALUE prev_loopval_popped = iseq->compile_data->loopval_popped;
+compile.c:	LABEL *next_label = iseq->compile_data->start_label = NEW_LABEL(nd_line(node));	/* next  */
+compile.c:	LABEL *redo_label = iseq->compile_data->redo_label = NEW_LABEL(nd_line(node));	/* redo  */
+compile.c:	LABEL *break_label = iseq->compile_data->end_label = NEW_LABEL(nd_line(node));	/* break */
+compile.c:	iseq->compile_data->loopval_popped = 0;
+compile.c:			iseq->compile_data->redo_label);
+compile.c:	iseq->compile_data->start_label = prev_start_label;
+compile.c:	iseq->compile_data->end_label = prev_end_label;
+compile.c:	iseq->compile_data->redo_label = prev_redo_label;
+compile.c:	iseq->compile_data->loopval_popped = prev_loopval_popped;
+compile.c:	iseq->compile_data->ensure_node_stack = iseq->compile_data->ensure_node_stack->prev;
+compile.c:	VALUE prevblock = iseq->compile_data->current_block;
+compile.c:	    iseq->compile_data->current_block =
+compile.c:		       iseq->compile_data->current_block, INT2FIX(0));
+compile.c:	    iseq->compile_data->current_block =
+compile.c:	iseq->compile_data->current_block = prevblock;
+compile.c:	if (iseq->compile_data->redo_label != 0) {
+compile.c:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c:	    COMPILE_(ret, "break val (while/until)", node->nd_stts, iseq->compile_data->loopval_popped);
+compile.c:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->end_label);
+compile.c:	else if (iseq->type == ISEQ_TYPE_BLOCK) {
+compile.c:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c:	    rb_iseq_t *ip = iseq->parent_iseq;
+compile.c:	if (iseq->compile_data->redo_label != 0) {
+compile.c:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->start_label);
+compile.c:	else if (iseq->compile_data->end_label) {
+compile.c:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->start_label);
+compile.c:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->end_label);
+compile.c:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c:	if (iseq->compile_data->redo_label) {
+compile.c:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->redo_label);
+compile.c:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c:	else if (iseq->compile_data->start_label) {
+compile.c:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->start_label);
+compile.c:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->start_label);
+compile.c:	if (iseq->type == ISEQ_TYPE_RESCUE) {
+compile.c:	    rb_str_concat(rb_str_new2("rescue in "), iseq->name),
+compile.c:	    if (iseq->compile_data->option->tailcall_optimization) {
+compile.c:						       iseq->name),
+compile.c:	erange = iseq->compile_data->ensure_node_stack->erange;
+compile.c:	iseq->compile_data->ensure_node_stack = enl.prev;
+compile.c:	int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c:	VALUE parent_block = iseq->compile_data->current_block;
+compile.c:	iseq->compile_data->current_block = Qfalse;
+compile.c:			 rb_hash_aref(iseq->compile_data,
+compile.c:			rb_hash_aset(iseq->compile_data, label_sym,
+compile.c:	VALUE parent_block = iseq->compile_data->current_block;
+compile.c:	iseq->compile_data->current_block = Qfalse;
+compile.c:	    rb_iseq_t *liseq = iseq->local_iseq;
+compile.c:	    argc = INT2FIX(liseq->argc);
+compile.c:	    for (i = 0; i < liseq->argc; i++) {
+compile.c:		int idx = liseq->local_size - i;
+compile.c:	    if (!liseq->arg_simple) {
+compile.c:		if (liseq->arg_opts) {
+compile.c:		    for (j = 0; j < liseq->arg_opts - 1; j++) {
+compile.c:			int idx = liseq->local_size - (i + j);
+compile.c:		if (liseq->arg_rest != -1) {
+compile.c:		    int idx = liseq->local_size - liseq->arg_rest;
+compile.c:		    argc = INT2FIX(liseq->arg_rest + 1);
+compile.c:		if (liseq->arg_post_len) {
+compile.c:		    int post_len = liseq->arg_post_len;
+compile.c:		    int post_start = liseq->arg_post_start;
+compile.c:		    if (liseq->arg_rest != -1) {
+compile.c:			    int idx = liseq->local_size - (post_start + j);
+compile.c:			    int idx = liseq->local_size - (post_start + j);
+compile.c:	if (iseq->type == ISEQ_TYPE_TOP || iseq->type == ISEQ_TYPE_CLASS) {
+compile.c:	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c:	if (iseq->compile_data->option->specialized_instruction) {
+compile.c:		if (iseq->compile_data->option->inline_const_cache) {
+compile.c:		if (iseq->compile_data->option->inline_const_cache) {
+compile.c:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c:			       RSTRING_PTR(iseq->name), (void *)iseq,
+compile.c:			       iseq->compile_data->flip_cnt++);
+compile.c:	    if (iseq->type == ISEQ_TYPE_RESCUE) {
+compile.c:	iseq->compile_data->start_label = next_label;
+compile.c:	iseq->compile_data->redo_label = redo_label;
+compile.c:			val = iseq->self;
+compile.c:	    eiseqval = ruby_iseq_load(ptr[1], iseq->self, Qnil);
+compile.c:		rb_compile_error(RSTRING_PTR(iseq->filename), line_no,
+compile.c:		rb_compile_error(RSTRING_PTR(iseq->filename), line_no,
+compile.c:				    argv[j] = ruby_iseq_load(op, iseq->self, Qnil);
+compile.c:    iseq->local_table_size = RARRAY_LEN(locals);
+compile.c:    iseq->local_table = tbl = (ID *)ALLOC_N(ID *, iseq->local_table_size);
+compile.c:    iseq->local_size = iseq->local_table_size + 1;
+compile.c:	iseq->arg_size = iseq->argc = FIX2INT(args);
+compile.c:	iseq->arg_simple = 1;
+compile.c:	iseq->argc = FIX2INT(argc);
+compile.c:	iseq->arg_rest = FIX2INT(arg_rest);
+compile.c:	iseq->arg_post_len = FIX2INT(arg_post_len);
+compile.c:	iseq->arg_post_start = FIX2INT(arg_post_start);
+compile.c:	iseq->arg_block = FIX2INT(arg_block);
+compile.c:	iseq->arg_opts = RARRAY_LEN(arg_opt_labels);
+compile.c:	iseq->arg_opt_table = (VALUE *)ALLOC_N(VALUE, iseq->arg_opts);
+compile.c:	if (iseq->arg_block != -1) {
+compile.c:	    iseq->arg_size = iseq->arg_block + 1;
+compile.c:	else if (iseq->arg_post_len) {
+compile.c:	    iseq->arg_size = iseq->arg_post_start + iseq->arg_post_len;
+compile.c:	else if (iseq->arg_rest != -1) {
+compile.c:	    iseq->arg_size = iseq->arg_rest + 1;
+compile.c:	    iseq->arg_size = iseq->argc + (iseq->arg_opts ? iseq->arg_opts - 1 : 0);
+compile.c:	    iseq->arg_opt_table[i] =
+compile.c:	iseq->arg_simple = NUM2INT(arg_simple);
+compile.c:    return iseq->self;
+compile.c:	while (iseq->type == ISEQ_TYPE_BLOCK ||
+compile.c:	       iseq->type == ISEQ_TYPE_RESCUE ||
+compile.c:	       iseq->type == ISEQ_TYPE_ENSURE ||
+compile.c:	       iseq->type == ISEQ_TYPE_EVAL ||
+compile.c:	       iseq->type == ISEQ_TYPE_MAIN
+compile.c:	    for (i = 0; i < iseq->local_table_size; i++) {
+compile.c:		if (iseq->local_table[i] == id) {
+compile.c:	    iseq = iseq->parent_iseq;
+compile.c:	iseq = th->base_block->iseq->local_iseq;
+compile.c:	for (i=0; i<iseq->local_table_size; i++) {
+compile.c:	    if (iseq->local_table[i] == id) {
+compile.c~:#define compile_debug iseq->compile_data->option->debug_level
+compile.c~:  new_child_iseq(iseq, node, name, iseq->self, type)
+compile.c~:  new_child_iseq(iseq, iseq->node, iseq->name, iseq->parent_iseq, iseq->type, sym)
+compile.c~:      if ((event) == RUBY_EVENT_LINE && iseq->coverage && \
+compile.c~:	  RARRAY_PTR(iseq->coverage)[(line) - 1] == Qnil) { \
+compile.c~:	  RARRAY_PTR(iseq->coverage)[(line) - 1] = INT2FIX(0); \
+compile.c~:      if (iseq->compile_data->option->trace_instruction) { \
+compile.c~:    (rb_ary_push(iseq->compile_data->catch_table_ary,		\
+compile.c~:  GET_THREAD()->errinfo = iseq->compile_data->err_info;  \
+compile.c~:  iseq->compile_data->err_info = GET_THREAD()->errinfo; \
+compile.c~:#define gl_node_level iseq->compile_data->node_level
+compile.c~:	rb_ary_push(iseq->mark_ary, v);
+compile.c~:#define ruby_sourcefile		RSTRING_PTR(iseq->filename)
+compile.c~:	rb_ary_push(iseq->compile_data->mark_ary, v);
+compile.c~:	switch (iseq->type) {
+compile.c~:	    LABEL *start = iseq->compile_data->start_label = NEW_LABEL(0);
+compile.c~:	    LABEL *end = iseq->compile_data->end_label = NEW_LABEL(0);
+compile.c~:	switch (iseq->type) {
+compile.c~:    if (iseq->type == ISEQ_TYPE_RESCUE || iseq->type == ISEQ_TYPE_ENSURE) {
+compile.c~:	ADD_INSN(ret, iseq->compile_data->last_line, leave);
+compile.c~:    iseq->iseq_encoded = ALLOC_N(VALUE, iseq->iseq_size);
+compile.c~:    MEMCPY(iseq->iseq_encoded, iseq->iseq, VALUE, iseq->iseq_size);
+compile.c~:    for (i = 0; i < iseq->iseq_size; /* */ ) {
+compile.c~:	int insn = iseq->iseq_encoded[i];
+compile.c~:	iseq->iseq_encoded[i] = (VALUE)table[insn];
+compile.c~:    iseq->iseq_encoded = iseq->iseq;
+compile.c~:	iseq->compile_data->storage_current;
+compile.c~:	storage = iseq->compile_data->storage_current = storage->next;
+compile.c~:    labelobj->label_no = iseq->compile_data->label_no++;
+compile.c~:    ret = rb_iseq_new_with_opt(node, name, iseq_filename(iseq->self),
+compile.c~:			       parent, type, iseq->compile_data->option);
+compile.c~:    if (iseq->compile_data->option->instructions_unification) {
+compile.c~:    if (iseq->compile_data->option->stack_caching) {
+compile.c~:	VALUE str = rb_iseq_disasm(iseq->self);
+compile.c~:    iseq->local_table = (ID *)ALLOC_N(ID *, 1);
+compile.c~:    iseq->local_table_size = 1;
+compile.c~:    iseq->local_size = iseq->local_table_size + 1;
+compile.c~:    iseq->local_table[0] = id_dollar_bang;
+compile.c~:    for (i = 0; i < iseq->local_table_size; i++) {
+compile.c~:	if (iseq->local_table[i] == id) {
+compile.c~:    int idx = get_dyna_var_idx_at_raw(iseq->local_iseq, id);
+compile.c~:	iseq = iseq->parent_iseq;
+compile.c~:    *ls = iseq->local_size;
+compile.c~:	iseq->argc = node_args->nd_frml;
+compile.c~:	debugs("  - argc: %d\n", iseq->argc);
+compile.c~:		iseq->arg_post_start = get_dyna_var_idx_at_raw(iseq, post_start_id);
+compile.c~:		iseq->arg_post_len = node_aux->nd_plen;
+compile.c~:	    iseq->arg_opts = i;
+compile.c~:	    iseq->arg_opt_table = ALLOC_N(VALUE, i);
+compile.c~:	    MEMCPY(iseq->arg_opt_table, RARRAY_PTR(labels), VALUE, i);
+compile.c~:		iseq->arg_opt_table[j] &= ~1;
+compile.c~:	    iseq->arg_opts = 0;
+compile.c~:	    iseq->arg_rest = get_dyna_var_idx_at_raw(iseq, rest_id);
+compile.c~:	    if (iseq->arg_rest == -1) {
+compile.c~:	    if (iseq->arg_post_start == 0) {
+compile.c~:		iseq->arg_post_start = iseq->arg_rest + 1;
+compile.c~:	    iseq->arg_block = get_dyna_var_idx_at_raw(iseq, block_id);
+compile.c~:	if (iseq->arg_opts != 0 || iseq->arg_post_len != 0 ||
+compile.c~:	    iseq->arg_rest != -1 || iseq->arg_block != -1) {
+compile.c~:	    iseq->arg_simple = 0;
+compile.c~:	    if (iseq->arg_block != -1) {
+compile.c~:		iseq->arg_size = iseq->arg_block + 1;
+compile.c~:	    else if (iseq->arg_post_len) {
+compile.c~:		iseq->arg_size = iseq->arg_post_start + iseq->arg_post_len;
+compile.c~:	    else if (iseq->arg_rest != -1) {
+compile.c~:		iseq->arg_size = iseq->arg_rest + 1;
+compile.c~:	    else if (iseq->arg_opts) {
+compile.c~:		iseq->arg_size = iseq->argc + iseq->arg_opts - 1;
+compile.c~:		iseq->arg_size = iseq->argc;
+compile.c~:	    iseq->arg_simple = 1;
+compile.c~:	    iseq->arg_size = iseq->argc;
+compile.c~:	if (iseq->type == ISEQ_TYPE_BLOCK) {
+compile.c~:	    if (iseq->arg_opts == 0 && iseq->arg_post_len == 0 && iseq->arg_rest == -1) {
+compile.c~:		if (iseq->argc == 1 && last_comma == 0) {
+compile.c~:		    iseq->arg_simple |= 0x02;
+compile.c~:	iseq->arg_simple = 1;
+compile.c~:	iseq->local_table = (ID *)ALLOC_N(ID *, size);
+compile.c~:	MEMCPY(iseq->local_table, tbl, ID *, size);
+compile.c~:    iseq->local_size = iseq->local_table_size = size;
+compile.c~:    iseq->local_size += 1;
+compile.c~:    debugs("iseq_set_local_table: %d, %d\n", iseq->local_size, iseq->local_table_size);
+compile.c~:	    rb_compile_error(RSTRING_PTR(iseq->filename), line,
+compile.c~:		    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:				rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:				    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:				    rb_compile_warning(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:			rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:	rb_bug("SP is not 0 on %s (%d)\n", RSTRING_PTR(iseq->name), sp);
+compile.c~:    iseq->iseq = (void *)generated_iseq;
+compile.c~:    iseq->iseq_size = pos;
+compile.c~:    iseq->insn_info_table = insn_info_table;
+compile.c~:    iseq->insn_info_size = k;
+compile.c~:    iseq->stack_max = stack_max;
+compile.c~:    tlen = RARRAY_LEN(iseq->compile_data->catch_table_ary);
+compile.c~:    tptr = RARRAY_PTR(iseq->compile_data->catch_table_ary);
+compile.c~:    iseq->catch_table = tlen ? ALLOC_N(struct iseq_catch_table_entry, tlen) : 0;
+compile.c~:    iseq->catch_table_size = tlen;
+compile.c~:	entry = &iseq->catch_table[i];
+compile.c~:    iseq->compile_data->catch_table_ary = 0;	/* free */
+compile.c~:    if (iseq->arg_opts != 0) {
+compile.c~:	for (i = 0; i < iseq->arg_opts; i++) {
+compile.c~:	    iseq->arg_opt_table[i] =
+compile.c~:		label_get_position((LABEL *)iseq->arg_opt_table[i]);
+compile.c~:    const int do_peepholeopt = iseq->compile_data->option->peephole_optimization;
+compile.c~:    const int do_tailcallopt = iseq->compile_data->option->tailcall_optimization;
+compile.c~:    const int do_si = iseq->compile_data->option->specialized_instruction;
+compile.c~:    const int do_ou = iseq->compile_data->option->operands_unification;
+compile.c~:		rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:			    rb_compile_error(RSTRING_PTR(iseq->filename), iobj->line_no,
+compile.c~:		int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c~:							   iseq->name),
+compile.c~:    if (iseq->parent_iseq != 0) {
+compile.c~:    enl->prev = iseq->compile_data->ensure_node_stack;	/* prev */
+compile.c~:    iseq->compile_data->ensure_node_stack = enl;
+compile.c~:	iseq->compile_data->ensure_node_stack;
+compile.c~:	    iseq->compile_data->ensure_node_stack = enlp->prev;
+compile.c~:    iseq->compile_data->ensure_node_stack = prev_enlp;
+compile.c~:	    ADD_INSN(ret, iseq->compile_data->last_line, putnil);
+compile.c~:    iseq->compile_data->last_line = nd_line(node);
+compile.c~:	LABEL *prev_start_label = iseq->compile_data->start_label;
+compile.c~:	LABEL *prev_end_label = iseq->compile_data->end_label;
+compile.c~:	LABEL *prev_redo_label = iseq->compile_data->redo_label;
+compile.c~:	VALUE prev_loopval_popped = iseq->compile_data->loopval_popped;
+compile.c~:	LABEL *next_label = iseq->compile_data->start_label = NEW_LABEL(nd_line(node));	/* next  */
+compile.c~:	LABEL *redo_label = iseq->compile_data->redo_label = NEW_LABEL(nd_line(node));	/* redo  */
+compile.c~:	LABEL *break_label = iseq->compile_data->end_label = NEW_LABEL(nd_line(node));	/* break */
+compile.c~:	iseq->compile_data->loopval_popped = 0;
+compile.c~:			iseq->compile_data->redo_label);
+compile.c~:	iseq->compile_data->start_label = prev_start_label;
+compile.c~:	iseq->compile_data->end_label = prev_end_label;
+compile.c~:	iseq->compile_data->redo_label = prev_redo_label;
+compile.c~:	iseq->compile_data->loopval_popped = prev_loopval_popped;
+compile.c~:	iseq->compile_data->ensure_node_stack = iseq->compile_data->ensure_node_stack->prev;
+compile.c~:	VALUE prevblock = iseq->compile_data->current_block;
+compile.c~:	    iseq->compile_data->current_block =
+compile.c~:		       iseq->compile_data->current_block, INT2FIX(0));
+compile.c~:	    iseq->compile_data->current_block =
+compile.c~:	iseq->compile_data->current_block = prevblock;
+compile.c~:	if (iseq->compile_data->redo_label != 0) {
+compile.c~:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c~:	    COMPILE_(ret, "break val (while/until)", node->nd_stts, iseq->compile_data->loopval_popped);
+compile.c~:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->end_label);
+compile.c~:	else if (iseq->type == ISEQ_TYPE_BLOCK) {
+compile.c~:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c~:	    rb_iseq_t *ip = iseq->parent_iseq;
+compile.c~:	if (iseq->compile_data->redo_label != 0) {
+compile.c~:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c~:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->start_label);
+compile.c~:	else if (iseq->compile_data->end_label) {
+compile.c~:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->start_label);
+compile.c~:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->end_label);
+compile.c~:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c~:	if (iseq->compile_data->redo_label) {
+compile.c~:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->redo_label);
+compile.c~:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->redo_label);
+compile.c~:	else if (iseq->type == ISEQ_TYPE_EVAL) {
+compile.c~:	else if (iseq->compile_data->start_label) {
+compile.c~:	    ADD_ADJUST(ret, nd_line(node), iseq->compile_data->start_label);
+compile.c~:	    ADD_INSNL(ret, nd_line(node), jump, iseq->compile_data->start_label);
+compile.c~:	if (iseq->type == ISEQ_TYPE_RESCUE) {
+compile.c~:	    rb_str_concat(rb_str_new2("rescue in "), iseq->name),
+compile.c~:	    if (iseq->compile_data->option->tailcall_optimization) {
+compile.c~:						       iseq->name),
+compile.c~:	erange = iseq->compile_data->ensure_node_stack->erange;
+compile.c~:	iseq->compile_data->ensure_node_stack = enl.prev;
+compile.c~:	int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c~:	VALUE parent_block = iseq->compile_data->current_block;
+compile.c~:	iseq->compile_data->current_block = Qfalse;
+compile.c~:			 rb_hash_aref(iseq->compile_data,
+compile.c~:			rb_hash_aset(iseq->compile_data, label_sym,
+compile.c~:	VALUE parent_block = iseq->compile_data->current_block;
+compile.c~:	iseq->compile_data->current_block = Qfalse;
+compile.c~:	    rb_iseq_t *liseq = iseq->local_iseq;
+compile.c~:	    argc = INT2FIX(liseq->argc);
+compile.c~:	    for (i = 0; i < liseq->argc; i++) {
+compile.c~:		int idx = liseq->local_size - i;
+compile.c~:	    if (!liseq->arg_simple) {
+compile.c~:		if (liseq->arg_opts) {
+compile.c~:		    for (j = 0; j < liseq->arg_opts - 1; j++) {
+compile.c~:			int idx = liseq->local_size - (i + j);
+compile.c~:		if (liseq->arg_rest != -1) {
+compile.c~:		    int idx = liseq->local_size - liseq->arg_rest;
+compile.c~:		    argc = INT2FIX(liseq->arg_rest + 1);
+compile.c~:		if (liseq->arg_post_len) {
+compile.c~:		    int post_len = liseq->arg_post_len;
+compile.c~:		    int post_start = liseq->arg_post_start;
+compile.c~:		    if (liseq->arg_rest != -1) {
+compile.c~:			    int idx = liseq->local_size - (post_start + j);
+compile.c~:			    int idx = liseq->local_size - (post_start + j);
+compile.c~:	if (iseq->type == ISEQ_TYPE_TOP || iseq->type == ISEQ_TYPE_CLASS) {
+compile.c~:	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+compile.c~:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c~:	if (iseq->compile_data->option->specialized_instruction) {
+compile.c~:		if (iseq->compile_data->option->inline_const_cache) {
+compile.c~:		if (iseq->compile_data->option->inline_const_cache) {
+compile.c~:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c~:	if (iseq->compile_data->option->inline_const_cache) {
+compile.c~:			       RSTRING_PTR(iseq->name), (void *)iseq,
+compile.c~:			       iseq->compile_data->flip_cnt++);
+compile.c~:	    if (iseq->type == ISEQ_TYPE_RESCUE) {
+compile.c~:	iseq->compile_data->start_label = next_label;
+compile.c~:	iseq->compile_data->redo_label = redo_label;
+compile.c~:			val = iseq->self;
+compile.c~:	    eiseqval = ruby_iseq_load(ptr[1], iseq->self, Qnil);
+compile.c~:		rb_compile_error(RSTRING_PTR(iseq->filename), line_no,
+compile.c~:		rb_compile_error(RSTRING_PTR(iseq->filename), line_no,
+compile.c~:				    argv[j] = ruby_iseq_load(op, iseq->self, Qnil);
+compile.c~:    iseq->local_table_size = RARRAY_LEN(locals);
+compile.c~:    iseq->local_table = tbl = (ID *)ALLOC_N(ID *, iseq->local_table_size);
+compile.c~:    iseq->local_size = iseq->local_table_size + 1;
+compile.c~:	iseq->arg_size = iseq->argc = FIX2INT(args);
+compile.c~:	iseq->arg_simple = 1;
+compile.c~:	iseq->argc = FIX2INT(argc);
+compile.c~:	iseq->arg_rest = FIX2INT(arg_rest);
+compile.c~:	iseq->arg_post_len = FIX2INT(arg_post_len);
+compile.c~:	iseq->arg_post_start = FIX2INT(arg_post_start);
+compile.c~:	iseq->arg_block = FIX2INT(arg_block);
+compile.c~:	iseq->arg_opts = RARRAY_LEN(arg_opt_labels);
+compile.c~:	iseq->arg_opt_table = (VALUE *)ALLOC_N(VALUE, iseq->arg_opts);
+compile.c~:	if (iseq->arg_block != -1) {
+compile.c~:	    iseq->arg_size = iseq->arg_block + 1;
+compile.c~:	else if (iseq->arg_post_len) {
+compile.c~:	    iseq->arg_size = iseq->arg_post_start + iseq->arg_post_len;
+compile.c~:	else if (iseq->arg_rest != -1) {
+compile.c~:	    iseq->arg_size = iseq->arg_rest + 1;
+compile.c~:	    iseq->arg_size = iseq->argc + (iseq->arg_opts ? iseq->arg_opts - 1 : 0);
+compile.c~:	    iseq->arg_opt_table[i] =
+compile.c~:	iseq->arg_simple = NUM2INT(arg_simple);
+compile.c~:    return iseq->self;
+compile.c~:	while (iseq->type == ISEQ_TYPE_BLOCK ||
+compile.c~:	       iseq->type == ISEQ_TYPE_RESCUE ||
+compile.c~:	       iseq->type == ISEQ_TYPE_ENSURE ||
+compile.c~:	       iseq->type == ISEQ_TYPE_EVAL ||
+compile.c~:	       iseq->type == ISEQ_TYPE_MAIN
+compile.c~:	    for (i = 0; i < iseq->local_table_size; i++) {
+compile.c~:		if (iseq->local_table[i] == id) {
+compile.c~:	    iseq = iseq->parent_iseq;
+compile.c~:	iseq = th->base_block->iseq->local_iseq;
+compile.c~:	for (i=0; i<iseq->local_table_size; i++) {
+compile.c~:	    if (iseq->local_table[i] == id) {
+diff.txt: 	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
+diff.txt:     iseq->self = self;
+eval.c:	if (iseq->defined_method_id) {
+eval.c:	    return iseq->defined_method_id;
+eval.c:	if (iseq->local_iseq == iseq) {
+eval.c:	iseq = iseq->parent_iseq;
+eval.c:	    if (cfp->iseq->type == ISEQ_TYPE_RESCUE) {
+eval.c:	    else if (cfp->iseq->type == ISEQ_TYPE_ENSURE &&
+insns.def:    ret = iseq->self;
+insns.def:    COPY_CREF(class_iseq->cref_stack, vm_cref_push(th, klass, NOEX_PUBLIC));
+insns.def:		  class_iseq->iseq_encoded, GET_SP(), 0,
+insns.def:		  class_iseq->local_size);
+iseq.c:	if (!iseq->orig) {
+iseq.c:	     * GC_INFO("%s @ %s\n", RSTRING_PTR(iseq->name),
+iseq.c:	     *                      RSTRING_PTR(iseq->filename));
+iseq.c:	    if (iseq->iseq != iseq->iseq_encoded) {
+iseq.c:		RUBY_FREE_UNLESS_NULL(iseq->iseq_encoded);
+iseq.c:	    RUBY_FREE_UNLESS_NULL(iseq->iseq);
+iseq.c:	    RUBY_FREE_UNLESS_NULL(iseq->insn_info_table);
+iseq.c:	    RUBY_FREE_UNLESS_NULL(iseq->local_table);
+iseq.c:	    RUBY_FREE_UNLESS_NULL(iseq->catch_table);
+iseq.c:	    RUBY_FREE_UNLESS_NULL(iseq->arg_opt_table);
+iseq.c:	    compile_data_free(iseq->compile_data);
+iseq.c:	RUBY_GC_INFO("%s @ %s\n", RSTRING_PTR(iseq->name), RSTRING_PTR(iseq->filename));
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->mark_ary);
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->name);
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->filename);
+iseq.c:	RUBY_MARK_UNLESS_NULL((VALUE)iseq->cref_stack);
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->klass);
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->coverage);
+iseq.c:/* 	RUBY_MARK_UNLESS_NULL((VALUE)iseq->node); */
+iseq.c:/*	RUBY_MARK_UNLESS_NULL(iseq->cached_special_block); */
+iseq.c:	RUBY_MARK_UNLESS_NULL(iseq->orig);
+iseq.c:	if (iseq->compile_data != 0) {
+iseq.c:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->mark_ary);
+iseq.c:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->err_info);
+iseq.c:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->catch_table_ary);
+iseq.c:    const int type = iseq->type;
+iseq.c:	iseq->cref_stack = NEW_BLOCK(th->top_wrapper ? th->top_wrapper : rb_cObject);
+iseq.c:	iseq->cref_stack->nd_file = 0;
+iseq.c:	iseq->cref_stack->nd_visi = NOEX_PRIVATE;
+iseq.c:	iseq->cref_stack = NEW_BLOCK(0); /* place holder */
+iseq.c:	iseq->cref_stack->nd_file = 0;
+iseq.c:	iseq->cref_stack = piseq->cref_stack;
+iseq.c:	iseq->local_iseq = iseq;
+iseq.c:	iseq->local_iseq = piseq->local_iseq;
+iseq.c:	iseq->parent_iseq = piseq;
+iseq.c:    iseq->name = name;
+iseq.c:    iseq->filename = filename;
+iseq.c:    iseq->defined_method_id = 0;
+iseq.c:    iseq->mark_ary = rb_ary_new();
+iseq.c:    RBASIC(iseq->mark_ary)->klass = 0;
+iseq.c:    iseq->type = type;
+iseq.c:    iseq->arg_rest = -1;
+iseq.c:    iseq->arg_block = -1;
+iseq.c:    iseq->klass = 0;
+iseq.c:     * iseq->special_block_builder = GC_GUARDED_PTR_REF(block_opt);
+iseq.c:     * iseq->cached_special_block_builder = 0;
+iseq.c:     * iseq->cached_special_block = 0;
+iseq.c:    iseq->compile_data = ALLOC(struct iseq_compile_data);
+iseq.c:    MEMZERO(iseq->compile_data, struct iseq_compile_data, 1);
+iseq.c:    iseq->compile_data->mark_ary = rb_ary_new();
+iseq.c:    RBASIC(iseq->compile_data->mark_ary)->klass = 0;
+iseq.c:    iseq->compile_data->storage_head = iseq->compile_data->storage_current =
+iseq.c:    iseq->compile_data->catch_table_ary = rb_ary_new();
+iseq.c:    iseq->compile_data->storage_head->pos = 0;
+iseq.c:    iseq->compile_data->storage_head->next = 0;
+iseq.c:    iseq->compile_data->storage_head->size =
+iseq.c:    iseq->compile_data->storage_head->buff =
+iseq.c:      (char *)(&iseq->compile_data->storage_head->buff + 1);
+iseq.c:    iseq->compile_data->option = option;
+iseq.c:    iseq->coverage = Qfalse;
+iseq.c:	    iseq->coverage = rb_hash_lookup(coverages, filename);
+iseq.c:	    if (NIL_P(iseq->coverage)) iseq->coverage = Qfalse;
+iseq.c:    struct iseq_compile_data *data = iseq->compile_data;
+iseq.c:    iseq->compile_data = 0;
+iseq.c:	rb_funcall2(err, rb_intern("set_backtrace"), 1, &iseq->filename);
+iseq.c:    VALUE parent = th->base_block->iseq->self;
+iseq.c:    iseq->self = self;
+iseq.c:    iseq->self = iseqval;
+iseq.c:	return rb_iseq_new_with_opt(node, th->base_block->iseq->name,
+iseq.c:				    file, th->base_block->iseq->self,
+iseq.c:    if (!iseq->name) {
+iseq.c:    if (!iseq->name) {
+iseq.c:		      RSTRING_PTR(iseq->name), RSTRING_PTR(iseq->filename));
+iseq.c:    return iseq->insn_info_table[0].line_no;
+iseq.c:    unsigned long i, size = iseq->insn_info_size;
+iseq.c:    struct iseq_insn_info_entry *table = iseq->insn_info_table;
+iseq.c:	    rb_iseq_t *ip = iseq->local_iseq;
+iseq.c:		ret = iseq->name;
+iseq.c:		    rb_ary_push(child, iseq->self);
+iseq.c:    switch(iseq->type) {
+iseq.c:    for (i=0; i<iseq->local_table_size; i++) {
+iseq.c:	ID lid = iseq->local_table[i];
+iseq.c:	for (j=0; j<iseq->arg_opts; j++) {
+iseq.c:			register_label(labels_table, iseq->arg_opt_table[j]));
+iseq.c:	if (iseq->arg_simple == 1) {
+iseq.c:	    args = INT2FIX(iseq->argc);
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->argc));
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->arg_post_len));
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->arg_post_start));
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->arg_rest));
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->arg_block));
+iseq.c:	    rb_ary_push(args, INT2FIX(iseq->arg_simple));
+iseq.c:    for (seq = iseq->iseq; seq < iseq->iseq + iseq->iseq_size; ) {
+iseq.c:		unsigned int idx = nseq - iseq->iseq + *seq;
+iseq.c:			unsigned int idx = nseq - iseq->iseq + pos;
+iseq.c:    for (i=0; i<iseq->catch_table_size; i++) {
+iseq.c:	struct iseq_catch_table_entry *entry = &iseq->catch_table[i];
+iseq.c:	if (iseq->insn_info_table[i].line_no != line) {
+iseq.c:	    line = iseq->insn_info_table[i].line_no;
+iseq.c:    rb_hash_aset(misc, ID2SYM(rb_intern("arg_size")), INT2FIX(iseq->arg_size));
+iseq.c:    rb_hash_aset(misc, ID2SYM(rb_intern("local_size")), INT2FIX(iseq->local_size));
+iseq.c:    rb_hash_aset(misc, ID2SYM(rb_intern("stack_max")), INT2FIX(iseq->stack_max));
+iseq.c:    rb_ary_push(val, iseq->name);
+iseq.c:    rb_ary_push(val, iseq->filename);
+iseq.c:    iseq->name = rb_str_new2(name);
+iseq.c:    iseq->filename = rb_str_new2(filename);
+iseq.c:    iseq->mark_ary = rb_ary_new();
+iseq.c:    iseq->self = iseqval;
+iseq.c:    iseq->iseq = ALLOC_N(VALUE, iseq->iseq_size);
+iseq.c:    for (i=0; i<iseq->iseq_size; i+=2) {
+iseq.c:	iseq->iseq[i] = BIN(opt_call_c_function);
+iseq.c:	iseq->iseq[i+1] = (VALUE)func;
+iseq.c:    ALLOC_AND_COPY(iseq->insn_info_table, insn_info_table,
+iseq.c:		   struct iseq_insn_info_entry, iseq->insn_info_size);
+iseq.c:    ALLOC_AND_COPY(iseq->catch_table, catch_table,
+iseq.c:		   struct iseq_catch_table_entry, iseq->catch_table_size);
+iseq.c:    ALLOC_AND_COPY(iseq->arg_opt_table, arg_opt_table,
+iseq.c:		   VALUE, iseq->arg_opts);
+iseq.c~:	if (!iseq->orig) {
+iseq.c~:	     * GC_INFO("%s @ %s\n", RSTRING_PTR(iseq->name),
+iseq.c~:	     *                      RSTRING_PTR(iseq->filename));
+iseq.c~:	    if (iseq->iseq != iseq->iseq_encoded) {
+iseq.c~:		RUBY_FREE_UNLESS_NULL(iseq->iseq_encoded);
+iseq.c~:	    RUBY_FREE_UNLESS_NULL(iseq->iseq);
+iseq.c~:	    RUBY_FREE_UNLESS_NULL(iseq->insn_info_table);
+iseq.c~:	    RUBY_FREE_UNLESS_NULL(iseq->local_table);
+iseq.c~:	    RUBY_FREE_UNLESS_NULL(iseq->catch_table);
+iseq.c~:	    RUBY_FREE_UNLESS_NULL(iseq->arg_opt_table);
+iseq.c~:	    compile_data_free(iseq->compile_data);
+iseq.c~:	RUBY_GC_INFO("%s @ %s\n", RSTRING_PTR(iseq->name), RSTRING_PTR(iseq->filename));
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->mark_ary);
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->name);
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->filename);
+iseq.c~:	RUBY_MARK_UNLESS_NULL((VALUE)iseq->cref_stack);
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->klass);
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->coverage);
+iseq.c~:/* 	RUBY_MARK_UNLESS_NULL((VALUE)iseq->node); */
+iseq.c~:/*	RUBY_MARK_UNLESS_NULL(iseq->cached_special_block); */
+iseq.c~:	RUBY_MARK_UNLESS_NULL(iseq->orig);
+iseq.c~:	if (iseq->compile_data != 0) {
+iseq.c~:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->mark_ary);
+iseq.c~:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->err_info);
+iseq.c~:	    RUBY_MARK_UNLESS_NULL(iseq->compile_data->catch_table_ary);
+iseq.c~:    const int type = iseq->type;
+iseq.c~:	iseq->cref_stack = NEW_BLOCK(th->top_wrapper ? th->top_wrapper : rb_cObject);
+iseq.c~:	iseq->cref_stack->nd_file = 0;
+iseq.c~:	iseq->cref_stack->nd_visi = NOEX_PRIVATE;
+iseq.c~:	iseq->cref_stack = NEW_BLOCK(0); /* place holder */
+iseq.c~:	iseq->cref_stack->nd_file = 0;
+iseq.c~:	iseq->cref_stack = piseq->cref_stack;
+iseq.c~:	iseq->local_iseq = iseq;
+iseq.c~:	iseq->local_iseq = piseq->local_iseq;
+iseq.c~:	iseq->parent_iseq = piseq;
+iseq.c~:    iseq->name = name;
+iseq.c~:    iseq->filename = filename;
+iseq.c~:    iseq->defined_method_id = 0;
+iseq.c~:    iseq->mark_ary = rb_ary_new();
+iseq.c~:    RBASIC(iseq->mark_ary)->klass = 0;
+iseq.c~:    iseq->type = type;
+iseq.c~:    iseq->arg_rest = -1;
+iseq.c~:    iseq->arg_block = -1;
+iseq.c~:    iseq->klass = 0;
+iseq.c~:     * iseq->special_block_builder = GC_GUARDED_PTR_REF(block_opt);
+iseq.c~:     * iseq->cached_special_block_builder = 0;
+iseq.c~:     * iseq->cached_special_block = 0;
+iseq.c~:    iseq->compile_data = ALLOC(struct iseq_compile_data);
+iseq.c~:    MEMZERO(iseq->compile_data, struct iseq_compile_data, 1);
+iseq.c~:    iseq->compile_data->mark_ary = rb_ary_new();
+iseq.c~:    RBASIC(iseq->compile_data->mark_ary)->klass = 0;
+iseq.c~:    iseq->compile_data->storage_head = iseq->compile_data->storage_current =
+iseq.c~:    iseq->compile_data->catch_table_ary = rb_ary_new();
+iseq.c~:    iseq->compile_data->storage_head->pos = 0;
+iseq.c~:    iseq->compile_data->storage_head->next = 0;
+iseq.c~:    iseq->compile_data->storage_head->size =
+iseq.c~:    iseq->compile_data->storage_head->buff =
+iseq.c~:      (char *)(&iseq->compile_data->storage_head->buff + 1);
+iseq.c~:    iseq->compile_data->option = option;
+iseq.c~:    iseq->coverage = Qfalse;
+iseq.c~:	    iseq->coverage = rb_hash_lookup(coverages, filename);
+iseq.c~:	    if (NIL_P(iseq->coverage)) iseq->coverage = Qfalse;
+iseq.c~:    struct iseq_compile_data *data = iseq->compile_data;
+iseq.c~:    iseq->compile_data = 0;
+iseq.c~:	rb_funcall2(err, rb_intern("set_backtrace"), 1, &iseq->filename);
+iseq.c~:    VALUE parent = th->base_block->iseq->self;
+iseq.c~:    iseq->self = self;
+iseq.c~:    iseq->self = iseqval;
+iseq.c~:	return rb_iseq_new_with_opt(node, th->base_block->iseq->name,
+iseq.c~:				    file, th->base_block->iseq->self,
+iseq.c~:    if (!iseq->name) {
+iseq.c~:    if (!iseq->name) {
+iseq.c~:		      RSTRING_PTR(iseq->name), RSTRING_PTR(iseq->filename));
+iseq.c~:    return iseq->insn_info_table[0].line_no;
+iseq.c~:    unsigned long i, size = iseq->insn_info_size;
+iseq.c~:    struct iseq_insn_info_entry *table = iseq->insn_info_table;
+iseq.c~:	    rb_iseq_t *ip = iseq->local_iseq;
+iseq.c~:		ret = iseq->name;
+iseq.c~:		    rb_ary_push(child, iseq->self);
+iseq.c~:    switch(iseq->type) {
+iseq.c~:    for (i=0; i<iseq->local_table_size; i++) {
+iseq.c~:	ID lid = iseq->local_table[i];
+iseq.c~:	for (j=0; j<iseq->arg_opts; j++) {
+iseq.c~:			register_label(labels_table, iseq->arg_opt_table[j]));
+iseq.c~:	if (iseq->arg_simple == 1) {
+iseq.c~:	    args = INT2FIX(iseq->argc);
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->argc));
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->arg_post_len));
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->arg_post_start));
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->arg_rest));
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->arg_block));
+iseq.c~:	    rb_ary_push(args, INT2FIX(iseq->arg_simple));
+iseq.c~:    for (seq = iseq->iseq; seq < iseq->iseq + iseq->iseq_size; ) {
+iseq.c~:		unsigned int idx = nseq - iseq->iseq + *seq;
+iseq.c~:			unsigned int idx = nseq - iseq->iseq + pos;
+iseq.c~:    for (i=0; i<iseq->catch_table_size; i++) {
+iseq.c~:	struct iseq_catch_table_entry *entry = &iseq->catch_table[i];
+iseq.c~:	if (iseq->insn_info_table[i].line_no != line) {
+iseq.c~:	    line = iseq->insn_info_table[i].line_no;
+iseq.c~:    rb_hash_aset(misc, ID2SYM(rb_intern("arg_size")), INT2FIX(iseq->arg_size));
+iseq.c~:    rb_hash_aset(misc, ID2SYM(rb_intern("local_size")), INT2FIX(iseq->local_size));
+iseq.c~:    rb_hash_aset(misc, ID2SYM(rb_intern("stack_max")), INT2FIX(iseq->stack_max));
+iseq.c~:    rb_ary_push(val, iseq->name);
+iseq.c~:    rb_ary_push(val, iseq->filename);
+iseq.c~:    iseq->name = rb_str_new2(name);
+iseq.c~:    iseq->filename = rb_str_new2(filename);
+iseq.c~:    iseq->mark_ary = rb_ary_new();
+iseq.c~:    iseq->self = iseqval;
+iseq.c~:    iseq->iseq = ALLOC_N(VALUE, iseq->iseq_size);
+iseq.c~:    for (i=0; i<iseq->iseq_size; i+=2) {
+iseq.c~:	iseq->iseq[i] = BIN(opt_call_c_function);
+iseq.c~:	iseq->iseq[i+1] = (VALUE)func;
+iseq.c~:    ALLOC_AND_COPY(iseq->insn_info_table, insn_info_table,
+iseq.c~:		   struct iseq_insn_info_entry, iseq->insn_info_size);
+iseq.c~:    ALLOC_AND_COPY(iseq->catch_table, catch_table,
+iseq.c~:		   struct iseq_catch_table_entry, iseq->catch_table_size);
+iseq.c~:    ALLOC_AND_COPY(iseq->arg_opt_table, arg_opt_table,
+iseq.c~:		   VALUE, iseq->arg_opts);
+proc.c:    if (BUILTIN_TYPE(iseq) == T_NODE || iseq->arg_block != -1) {
+proc.c:	    if (iseq->arg_rest < 0) {
+proc.c:		return INT2FIX(iseq->argc);
+proc.c:		return INT2FIX(-(iseq->argc + 1 + iseq->arg_post_len));
+proc.c:    loc[0] = iseq->filename;
+proc.c:    if (iseq->insn_info_table) {
+proc.c:		p1->block.iseq->iseq_size == p2->block.iseq->iseq_size &&
+proc.c:		p1->block.iseq->local_size == p2->block.iseq->local_size &&
+proc.c:		MEMCMP(p1->block.iseq->iseq, p2->block.iseq->iseq, VALUE,
+proc.c:		       p1->block.iseq->iseq_size) == 0) {
+proc.c:	if (iseq->insn_info_table) {
+proc.c:			 RSTRING_PTR(iseq->filename),
+proc.c:	    proc->block.iseq->defined_method_id = id;
+proc.c:	    proc->block.iseq->klass = mod;
+proc.c:	    if (iseq->arg_rest == -1 && iseq->arg_opts == 0) {
+proc.c:		return iseq->argc;
+proc.c:		return -(iseq->argc + 1 + iseq->arg_post_len);
+thread.c:    VALUE coverage = GET_THREAD()->cfp->iseq->coverage;
+vm.c:    if (iseq->type != ISEQ_TYPE_TOP) {
+vm.c:		  th->top_self, 0, iseq->iseq_encoded,
+vm.c:		  th->cfp->sp, 0, iseq->local_size);
+vm.c:        CHECK_STACK_OVERFLOW(th->cfp, iseq->stack_max);
+vm.c:		  GC_GUARDED_PTR(block->dfp), iseq->iseq_encoded,
+vm.c:		  th->cfp->sp, block->lfp, iseq->local_size);
+vm.c:    CHECK_STACK_OVERFLOW(th->cfp, iseq->stack_max);
+vm.c:    if (bind && iseq->local_size > 0) {
+vm.c:    CHECK_STACK_OVERFLOW(th->cfp, iseq->stack_max);
+vm.c:		RUBY_MARK_UNLESS_NULL(env->block.iseq->self);
+vm.c:	local_size = cfp->iseq->local_size;
+vm.c:    for (i = 0; i < env->block.iseq->local_table_size; i++) {
+vm.c:	ID lid = env->block.iseq->local_table[i];
+vm.c:	int i, opt_pc, arg_size = iseq->arg_size;
+vm.c:	CHECK_STACK_OVERFLOW(cfp, argc + iseq->stack_max);
+vm.c:		      iseq->iseq_encoded + opt_pc, cfp->sp + arg_size, block->lfp,
+vm.c:		      iseq->local_size - arg_size);
+vm.c:	size_t pos = cfp->pc - cfp->iseq->iseq_encoded;
+vm.c:	for (i = 0; i < iseq->insn_info_size; i++) {
+vm.c:	    if (iseq->insn_info_table[i].position == pos) {
+vm.c:		line_no = iseq->insn_info_table[i - 1].line_no;
+vm.c:	line_no = iseq->insn_info_table[i - 1].line_no;
+vm.c:		file = RSTRING_PTR(iseq->filename);
+vm.c:				 file, line_no, RSTRING_PTR(iseq->name));
+vm.c:	return RSTRING_PTR(cfp->iseq->filename);
+vm.c:	epc = cfp->pc - cfp->iseq->iseq_encoded;
+vm.c:	    for (i = 0; i < cfp->iseq->catch_table_size; i++) {
+vm.c:		entry = &cfp->iseq->catch_table[i];
+vm.c:	    for (i = 0; i < cfp->iseq->catch_table_size; i++) {
+vm.c:		entry = &cfp->iseq->catch_table[i];
+vm.c:			    cfp->pc = cfp->iseq->iseq_encoded + entry->cont;
+vm.c:	    for (i = 0; i < cfp->iseq->catch_table_size; i++) {
+vm.c:		entry = &cfp->iseq->catch_table[i];
+vm.c:			cfp->pc = cfp->iseq->iseq_encoded + entry->cont;
+vm.c:	    for (i = 0; i < cfp->iseq->catch_table_size; i++) {
+vm.c:		entry = &cfp->iseq->catch_table[i];
+vm.c:	    cfp->pc = cfp->iseq->iseq_encoded + cont_pc;
+vm.c:			  cfp->self, (VALUE)cfp->dfp, catch_iseq->iseq_encoded,
+vm.c:			  cfp->sp + 1 /* push value */, cfp->lfp, catch_iseq->local_size - 1);
+vm.c:	if (iseq->defined_method_id) {
+vm.c:	    if (idp) *idp = iseq->defined_method_id;
+vm.c:	    if (klassp) *klassp = iseq->klass;
+vm.c:	if (iseq->local_iseq == iseq) {
+vm.c:	iseq = iseq->parent_iseq;
+vm.c:	    char *file = RSTRING_PTR(iseq->filename);
+vm.c:			     file, line_no, RSTRING_PTR(iseq->name));
+vm.c:    COPY_CREF(miseq->cref_stack, cref);
+vm.c:    miseq->klass = klass;
+vm.c:    miseq->defined_method_id = id;
+vm.c:    newbody = NEW_NODE(RUBY_VM_METHOD_NODE, 0, miseq->self, 0);
+vm.c:	th->cfp->pc = iseq->iseq_encoded;
+vm.inc:    ret = iseq->self;
+vm.inc:    COPY_CREF(class_iseq->cref_stack, vm_cref_push(th, klass, NOEX_PUBLIC));
+vm.inc:		  class_iseq->iseq_encoded, GET_SP(), 0,
+vm.inc:		  class_iseq->local_size);
+vm_dump.c:	biseq_name = "";	/* RSTRING(cfp->block_iseq->name)->ptr; */
+vm_dump.c:	    pc = cfp->pc - cfp->iseq->iseq_encoded;
+vm_dump.c:	    iseq_name = RSTRING_PTR(cfp->iseq->name);
+vm_dump.c:		snprintf(posbuf, MAX_POSBUF, "%s:%d", RSTRING_PTR(cfp->iseq->filename), line);
+vm_dump.c:	argc = iseq->argc;
+vm_dump.c:	local_size = iseq->local_size;
+vm_dump.c:	name = RSTRING_PTR(iseq->name);
+vm_dump.c:	pc = cfp->pc - cfp->iseq->iseq_encoded;
+vm_dump.c:	VALUE *seq = iseq->iseq;
+vm_dump.c:	int pc = cfp->pc - iseq->iseq_encoded;
+vm_eval.c:	if (bind && iseq->local_size > 0) {
+vm_eval.c:	CHECK_STACK_OVERFLOW(th->cfp, iseq->stack_max);
+vm_eval.c:	    for (i = 0; i < cfp->iseq->local_table_size; i++) {
+vm_eval.c:		ID lid = cfp->iseq->local_table[i];
+vm_insnhelper.c:	cfp->iseq->profile.count++;
+vm_insnhelper.c:	cfp->iseq->profile.time_cumu = cfp->prof_time_self;
+vm_insnhelper.c:	cfp->iseq->profile.time_self = cfp->prof_time_self - cfp->prof_time_chld;
+vm_insnhelper.c:    if (LIKELY(iseq->arg_simple & 0x01)) { \
+vm_insnhelper.c:	if (orig_argc != iseq->argc) { \
+vm_insnhelper.c:	    rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", orig_argc, iseq->argc); \
+vm_insnhelper.c:    const int m = iseq->argc;
+vm_insnhelper.c:    th->mark_stack_len = argc + iseq->arg_size;
+vm_insnhelper.c:    if (argc < (m + iseq->arg_post_len)) { /* check with post arg */
+vm_insnhelper.c:		 argc, m + iseq->arg_post_len);
+vm_insnhelper.c:    if (iseq->arg_post_len) {
+vm_insnhelper.c:	if (!(orig_argc < iseq->arg_post_start)) {
+vm_insnhelper.c:	MEMCPY(&orig_argv[iseq->arg_post_start], &argv[argc -= iseq->arg_post_len],
+vm_insnhelper.c:	       VALUE, iseq->arg_post_len);
+vm_insnhelper.c:    if (iseq->arg_opts) {
+vm_insnhelper.c:	const int opts = iseq->arg_opts - 1 /* no opt */;
+vm_insnhelper.c:	if (iseq->arg_rest == -1 && argc > opts) {
+vm_insnhelper.c:		     orig_argc, m + opts + iseq->arg_post_len);
+vm_insnhelper.c:	    opt_pc = iseq->arg_opt_table[opts]; /* no opt */
+vm_insnhelper.c:	    opt_pc = iseq->arg_opt_table[argc];
+vm_insnhelper.c:    if (iseq->arg_rest != -1) {
+vm_insnhelper.c:	orig_argv[iseq->arg_rest] = rb_ary_new4(argc, argv);
+vm_insnhelper.c:    if (block && iseq->arg_block != -1) {
+vm_insnhelper.c:		     orig_argc, m + iseq->arg_post_len);
+vm_insnhelper.c:	orig_argv[iseq->arg_block] = blockval; /* Proc or nil */
+vm_insnhelper.c:    CHECK_STACK_OVERFLOW(cfp, iseq->stack_max);
+vm_insnhelper.c:    sp = rsp + iseq->arg_size;
+vm_insnhelper.c:		      iseq->local_size, iseq->arg_size);
+vm_insnhelper.c:	for (i = 0; i < iseq->local_size - iseq->arg_size; i++) {
+vm_insnhelper.c:		      iseq->iseq_encoded + opt_pc, sp, 0, 0);
+vm_insnhelper.c:	for (i = 0; i < iseq->local_size - iseq->arg_size; i++) {
+vm_insnhelper.c:		      iseq->iseq_encoded + opt_pc, sp, 0, 0);
+vm_insnhelper.c:    const int m = iseq->argc;
+vm_insnhelper.c:    const int r = iseq->arg_rest;
+vm_insnhelper.c:    int len = iseq->arg_post_len;
+vm_insnhelper.c:    int start = iseq->arg_post_start;
+vm_insnhelper.c:    if (iseq->arg_opts) {
+vm_insnhelper.c:	const int opts = iseq->arg_opts - 1;
+vm_insnhelper.c:	    opt_pc = iseq->arg_opt_table[opts];
+vm_insnhelper.c:	    opt_pc = iseq->arg_opt_table[rsize];
+vm_insnhelper.c:    const int m = iseq->argc;
+vm_insnhelper.c:    if (!(iseq->arg_simple & 0x02) &&          /* exclude {|a|} */
+vm_insnhelper.c:            (m + iseq->arg_post_len) > 0 &&    /* this process is meaningful */
+vm_insnhelper.c:    if (iseq->arg_rest == -1 && iseq->arg_opts == 0) {
+vm_insnhelper.c:        const int arg_size = iseq->arg_size;
+vm_insnhelper.c:        int r = iseq->arg_rest;
+vm_insnhelper.c:        if (iseq->arg_post_len || 
+vm_insnhelper.c:                iseq->arg_opts) { /* TODO: implement simple version for (iseq->arg_post_len==0 && iseq->arg_opts > 0) */
+vm_insnhelper.c:        th->mark_stack_len = iseq->arg_size;
+vm_insnhelper.c:    if (iseq->arg_block != -1) {
+vm_insnhelper.c:        argv[iseq->arg_block] = procval;
+vm_insnhelper.c:	printf("iseq argc: %d\n", iseq->argc);
+vm_insnhelper.c:	printf("iseq opts: %d\n", iseq->arg_opts);
+vm_insnhelper.c:	printf("iseq rest: %d\n", iseq->arg_rest);
+vm_insnhelper.c:	printf("iseq post: %d\n", iseq->arg_post_len);
+vm_insnhelper.c:	printf("iseq blck: %d\n", iseq->arg_block);
+vm_insnhelper.c:	printf("iseq smpl: %d\n", iseq->arg_simple);
+vm_insnhelper.c:    if (GET_ISEQ()->local_iseq->type != ISEQ_TYPE_METHOD || block == 0) {
+vm_insnhelper.c:	const int arg_size = iseq->arg_size;
+vm_insnhelper.c:	CHECK_STACK_OVERFLOW(GET_CFP(), iseq->stack_max);
+vm_insnhelper.c:		      iseq->iseq_encoded + opt_pc, rsp + arg_size, block->lfp,
+vm_insnhelper.c:		      iseq->local_size - arg_size);
+vm_insnhelper.c:	    cref = iseq->cref_stack;
+vm_insnhelper.c:		if (cfp->iseq->type != ISEQ_TYPE_BLOCK) {
+vm_insnhelper.c:		    base_iseq = base_iseq->parent_iseq;
+vm_insnhelper.c:			    VALUE epc = epc = cfp->pc - cfp->iseq->iseq_encoded;
+vm_insnhelper.c:			    for (i=0; i<iseq->catch_table_size; i++) {
+vm_insnhelper.c:				struct iseq_catch_table_entry *entry = &iseq->catch_table[i];
+vm_insnhelper.c:		    if (cfp->dfp == lfp && cfp->iseq->type == ISEQ_TYPE_METHOD) {
+vm_insnhelper.c~:	cfp->iseq->profile.count++;
+vm_insnhelper.c~:	cfp->iseq->profile.time_cumu = cfp->prof_time_self;
+vm_insnhelper.c~:	cfp->iseq->profile.time_self = cfp->prof_time_self - cfp->prof_time_chld;
+vm_insnhelper.c~:    if (LIKELY(iseq->arg_simple & 0x01)) { \
+vm_insnhelper.c~:	if (orig_argc != iseq->argc) { \
+vm_insnhelper.c~:	    rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", orig_argc, iseq->argc); \
+vm_insnhelper.c~:    const int m = iseq->argc;
+vm_insnhelper.c~:    th->mark_stack_len = argc + iseq->arg_size;
+vm_insnhelper.c~:    if (argc < (m + iseq->arg_post_len)) { /* check with post arg */
+vm_insnhelper.c~:		 argc, m + iseq->arg_post_len);
+vm_insnhelper.c~:    if (iseq->arg_post_len) {
+vm_insnhelper.c~:	if (!(orig_argc < iseq->arg_post_start)) {
+vm_insnhelper.c~:	MEMCPY(&orig_argv[iseq->arg_post_start], &argv[argc -= iseq->arg_post_len],
+vm_insnhelper.c~:	       VALUE, iseq->arg_post_len);
+vm_insnhelper.c~:    if (iseq->arg_opts) {
+vm_insnhelper.c~:	const int opts = iseq->arg_opts - 1 /* no opt */;
+vm_insnhelper.c~:	if (iseq->arg_rest == -1 && argc > opts) {
+vm_insnhelper.c~:		     orig_argc, m + opts + iseq->arg_post_len);
+vm_insnhelper.c~:	    opt_pc = iseq->arg_opt_table[opts]; /* no opt */
+vm_insnhelper.c~:	    opt_pc = iseq->arg_opt_table[argc];
+vm_insnhelper.c~:    if (iseq->arg_rest != -1) {
+vm_insnhelper.c~:	orig_argv[iseq->arg_rest] = rb_ary_new4(argc, argv);
+vm_insnhelper.c~:    if (block && iseq->arg_block != -1) {
+vm_insnhelper.c~:		     orig_argc, m + iseq->arg_post_len);
+vm_insnhelper.c~:	orig_argv[iseq->arg_block] = blockval; /* Proc or nil */
+vm_insnhelper.c~:    CHECK_STACK_OVERFLOW(cfp, iseq->stack_max);
+vm_insnhelper.c~:    sp = rsp + iseq->arg_size;
+vm_insnhelper.c~:		      iseq->local_size, iseq->arg_size);
+vm_insnhelper.c~:	for (i = 0; i < iseq->local_size - iseq->arg_size; i++) {
+vm_insnhelper.c~:		      iseq->iseq_encoded + opt_pc, sp, 0, 0);
+vm_insnhelper.c~:	for (i = 0; i < iseq->local_size - iseq->arg_size; i++) {
+vm_insnhelper.c~:		      iseq->iseq_encoded + opt_pc, sp, 0, 0);
+vm_insnhelper.c~:    const int m = iseq->argc;
+vm_insnhelper.c~:    const int r = iseq->arg_rest;
+vm_insnhelper.c~:    int len = iseq->arg_post_len;
+vm_insnhelper.c~:    int start = iseq->arg_post_start;
+vm_insnhelper.c~:    if (iseq->arg_opts) {
+vm_insnhelper.c~:	const int opts = iseq->arg_opts - 1;
+vm_insnhelper.c~:	    opt_pc = iseq->arg_opt_table[opts];
+vm_insnhelper.c~:	    opt_pc = iseq->arg_opt_table[rsize];
+vm_insnhelper.c~:    const int m = iseq->argc;
+vm_insnhelper.c~:    if (!(iseq->arg_simple & 0x02) &&          /* exclude {|a|} */
+vm_insnhelper.c~:            (m + iseq->arg_post_len) > 0 &&    /* this process is meaningful */
+vm_insnhelper.c~:    if (iseq->arg_rest == -1 && iseq->arg_opts == 0) {
+vm_insnhelper.c~:        const int arg_size = iseq->arg_size;
+vm_insnhelper.c~:        int r = iseq->arg_rest;
+vm_insnhelper.c~:        if (iseq->arg_post_len || 
+vm_insnhelper.c~:                iseq->arg_opts) { /* TODO: implement simple version for (iseq->arg_post_len==0 && iseq->arg_opts > 0) */
+vm_insnhelper.c~:        th->mark_stack_len = iseq->arg_size;
+vm_insnhelper.c~:    if (iseq->arg_block != -1) {
+vm_insnhelper.c~:        argv[iseq->arg_block] = procval;
+vm_insnhelper.c~:	printf("iseq argc: %d\n", iseq->argc);
+vm_insnhelper.c~:	printf("iseq opts: %d\n", iseq->arg_opts);
+vm_insnhelper.c~:	printf("iseq rest: %d\n", iseq->arg_rest);
+vm_insnhelper.c~:	printf("iseq post: %d\n", iseq->arg_post_len);
+vm_insnhelper.c~:	printf("iseq blck: %d\n", iseq->arg_block);
+vm_insnhelper.c~:	printf("iseq smpl: %d\n", iseq->arg_simple);
+vm_insnhelper.c~:    if (GET_ISEQ()->local_iseq->type != ISEQ_TYPE_METHOD || block == 0) {
+vm_insnhelper.c~:	const int arg_size = iseq->arg_size;
+vm_insnhelper.c~:	CHECK_STACK_OVERFLOW(GET_CFP(), iseq->stack_max);
+vm_insnhelper.c~:		      iseq->iseq_encoded + opt_pc, rsp + arg_size, block->lfp,
+vm_insnhelper.c~:		      iseq->local_size - arg_size);
+vm_insnhelper.c~:	    cref = iseq->cref_stack;
+vm_insnhelper.c~:		if (cfp->iseq->type != ISEQ_TYPE_BLOCK) {
+vm_insnhelper.c~:		    base_iseq = base_iseq->parent_iseq;
+vm_insnhelper.c~:			    VALUE epc = epc = cfp->pc - cfp->iseq->iseq_encoded;
+vm_insnhelper.c~:			    for (i=0; i<iseq->catch_table_size; i++) {
+vm_insnhelper.c~:				struct iseq_catch_table_entry *entry = &iseq->catch_table[i];
+vm_insnhelper.c~:		    if (cfp->dfp == lfp && cfp->iseq->type == ISEQ_TYPE_METHOD) {
