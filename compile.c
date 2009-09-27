@@ -2414,11 +2414,7 @@ case_when_optimizable_literal(NODE * node)
 static void
 paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
   NODE *node = node_root;
-<<<<<<< HEAD:compile.c
   int line = nd_line(node), i=0;
-=======
-  int len = node->nd_alen, line = nd_line(node), i=0;
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
   
     if (nd_type(node) != NODE_ZARRAY) {
 	while (node) {
@@ -2427,44 +2423,19 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 	      if(SYMBOL_P(node->nd_head->nd_lit)){
 		
 		ID id = SYM2ID(node->nd_head->nd_lit);
-<<<<<<< HEAD:compile.c
-		
-=======
-		ID match_id = rb_intern("matchcond");
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 		
 		int local = get_match_var_idx(iseq, id);
 		
 		if(local >= 0){
 		  int idx = iseq->local_iseq->local_size - local;
-<<<<<<< HEAD:compile.c
-=======
-		  int mc_idx =iseq->local_iseq->local_size - get_match_var_idx(iseq, match_id);
-		
-		  ADD_INSN1(body_seq, line, getlocal, INT2FIX(mc_idx));
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 		  ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
-<<<<<<< HEAD:compile.c
 		  ADD_SEND(body_seq, line, ID2SYM(idAREF), INT2FIX(1));
-=======
-		  ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")), INT2FIX(1));
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 		  ADD_INSN1(body_seq, line, setlocal, INT2FIX(idx));
 		} else {
 		  int idx, lv, ls;
 
-<<<<<<< HEAD:compile.c
-
-=======
-		  idx = get_dyna_var_idx(iseq, match_id, &lv, &ls);
-		  ADD_INSN2(body_seq, line, getdynamic, INT2FIX(ls - idx), INT2FIX(lv));
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 		  ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
-<<<<<<< HEAD:compile.c
 		  ADD_SEND(body_seq, line, ID2SYM(idAREF),INT2FIX(1));
-=======
-		  ADD_SEND(body_seq, line, ID2SYM(rb_intern("[]")),INT2FIX(1));
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 
 		  idx = get_dyna_var_idx(iseq, id, &lv, &ls);
 		  ADD_INSN2(body_seq, line, setdynamic, INT2FIX(ls - idx), INT2FIX(lv));
@@ -3270,11 +3241,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    }
 
 	    ADD_LABEL(body_seq, l1);
-<<<<<<< HEAD:compile.c
 	    //ADD_INSN(body_seq, nd_line(node), pop);
-=======
-	    ADD_INSN(body_seq, nd_line(node), pop);
->>>>>>> f7bff1dc2d61f6c4c19386b8a09f427cc2ad8f79:compile.c
 	    paternmatch_setlocal(iseq, body_seq, vals->nd_head);
 	    COMPILE_(body_seq, "when body", node->nd_body, poped);
 	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);
