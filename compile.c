@@ -2414,7 +2414,7 @@ case_when_optimizable_literal(NODE * node)
 static void
 paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
   NODE *node = node_root;
-  int line = nd_line(node), i=0;
+  int line = nd_line(node), i=0,j=0;
   
     if (nd_type(node) != NODE_ZARRAY) {
 	while (node) {
@@ -2425,7 +2425,7 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 		ID id = SYM2ID(node->nd_head->nd_lit);
 		
 		int local = get_match_var_idx(iseq, id);
-		
+		ADD_INSN1(body_seq, line, topn, INT2FIX(0));
 		if(local >= 0){
 		  int idx = iseq->local_iseq->local_size - local;
 		  ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
@@ -2446,6 +2446,7 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 	    node = node->nd_next;
 	    i++;
 	}
+	ADD_INSN(body_seq, 0, pop);
     }
     return;
 }

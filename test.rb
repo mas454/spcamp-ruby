@@ -1,14 +1,12 @@
 # -*- coding: utf-8  -*
-def test(arr)
- match arr
-    when [x,_,_]
-      x
+ match [1,2,3]
+    when [x,2,y]
+     puts x
+     puts y
     when [1,2,3,y]
-      x
-　　when [1,_,x,y]
-     x+y
+      puts y
+    when [1,2,3,4,z]
+      puts z
  end
-end
-puts test([1,_,2,3])
 #puts RubyVM::InstructionSequence.compile_file(__FILE__).disasm
 
