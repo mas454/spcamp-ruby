@@ -1,12 +1,10 @@
-# -*- coding: utf-8  -*
- match [1,2,3]
-    when [x,2,y]
-     puts x
-     puts y
-    when [1,2,3,y]
-      puts y
-    when [1,2,3,4,z]
-      puts z
- end
+x=10
+match [10, 20, 30, "abc"]
+ when [x, 20, z, "abc"]
+  puts x+z
+ when [10,20,30]
+  puts 40
+end
+
 #puts RubyVM::InstructionSequence.compile_file(__FILE__).disasm
 

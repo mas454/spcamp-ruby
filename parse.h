@@ -158,7 +158,8 @@
      id_core_define_method = 374,
      id_core_define_singleton_method = 375,
      id_core_set_postexe = 376,
-     tLAST_TOKEN = 377
+     tINFIX_OP = 377,
+     tLAST_TOKEN = 378
    };
 #endif
 /* Tokens.  */
@@ -281,7 +282,8 @@
 #define id_core_define_method 374
 #define id_core_define_singleton_method 375
 #define id_core_set_postexe 376
-#define tLAST_TOKEN 377
+#define tINFIX_OP 377
+#define tLAST_TOKEN 378
 
 
 

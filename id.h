@@ -156,7 +156,7 @@ ruby_method_id_check_for(id_core_undef_method, 373);
 ruby_method_id_check_for(id_core_define_method, 374);
 ruby_method_id_check_for(id_core_define_singleton_method, 375);
 ruby_method_id_check_for(id_core_set_postexe, 376);
-ruby_method_id_check_for(tLAST_TOKEN, 377);
+ruby_method_id_check_for(tLAST_TOKEN, 378);
 };
 #endif
 

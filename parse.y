@@ -65,7 +65,8 @@ enum lex_state_e {
     EXPR_FNAME,			/* ignore newline, no reserved words. */
     EXPR_DOT,			/* right after `.' or `::', no reserved words. */
     EXPR_CLASS,			/* immediate after `class', no here document. */
-    EXPR_VALUE			/* alike EXPR_BEG but label is disallowed. */
+    EXPR_VALUE,		/* alike EXPR_BEG but label is disallowed. */
+    EXPR_INFIX
 };
 
 # ifdef HAVE_LONG_LONG
@@ -660,7 +661,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 	keyword__ENCODING__
         
 
-%token <id>   tIDENTIFIER tFID tGVAR tIVAR tCONSTANT tCVAR tLABEL
+%token <id>   tIDENTIFIER  tFID tGVAR tIVAR tCONSTANT tCVAR tLABEL
 %token <node> tINTEGER tFLOAT tSTRING_CONTENT tCHAR
 %token <node> tNTH_REF tBACK_REF
 %token <num>  tREGEXP_END
@@ -670,7 +671,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %type <node> words qwords word_list qword_list word
 %type <node> literal numeric dsym cpath
 %type <node> top_compstmt top_stmts top_stmt
-%type <node> bodystmt compstmt stmts stmt expr parg arg mprimary primary command command_call method_call
+%type <node> bodystmt compstmt stmts stmt expr parg  arg testarg mprimary primary command command_call method_call
 %type <node> expr_value parg_value arg_value primary_value
 %type <node> if_tail opt_else patern_body matches case_body cases opt_rescue exc_list exc_var opt_ensure k_patern_when
 %type <node> args call_args opt_call_args patern_args
@@ -743,7 +744,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %left  '|' '^'
 %left  '&'
 %left  tLSHFT tRSHFT
-%left  '+' '-'
+%left  '+' '-' tIDENTIFIER
 %left  '*' '/' '%'
 %right tUMINUS_NUM tUMINUS
 %right tPOW
@@ -760,7 +761,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %nonassoc id_core_define_method
 %nonassoc id_core_define_singleton_method
 %nonassoc id_core_set_postexe
-
+%token<id> tINFIX_OP
 %token tLAST_TOKEN
 
 %%
@@ -1826,6 +1827,7 @@ op		: '|'		{ ifndef_ripper($$ = '|'); }
 		| tRSHFT	{ ifndef_ripper($$ = tRSHFT); }
 		| '+'		{ ifndef_ripper($$ = '+'); }
 		| '-'		{ ifndef_ripper($$ = '-'); }
+                | tINFIX_OP     { ifndef_ripper($$ = tINFIX_OP);}
 		| '*'		{ ifndef_ripper($$ = '*'); }
 		| tSTAR		{ ifndef_ripper($$ = '*'); }
 		| '/'		{ ifndef_ripper($$ = '/'); }
@@ -1858,7 +1860,13 @@ parg            : mprimary
 		    {
 			$$ = $1;
 		    }
-		; 
+		;
+testarg        : arg
+                   {
+		     lex_state = EXPR_INFIX;
+		     $$ = $1;
+		   }
+               ; 
 arg		: lhs '=' arg
 		    {
 		    /*%%%*/
@@ -2072,7 +2080,7 @@ arg		: lhs '=' arg
 			$$ = dispatch2(dot3, $1, $3);
 		    %*/
 		    }
-		| arg '+' arg
+                | arg  '+' arg
 		    {
 		    /*%%%*/
 			$$ = call_bin_op($1, '+', $3);
@@ -2080,6 +2088,7 @@ arg		: lhs '=' arg
 			$$ = dispatch3(binary, $1, ID2SYM('+'), $3);
 		    %*/
 		    }
+                
 		| arg '-' arg
 		    {
 		    /*%%%*/
@@ -2329,12 +2338,17 @@ arg		: lhs '=' arg
 			$$ = dispatch3(ifop, $1, $3, $6);
 		    %*/
 		    }
+/* | testarg tIDENTIFIER arg
+                    {
+		      $$ = call_bin_op($1, $2, $3);
+		      }*/
 		| primary
 		    {
 			$$ = $1;
 		    }
 
 		;
+
 parg_value     : parg
                     {
 		    /*%%%*/
@@ -2356,6 +2370,7 @@ arg_value	: arg
 			$$ = $1;
 		    %*/
 		    }
+                
 		;
 
 aref_args	: none
@@ -2820,7 +2835,13 @@ primary		: literal
                   k_end
                     {
 		    /*%%%*/
+		      //ID id = rb_intern("condmatch");
+		      
 		      $$ = NEW_PATERN($2, $4);
+		      /*if(!local_id(id)){
+			local_var(id);
+		      }
+		      $$ = NEW_PATERN(assignable(id, $2), $4);*/
 		      fixpos($$, $2);
 		    /*%
 			$$ = dispatch2(case, $2, $4);
@@ -7647,7 +7668,10 @@ parser_yylex(struct parser_params *parser)
 		result = tFID;
 	    }
 	    else {
-		if (lex_state == EXPR_FNAME) {
+	      if(lex_state == EXPR_INFIX){
+		
+		result = tIDENTIFIER;
+	      }else if (lex_state == EXPR_FNAME) {
 		    if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
 			(!peek('=') || (lex_p + 1 < lex_pend && lex_p[1] == '>'))) {
 			result = tIDENTIFIER;
@@ -7730,7 +7754,9 @@ parser_yylex(struct parser_params *parser)
             ID ident = TOK_INTERN(!ENC_SINGLE(mb));
 
             set_yylval_id(ident);
-            if (last_state != EXPR_DOT && is_local_id(ident) && lvar_defined(ident)) {
+	    if(lex_state == EXPR_INFIX){
+	     lex_state = EXPR_BEG;
+	    }else if (last_state != EXPR_DOT && is_local_id(ident) && lvar_defined(ident)) {
                 lex_state = EXPR_END;
             }
         }
@@ -8093,8 +8119,9 @@ gettable_gen(struct parser_params *parser, ID id)
 	  }
 	  //assignable(id, 0);
 	  //printf("id: %s\n", rb_id2name(id));
-	  return NEW_LIT(ID2SYM(id));
-	  }
+	  //return NEW_LIT(ID2SYM(id));
+	  return NEW_LVAR(id);
+	}
 	if (local_id(id)){ 
 	  //printf("local id: %s\n", rb_id2name(id));
 	  return NEW_LVAR(id);
