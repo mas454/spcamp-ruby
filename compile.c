@@ -2267,6 +2267,38 @@ static void var2sym(NODE* n){
   n->u2.value = 0;
   n->u3.value = 0;
 }
+static int compile_paternmatch_argscat(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
+			       LABEL *nextl, LABEL *body_label)
+{
+  NODE *node = node_root;
+  NODE *argscat_head = node->nd_head;
+  int len = node->nd_alen, line = nd_line(node), i=0;
+  if (nd_type(argscat_head) != NODE_ZARRAY) {
+	while (argscat_head) {
+	    if (nd_type(argscat_head) != NODE_ARRAY) {
+		rb_bug("compile_array: This node is not NODE_ARRAY, but %s",
+		       ruby_node_name(nd_type(argscat_head)));
+	    }	    
+	    
+	    switch(nd_type(argscat_head->nd_head)){
+	     case NODE_LVAR:
+	       //case NODE_ARGSCAT:
+	      break;
+	     default:
+	       ADD_INSN(ret, line, dup);
+	       ADD_INSN1(ret, line, putobject, INT2FIX(i));
+	       ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
+	       COMPILE_(ret, "array element", argscat_head->nd_head, 0);
+	       ADD_SEND(ret, line, ID2SYM(idEq), INT2FIX(1));
+	       ADD_INSNL(ret, line, branchunless, nextl);
+	    }
+	    i++;
+	    argscat_head = argscat_head->nd_next;
+	}
+    }
+    ADD_INSNL(ret, line, jump, body_label);
+    return len;
+}
 static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
 			       LABEL *nextl, LABEL *body_label)
 {
@@ -2289,6 +2321,7 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	    
 	    switch(nd_type(node->nd_head)){
 	     case NODE_LVAR:
+	       //case NODE_ARGSCAT:
 	      break;
 	     default:
 	       ADD_INSN(ret, line, dup);
@@ -2460,9 +2493,29 @@ case_when_optimizable_literal(NODE * node)
 static void
 paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
   NODE *node = node_root;
-  int line = nd_line(node), i=0;//,j=0;
-  
-    if (nd_type(node) != NODE_ZARRAY) {
+  int line = nd_line(node), i=0;
+  if(nd_type(node)==NODE_ARGSCAT){
+    int len = node->nd_head->nd_alen;
+    ID id = node->nd_body->nd_vid;
+		
+    int local = get_match_var_idx(iseq, id);
+    VALUE range = rb_range_new(INT2FIX(len), INT2FIX(-1),Qfalse);
+    ADD_INSN(body_seq, line, dup);
+    if(local >= 0){
+      int idx = iseq->local_iseq->local_size - local;
+      
+      ADD_INSN1(body_seq, line, putobject, range);
+      ADD_SEND(body_seq, line, ID2SYM(idAREF), INT2FIX(1));
+      ADD_INSN1(body_seq, line, setlocal, INT2FIX(idx));
+    } else {
+      int idx, lv, ls;
+
+      ADD_INSN1(body_seq, line, putobject, range);
+      ADD_SEND(body_seq, line, ID2SYM(idAREF),INT2FIX(1));
+      idx = get_dyna_var_idx(iseq, id, &lv, &ls);
+      ADD_INSN2(body_seq, line, setdynamic, INT2FIX(ls - idx), INT2FIX(lv));
+    }
+  }else if (nd_type(node) != NODE_ZARRAY) {
 	while (node) {
 	    if (nd_type(node->nd_head) == NODE_LVAR) {
 		ID id = node->nd_head->nd_vid;
@@ -2506,9 +2559,11 @@ when_vals_patern(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *next
 	if(nd_type(val)== NODE_ARRAY){
 	  //compile_patern_array_(iseq, cond_seq, val, Qtrue, 0);
 	  compile_paternmatch(iseq, cond_seq, val, next, body_label);
+	}else if(nd_type(val)==NODE_ARGSCAT){
+	  compile_paternmatch_argscat(iseq, cond_seq, val, next, body_label);
 	}else{
 	  COMPILE(cond_seq, "when cond", val);
-        }
+	}
 	
 	vals = vals->nd_next;
     }
@@ -4611,7 +4666,6 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	    ID id = node->nd_vid;
 	    int idx = iseq->local_iseq->local_size - get_local_var_idx(iseq, id);
 	    debugs("id: %s idx: %d\n", rb_id2name(id), idx);
-	    
 	    ADD_INSN1(ret, nd_line(node), getlocal, INT2FIX(idx));
 	}
 	break;
@@ -4820,6 +4874,7 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 	break;
       }
       case NODE_ARGSCAT:{
+	//printf("argscat\n");
 	COMPILE(ret, "argscat head", node->nd_head);
 	COMPILE(ret, "argscat body", node->nd_body);
 	ADD_INSN(ret, nd_line(node), concatarray);

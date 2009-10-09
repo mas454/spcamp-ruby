@@ -120,7 +120,7 @@ enum ruby_method_ids {
     TOKEN2ID(__send__),
     TOKEN2ID(Initialize)
 };
-
+/*
 #ifdef tLAST_TOKEN
 struct ruby_method_ids_check {
 #define ruby_method_id_check_for(name, value) \
@@ -159,5 +159,5 @@ ruby_method_id_check_for(id_core_set_postexe, 376);
 ruby_method_id_check_for(tLAST_TOKEN, 378);
 };
 #endif
-
+*/
 #endif /* RUBY_ID_H */

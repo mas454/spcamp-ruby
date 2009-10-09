@@ -13716,6 +13716,7 @@ arg_concat_gen(struct parser_params *parser, NODE *node1, NODE *node2)
 	node1->nd_body = list_concat(node1->nd_body, node2);
 	return node1;
     }
+    //printf("test\n");
     return NEW_ARGSCAT(node1, node2);
 }
 

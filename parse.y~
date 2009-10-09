@@ -1863,7 +1863,6 @@ parg            : mprimary
 		;
 testarg        : arg
                    {
-		     printf("test\n");
 		     lex_state = EXPR_INFIX;
 		     $$ = $1;
 		   }
@@ -7670,7 +7669,7 @@ parser_yylex(struct parser_params *parser)
 	    }
 	    else {
 	      if(lex_state == EXPR_INFIX){
-		printf("test222\n");
+		
 		result = tIDENTIFIER;
 	      }else if (lex_state == EXPR_FNAME) {
 		    if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
@@ -8115,7 +8114,6 @@ gettable_gen(struct parser_params *parser, ID id)
     else if (is_local_id(id)) {
 	if (dyna_in_block() && dvar_defined(id)) return NEW_DVAR(id);
 	if(patern_match_set == 1){
-	  printf("test\n");
 	  if(!local_id(id)){
 	    local_var(id);
 	  }
