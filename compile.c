@@ -2323,6 +2323,13 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	     case NODE_LVAR:
 	       //case NODE_ARGSCAT:
 	      break;
+	     case NODE_ARRAY:
+	      ADD_INSN(ret, line, dup);
+              ADD_INSN1(ret, line, putobject, INT2FIX(i));
+	      ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
+	      compile_paternmatch(iseq, ret, node->nd_head,nextl,0);
+	      ADD_INSN(ret, line, pop);
+	      break;
 	     default:
 	       ADD_INSN(ret, line, dup);
 	       ADD_INSN1(ret, line, putobject, INT2FIX(i));
@@ -2335,7 +2342,9 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	    node = node->nd_next;
 	}
     }
-    ADD_INSNL(ret, line, jump, body_label);
+	if(body_label!=0){
+	  ADD_INSNL(ret, line, jump, body_label);
+	}
     if (len != i) {
 	if (0) {
 	    rb_bug("node error: compile_array (%d: %d-%d)",
@@ -2515,7 +2524,9 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
       idx = get_dyna_var_idx(iseq, id, &lv, &ls);
       ADD_INSN2(body_seq, line, setdynamic, INT2FIX(ls - idx), INT2FIX(lv));
     }
-  }else if (nd_type(node) != NODE_ZARRAY) {
+    node = node->nd_head;
+  } 
+  if (nd_type(node) != NODE_ZARRAY) {
 	while (node) {
 	    if (nd_type(node->nd_head) == NODE_LVAR) {
 		ID id = node->nd_head->nd_vid;
@@ -2538,12 +2549,18 @@ paternmatch_setlocal(rb_iseq_t *iseq, LINK_ANCHOR *body_seq, NODE *node_root){
 		}
 		//ADD_INSN(body_seq, 0, pop);
 	      
+	    }else if(nd_type(node->nd_head) == NODE_ARRAY){
+	      ADD_INSN(body_seq, line, dup);
+	      ADD_INSN1(body_seq, line, putobject, INT2FIX(i));
+	      ADD_SEND(body_seq, line, ID2SYM(idAREF),INT2FIX(1));
+	      paternmatch_setlocal(iseq, body_seq, node->nd_head);
+	      //ADD_INSN(body_seq, 0, pop);
 	    }
 	    node = node->nd_next;
 	    i++;
 	}
 	ADD_INSN(body_seq, 0, pop);
-    }
+  }
     return;
 }
 
