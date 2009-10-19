@@ -102,6 +102,17 @@ struct local_vars {
     struct vtable *vars;
     struct local_vars *prev;
 };
+struct infix_ops {
+  ID i;
+  struct infix_ops *next;
+};
+ static struct infix_ops *
+   infix_ops_add(struct infix_ops *ops, ID i){
+   struct infix_ops *next = ALLOC(struct infix_ops);
+   ops->i = i;
+   ops->next = next;
+   return next;
+ }
 
 #define DVARS_INHERIT ((void*)1)
 #define DVARS_TOPSCOPE NULL
@@ -238,7 +249,7 @@ struct parser_params {
     rb_encoding *utf8;
 
     int parser_yydebug;
-
+  
 #ifndef RIPPER
     /* Ruby core only */
     NODE *parser_eval_tree_begin;
@@ -261,6 +272,8 @@ struct parser_params {
     VALUE parsing_thread;
     int toplevel_p;
 #endif
+  struct infix_ops *infix_op_table;
+  struct infix_ops *top_infix_op_table;
 };
 
 #define UTF8_ENC() (parser->utf8 ? parser->utf8 : \
@@ -322,6 +335,8 @@ static int parser_yyerror(struct parser_params*, const char*);
 #define ruby_debug_lines	(parser->debug_lines)
 #define ruby_coverage		(parser->coverage)
 #endif
+#define infix_add_table          (parser->infix_op_table)
+#define top_infix_table      (parser->top_infix_op_table)
 
 static int yylex(void*, void*);
 
@@ -475,6 +490,7 @@ static int lvar_defined_gen(struct parser_params*, ID);
 #define nd_paren(node) (char)((node)->u2.id >> CHAR_BIT*2)
 #define nd_nest u3.cnt
 int patern_match_set=0;
+
 /****** Ripper *******/
 
 #ifdef RIPPER
@@ -653,13 +669,14 @@ static void token_info_pop(struct parser_params*, const char *token);
 	modifier_until
 	modifier_rescue
 	keyword_alias
-	keyword_defined
+        keyword_ialias
+        keyword_defined
 	keyword_BEGIN
 	keyword_END
 	keyword__LINE__
 	keyword__FILE__
 	keyword__ENCODING__
-        
+       
 
 %token <id>   tIDENTIFIER  tFID tGVAR tIVAR tCONSTANT tCVAR tLABEL
 %token <node> tINTEGER tFLOAT tSTRING_CONTENT tCHAR
@@ -719,6 +736,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %token tSTAR		/* * */
 %token tAMPER		/* & */
 %token tLAMBDA		/* -> */
+
 %token tSYMBEG tSTRING_BEG tXSTRING_BEG tREGEXP_BEG tWORDS_BEG tQWORDS_BEG
 %token tSTRING_DBEG tSTRING_DVAR tSTRING_END tLAMBEG
 
@@ -744,8 +762,8 @@ static void token_info_pop(struct parser_params*, const char *token);
 %left  '|' '^'
 %left  '&'
 %left  tLSHFT tRSHFT
-%left  '+' '-' tIDENTIFIER
-%left  '*' '/' '%'
+%left  '+' '-' tINFIX_OP
+%left  '*' '/' '%' 
 %right tUMINUS_NUM tUMINUS
 %right tPOW
 %right '!' '~' tUPLUS
@@ -761,6 +779,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %nonassoc id_core_define_method
 %nonassoc id_core_define_singleton_method
 %nonassoc id_core_set_postexe
+ //%token  
 %token<id> tINFIX_OP
 %token tLAST_TOKEN
 
@@ -975,6 +994,14 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 			$$ = dispatch1(alias_error, $$);
 		    %*/
 		    }
+                | keyword_ialias fname
+                       {
+			 
+			 infix_add_table = infix_ops_add(infix_add_table, $2);
+			 printf("id: %s\n", rb_id2name($2));
+			 $$ = NEW_LIT(ID2SYM($2));
+			 //$$ = NEW_BEGIN(0);
+		       }
 		| keyword_undef undef_list
 		    {
 		    /*%%%*/
@@ -983,6 +1010,7 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 			$$ = dispatch1(undef, $2);
 		    %*/
 		    }
+                
 		| stmt modifier_if expr_value
 		    {
 		    /*%%%*/
@@ -1844,7 +1872,7 @@ op		: '|'		{ ifndef_ripper($$ = '|'); }
 
 reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_BEGIN | keyword_END
-		| keyword_alias | keyword_and | keyword_begin
+		| keyword_alias | keyword_ialias | keyword_and | keyword_begin
 		| keyword_break | keyword_case| keyword_patern | keyword_class 
                 | keyword_def
 		| keyword_defined | keyword_do | keyword_else | keyword_elsif
@@ -9845,6 +9873,8 @@ parser_initialize(struct parser_params *parser)
     parser->heap = NULL;
 #endif
     parser->enc = rb_usascii_encoding();
+    parser->infix_op_table = ALLOC(struct infix_ops);
+    parser->top_infix_op_table = parser->infix_op_table;
 }
 
 #ifdef RIPPER
@@ -10181,12 +10211,14 @@ static const struct kw_assoc {
     {modifier_until,	"until"},
     {modifier_rescue,	"rescue"},
     {keyword_alias,	"alias"},
+    {keyword_ialias,	"ialias"},
     {keyword_defined,	"defined?"},
     {keyword_BEGIN,	"BEGIN"},
     {keyword_END,	"END"},
     {keyword__LINE__,	"__LINE__"},
     {keyword__FILE__,	"__FILE__"},
     {keyword__ENCODING__, "__ENCODING__"},
+    //{keyword_ialias,	"ialias"},
     {0, NULL}
 };
 

@@ -653,13 +653,14 @@ static void token_info_pop(struct parser_params*, const char *token);
 	modifier_until
 	modifier_rescue
 	keyword_alias
-	keyword_defined
+        keyword_ialias
+        keyword_defined
 	keyword_BEGIN
 	keyword_END
 	keyword__LINE__
 	keyword__FILE__
 	keyword__ENCODING__
-        
+       
 
 %token <id>   tIDENTIFIER  tFID tGVAR tIVAR tCONSTANT tCVAR tLABEL
 %token <node> tINTEGER tFLOAT tSTRING_CONTENT tCHAR
@@ -719,6 +720,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %token tSTAR		/* * */
 %token tAMPER		/* & */
 %token tLAMBDA		/* -> */
+
 %token tSYMBEG tSTRING_BEG tXSTRING_BEG tREGEXP_BEG tWORDS_BEG tQWORDS_BEG
 %token tSTRING_DBEG tSTRING_DVAR tSTRING_END tLAMBEG
 
@@ -744,8 +746,8 @@ static void token_info_pop(struct parser_params*, const char *token);
 %left  '|' '^'
 %left  '&'
 %left  tLSHFT tRSHFT
-%left  '+' '-' tIDENTIFIER
-%left  '*' '/' '%'
+%left  '+' '-' tINFIX_OP
+%left  '*' '/' '%' 
 %right tUMINUS_NUM tUMINUS
 %right tPOW
 %right '!' '~' tUPLUS
@@ -761,6 +763,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %nonassoc id_core_define_method
 %nonassoc id_core_define_singleton_method
 %nonassoc id_core_set_postexe
+ //%token  
 %token<id> tINFIX_OP
 %token tLAST_TOKEN
 
@@ -1844,7 +1847,7 @@ op		: '|'		{ ifndef_ripper($$ = '|'); }
 
 reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_BEGIN | keyword_END
-		| keyword_alias | keyword_and | keyword_begin
+		| keyword_alias | keyword_ialias | keyword_and | keyword_begin
 		| keyword_break | keyword_case| keyword_patern | keyword_class 
                 | keyword_def
 		| keyword_defined | keyword_do | keyword_else | keyword_elsif
@@ -8321,6 +8324,7 @@ arg_concat_gen(struct parser_params *parser, NODE *node1, NODE *node2)
 	node1->nd_body = list_concat(node1->nd_body, node2);
 	return node1;
     }
+    //printf("test\n");
     return NEW_ARGSCAT(node1, node2);
 }
 
@@ -10180,12 +10184,14 @@ static const struct kw_assoc {
     {modifier_until,	"until"},
     {modifier_rescue,	"rescue"},
     {keyword_alias,	"alias"},
+    {keyword_ialias,	"ialias"},
     {keyword_defined,	"defined?"},
     {keyword_BEGIN,	"BEGIN"},
     {keyword_END,	"END"},
     {keyword__LINE__,	"__LINE__"},
     {keyword__FILE__,	"__FILE__"},
     {keyword__ENCODING__, "__ENCODING__"},
+    {keyword_ialias,	"ialias"},
     {0, NULL}
 };
 

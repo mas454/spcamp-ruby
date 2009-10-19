@@ -923,9 +923,9 @@ static void
 add_opt_method(VALUE klass, ID mid, VALUE bop)
 {
     NODE *node;
+    //printf("check %s\n", rb_id2name(mid));
     if (st_lookup(RCLASS_M_TBL(klass), mid, (void *)&node) &&
 	nd_type(node->nd_body->nd_body) == NODE_CFUNC) {
-      //printf("check %s\n", rb_id2name(mid));
 	st_insert(vm_opt_method_table, (st_data_t)node, (st_data_t)bop);
     }
     else {

@@ -83,83 +83,84 @@
      modifier_until = 299,
      modifier_rescue = 300,
      keyword_alias = 301,
-     keyword_defined = 302,
-     keyword_BEGIN = 303,
-     keyword_END = 304,
-     keyword__LINE__ = 305,
-     keyword__FILE__ = 306,
-     keyword__ENCODING__ = 307,
-     tIDENTIFIER = 308,
-     tFID = 309,
-     tGVAR = 310,
-     tIVAR = 311,
-     tCONSTANT = 312,
-     tCVAR = 313,
-     tLABEL = 314,
-     tINTEGER = 315,
-     tFLOAT = 316,
-     tSTRING_CONTENT = 317,
-     tCHAR = 318,
-     tNTH_REF = 319,
-     tBACK_REF = 320,
-     tREGEXP_END = 321,
-     tUPLUS = 322,
-     tUMINUS = 323,
-     tPOW = 324,
-     tCMP = 325,
-     tEQ = 326,
-     tEQQ = 327,
-     tNEQ = 328,
-     tGEQ = 329,
-     tLEQ = 330,
-     tANDOP = 331,
-     tOROP = 332,
-     tMATCH = 333,
-     tNMATCH = 334,
-     tDOT2 = 335,
-     tDOT3 = 336,
-     tAREF = 337,
-     tASET = 338,
-     tLSHFT = 339,
-     tRSHFT = 340,
-     tCOLON2 = 341,
-     tCOLON3 = 342,
-     tOP_ASGN = 343,
-     tASSOC = 344,
-     tLPAREN = 345,
-     tLPAREN_ARG = 346,
-     tRPAREN = 347,
-     tLBRACK = 348,
-     tLBRACE = 349,
-     tLBRACE_ARG = 350,
-     tSTAR = 351,
-     tAMPER = 352,
-     tLAMBDA = 353,
-     tSYMBEG = 354,
-     tSTRING_BEG = 355,
-     tXSTRING_BEG = 356,
-     tREGEXP_BEG = 357,
-     tWORDS_BEG = 358,
-     tQWORDS_BEG = 359,
-     tSTRING_DBEG = 360,
-     tSTRING_DVAR = 361,
-     tSTRING_END = 362,
-     tLAMBEG = 363,
-     tLOWEST = 364,
-     tUMINUS_NUM = 365,
-     idNULL = 366,
-     idRespond_to = 367,
-     idIFUNC = 368,
-     idCFUNC = 369,
-     idThrowState = 370,
-     id_core_set_method_alias = 371,
-     id_core_set_variable_alias = 372,
-     id_core_undef_method = 373,
-     id_core_define_method = 374,
-     id_core_define_singleton_method = 375,
-     id_core_set_postexe = 376,
-     tINFIX_OP = 377,
-     tLAST_TOKEN = 378
+     keyword_ialias = 302,
+     keyword_defined = 303,
+     keyword_BEGIN = 304,
+     keyword_END = 305,
+     keyword__LINE__ = 306,
+     keyword__FILE__ = 307,
+     keyword__ENCODING__ = 308,
+     tIDENTIFIER = 309,
+     tFID = 310,
+     tGVAR = 311,
+     tIVAR = 312,
+     tCONSTANT = 313,
+     tCVAR = 314,
+     tLABEL = 315,
+     tINTEGER = 316,
+     tFLOAT = 317,
+     tSTRING_CONTENT = 318,
+     tCHAR = 319,
+     tNTH_REF = 320,
+     tBACK_REF = 321,
+     tREGEXP_END = 322,
+     tUPLUS = 323,
+     tUMINUS = 324,
+     tPOW = 325,
+     tCMP = 326,
+     tEQ = 327,
+     tEQQ = 328,
+     tNEQ = 329,
+     tGEQ = 330,
+     tLEQ = 331,
+     tANDOP = 332,
+     tOROP = 333,
+     tMATCH = 334,
+     tNMATCH = 335,
+     tDOT2 = 336,
+     tDOT3 = 337,
+     tAREF = 338,
+     tASET = 339,
+     tLSHFT = 340,
+     tRSHFT = 341,
+     tCOLON2 = 342,
+     tCOLON3 = 343,
+     tOP_ASGN = 344,
+     tASSOC = 345,
+     tLPAREN = 346,
+     tLPAREN_ARG = 347,
+     tRPAREN = 348,
+     tLBRACK = 349,
+     tLBRACE = 350,
+     tLBRACE_ARG = 351,
+     tSTAR = 352,
+     tAMPER = 353,
+     tLAMBDA = 354,
+     tSYMBEG = 355,
+     tSTRING_BEG = 356,
+     tXSTRING_BEG = 357,
+     tREGEXP_BEG = 358,
+     tWORDS_BEG = 359,
+     tQWORDS_BEG = 360,
+     tSTRING_DBEG = 361,
+     tSTRING_DVAR = 362,
+     tSTRING_END = 363,
+     tLAMBEG = 364,
+     tLOWEST = 365,
+     tINFIX_OP = 366,
+     tUMINUS_NUM = 367,
+     idNULL = 368,
+     idRespond_to = 369,
+     idIFUNC = 370,
+     idCFUNC = 371,
+     idThrowState = 372,
+     id_core_set_method_alias = 373,
+     id_core_set_variable_alias = 374,
+     id_core_undef_method = 375,
+     id_core_define_method = 376,
+     id_core_define_singleton_method = 377,
+     id_core_set_postexe = 378,
+     tLAST_TOKEN = 379
    };
 #endif
 /* Tokens.  */
@@ -207,83 +208,84 @@
 #define modifier_until 299
 #define modifier_rescue 300
 #define keyword_alias 301
-#define keyword_defined 302
-#define keyword_BEGIN 303
-#define keyword_END 304
-#define keyword__LINE__ 305
-#define keyword__FILE__ 306
-#define keyword__ENCODING__ 307
-#define tIDENTIFIER 308
-#define tFID 309
-#define tGVAR 310
-#define tIVAR 311
-#define tCONSTANT 312
-#define tCVAR 313
-#define tLABEL 314
-#define tINTEGER 315
-#define tFLOAT 316
-#define tSTRING_CONTENT 317
-#define tCHAR 318
-#define tNTH_REF 319
-#define tBACK_REF 320
-#define tREGEXP_END 321
-#define tUPLUS 322
-#define tUMINUS 323
-#define tPOW 324
-#define tCMP 325
-#define tEQ 326
-#define tEQQ 327
-#define tNEQ 328
-#define tGEQ 329
-#define tLEQ 330
-#define tANDOP 331
-#define tOROP 332
-#define tMATCH 333
-#define tNMATCH 334
-#define tDOT2 335
-#define tDOT3 336
-#define tAREF 337
-#define tASET 338
-#define tLSHFT 339
-#define tRSHFT 340
-#define tCOLON2 341
-#define tCOLON3 342
-#define tOP_ASGN 343
-#define tASSOC 344
-#define tLPAREN 345
-#define tLPAREN_ARG 346
-#define tRPAREN 347
-#define tLBRACK 348
-#define tLBRACE 349
-#define tLBRACE_ARG 350
-#define tSTAR 351
-#define tAMPER 352
-#define tLAMBDA 353
-#define tSYMBEG 354
-#define tSTRING_BEG 355
-#define tXSTRING_BEG 356
-#define tREGEXP_BEG 357
-#define tWORDS_BEG 358
-#define tQWORDS_BEG 359
-#define tSTRING_DBEG 360
-#define tSTRING_DVAR 361
-#define tSTRING_END 362
-#define tLAMBEG 363
-#define tLOWEST 364
-#define tUMINUS_NUM 365
-#define idNULL 366
-#define idRespond_to 367
-#define idIFUNC 368
-#define idCFUNC 369
-#define idThrowState 370
-#define id_core_set_method_alias 371
-#define id_core_set_variable_alias 372
-#define id_core_undef_method 373
-#define id_core_define_method 374
-#define id_core_define_singleton_method 375
-#define id_core_set_postexe 376
-#define tINFIX_OP 377
-#define tLAST_TOKEN 378
+#define keyword_ialias 302
+#define keyword_defined 303
+#define keyword_BEGIN 304
+#define keyword_END 305
+#define keyword__LINE__ 306
+#define keyword__FILE__ 307
+#define keyword__ENCODING__ 308
+#define tIDENTIFIER 309
+#define tFID 310
+#define tGVAR 311
+#define tIVAR 312
+#define tCONSTANT 313
+#define tCVAR 314
+#define tLABEL 315
+#define tINTEGER 316
+#define tFLOAT 317
+#define tSTRING_CONTENT 318
+#define tCHAR 319
+#define tNTH_REF 320
+#define tBACK_REF 321
+#define tREGEXP_END 322
+#define tUPLUS 323
+#define tUMINUS 324
+#define tPOW 325
+#define tCMP 326
+#define tEQ 327
+#define tEQQ 328
+#define tNEQ 329
+#define tGEQ 330
+#define tLEQ 331
+#define tANDOP 332
+#define tOROP 333
+#define tMATCH 334
+#define tNMATCH 335
+#define tDOT2 336
+#define tDOT3 337
+#define tAREF 338
+#define tASET 339
+#define tLSHFT 340
+#define tRSHFT 341
+#define tCOLON2 342
+#define tCOLON3 343
+#define tOP_ASGN 344
+#define tASSOC 345
+#define tLPAREN 346
+#define tLPAREN_ARG 347
+#define tRPAREN 348
+#define tLBRACK 349
+#define tLBRACE 350
+#define tLBRACE_ARG 351
+#define tSTAR 352
+#define tAMPER 353
+#define tLAMBDA 354
+#define tSYMBEG 355
+#define tSTRING_BEG 356
+#define tXSTRING_BEG 357
+#define tREGEXP_BEG 358
+#define tWORDS_BEG 359
+#define tQWORDS_BEG 360
+#define tSTRING_DBEG 361
+#define tSTRING_DVAR 362
+#define tSTRING_END 363
+#define tLAMBEG 364
+#define tLOWEST 365
+#define tINFIX_OP 366
+#define tUMINUS_NUM 367
+#define idNULL 368
+#define idRespond_to 369
+#define idIFUNC 370
+#define idCFUNC 371
+#define idThrowState 372
+#define id_core_set_method_alias 373
+#define id_core_set_variable_alias 374
+#define id_core_undef_method 375
+#define id_core_define_method 376
+#define id_core_define_singleton_method 377
+#define id_core_set_postexe 378
+#define tLAST_TOKEN 379
 
 
 
