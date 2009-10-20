@@ -111,9 +111,21 @@ struct infix_ops {
    struct infix_ops *next = ALLOC(struct infix_ops);
    ops->i = i;
    ops->next = next;
+   next->next=0;
+     
    return next;
  }
-
+ static int serch_infix_ops(struct infix_ops *n, ID id){
+   //struct infix_ops *n; 
+   //n = parser->top_infix_op_table;;
+   while(n != 0){
+     if(n->i == id){
+       return 0;
+     }
+     n = n->next;
+   }
+   return 1;
+ }
 #define DVARS_INHERIT ((void*)1)
 #define DVARS_TOPSCOPE NULL
 #define DVARS_SPECIAL_P(tbl) (!POINTER_P(tbl))
@@ -215,6 +227,7 @@ struct parser_params {
 
     NODE *parser_lex_strterm;
     enum lex_state_e parser_lex_state;
+    enum lex_state_e pre_parser_lex_state;
     stack_type parser_cond_stack;
     stack_type parser_cmdarg_stack;
     int parser_class_nest;
@@ -299,6 +312,7 @@ static int parser_yyerror(struct parser_params*, const char*);
 
 #define lex_strterm		(parser->parser_lex_strterm)
 #define lex_state		(parser->parser_lex_state)
+#define pre_lex_state           (parser->pre_parser_lex_state)
 #define cond_stack		(parser->parser_cond_stack)
 #define cmdarg_stack		(parser->parser_cmdarg_stack)
 #define class_nest		(parser->parser_class_nest)
@@ -1891,6 +1905,8 @@ parg            : mprimary
 		;
 testarg        : arg
                    {
+		     printf("test\n");
+		     pre_lex_state = lex_state;
 		     lex_state = EXPR_INFIX;
 		     $$ = $1;
 		   }
@@ -2366,10 +2382,10 @@ arg		: lhs '=' arg
 			$$ = dispatch3(ifop, $1, $3, $6);
 		    %*/
 		    }
-/* | testarg tIDENTIFIER arg
+                | testarg tINFIX_OP arg
                     {
 		      $$ = call_bin_op($1, $2, $3);
-		      }*/
+		    }
 		| primary
 		    {
 			$$ = $1;
@@ -7696,10 +7712,16 @@ parser_yylex(struct parser_params *parser)
 		result = tFID;
 	    }
 	    else {
-	      if(lex_state == EXPR_INFIX){
-		
-		result = tIDENTIFIER;
-	      }else if (lex_state == EXPR_FNAME) {
+	      if(1){
+		ID id = TOK_INTERN(!ENC_SINGLE(mb));
+		if(serch_infix_ops(top_infix_table,id) == 0){
+		  set_yylval_id(id);
+		  return tINFIX_OP;
+		}else{
+		  //lex_state = pre_lex_state;
+		}
+	      } 
+	      if (lex_state == EXPR_FNAME) {
 		    if ((c = nextc()) == '=' && !peek('~') && !peek('>') &&
 			(!peek('=') || (lex_p + 1 < lex_pend && lex_p[1] == '>'))) {
 			result = tIDENTIFIER;
@@ -9874,6 +9896,7 @@ parser_initialize(struct parser_params *parser)
 #endif
     parser->enc = rb_usascii_encoding();
     parser->infix_op_table = ALLOC(struct infix_ops);
+    parser->infix_op_table->next = 0;
     parser->top_infix_op_table = parser->infix_op_table;
 }
 
