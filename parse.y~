@@ -7712,13 +7712,13 @@ parser_yylex(struct parser_params *parser)
 		result = tFID;
 	    }
 	    else {
-	      if(lex_state == EXPR_INFIX){
+	      if(1){
 		ID id = TOK_INTERN(!ENC_SINGLE(mb));
 		if(serch_infix_ops(top_infix_table,id) == 0){
 		  set_yylval_id(id);
 		  return tINFIX_OP;
 		}else{
-		  lex_state = pre_lex_state;
+		  //lex_state = pre_lex_state;
 		}
 	      } 
 	      if (lex_state == EXPR_FNAME) {
