@@ -103,28 +103,40 @@ struct local_vars {
     struct local_vars *prev;
 };
 struct infix_ops {
-  ID i;
+  ID key;
+  ID data;
   struct infix_ops *next;
 };
  static struct infix_ops *
    infix_ops_add(struct infix_ops *ops, ID i){
    struct infix_ops *next = ALLOC(struct infix_ops);
-   ops->i = i;
+   ops->key = i;
+   ops->data = i;
    ops->next = next;
    next->next=0;
      
    return next;
  }
- static int serch_infix_ops(struct infix_ops *n, ID id){
+static struct infix_ops *
+  infix_ops_add2(struct infix_ops *ops, ID key,ID data){
+   struct infix_ops *next = ALLOC(struct infix_ops);
+   ops->key = key;
+   ops->data = data;
+   ops->next = next;
+   next->next=0;
+     
+   return next;
+ }
+ static ID serch_infix_ops(struct infix_ops *n, ID id){
    //struct infix_ops *n; 
-   //n = parser->top_infix_op_table;;
+   //n = parser->top_infix_op_table;
    while(n != 0){
-     if(n->i == id){
-       return 0;
+     if(n->key == id){
+       return n->data;
      }
      n = n->next;
    }
-   return 1;
+   return 0;
  }
 #define DVARS_INHERIT ((void*)1)
 #define DVARS_TOPSCOPE NULL
@@ -1012,9 +1024,14 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
                        {
 			 
 			 infix_add_table = infix_ops_add(infix_add_table, $2);
-			 printf("id: %s\n", rb_id2name($2));
+			 //printf("id: %s\n", rb_id2name($2));
 			 $$ = NEW_LIT(ID2SYM($2));
 			 //$$ = NEW_BEGIN(0);
+		       }
+                | keyword_ialias fname fname
+                       {
+			 infix_add_table = infix_ops_add2(infix_add_table, $2, $3);
+			 $$ = NEW_BEGIN(0);
 		       }
 		| keyword_undef undef_list
 		    {
@@ -1905,7 +1922,6 @@ parg            : mprimary
 		;
 testarg        : arg
                    {
-		     printf("test\n");
 		     pre_lex_state = lex_state;
 		     lex_state = EXPR_INFIX;
 		     $$ = $1;
@@ -2382,7 +2398,7 @@ arg		: lhs '=' arg
 			$$ = dispatch3(ifop, $1, $3, $6);
 		    %*/
 		    }
-                | testarg tINFIX_OP arg
+                | arg tINFIX_OP arg
                     {
 		      $$ = call_bin_op($1, $2, $3);
 		    }
@@ -6668,7 +6684,7 @@ parser_yylex(struct parser_params *parser)
 		c = tSTAR;
 	    }
 	    else {
-		c = '*';
+	      c = '*';
 	    }
 	}
 	switch (lex_state) {
@@ -7714,9 +7730,25 @@ parser_yylex(struct parser_params *parser)
 	    else {
 	      if(1){
 		ID id = TOK_INTERN(!ENC_SINGLE(mb));
-		if(serch_infix_ops(top_infix_table,id) == 0){
-		  set_yylval_id(id);
-		  return tINFIX_OP;
+		ID data = serch_infix_ops(top_infix_table,id);
+		if( data != 0){
+		  char c = *(rb_id2name(data));
+		  switch(c){
+		  case '+':
+		    return '+';
+		  case '-':
+		    return '-';
+		  case '*':
+		    return '*';
+		  case '/':
+		    return '/';
+		  case '%':
+		    return '%';
+		  default:
+		    set_yylval_id(data);
+		    return tINFIX_OP;
+		 }
+		  
 		}else{
 		  //lex_state = pre_lex_state;
 		}

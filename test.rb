@@ -1,9 +1,9 @@
-class Fixnum
-   def test(y)
-     self + y
-   end
- end
-ialias test +
+#class Fixnum
+#   def test(y)
+#     self + y
+#   end
+#end
+ialias mul *
 
-#20 test2 x
-puts 10 test 20 * 3
+#20 test x
+puts (10 mul 20)

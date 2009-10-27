@@ -402,7 +402,7 @@ Init_Comparable(199,4523
 #undef rb_intern201,4547
 #define rb_intern(202,4564
 
-compile.c,6469
+compile.c,6520
 #define USE_INSN_STACK_INCREASE 14,324
 typedef struct iseq_link_element 21,446
 	ISEQ_ELEMENT_NONE 23,492
@@ -566,52 +566,53 @@ compile_dstr(2181,51428
 compile_dregx(2190,51656
 compile_branch_condition(2199,51905
 static void var2sym(2242,53251
-static int compile_paternmatch(2270,53876
-compile_patern_array_(2315,55017
-compile_array_(2381,56497
-compile_array(2436,57738
-case_when_optimizable_literal(2442,57894
-paternmatch_setlocal(2458,58189
-when_vals_patern(2499,59322
-when_vals_ar(2519,59788
-when_vals(2552,60535
-compile_massign_lhs(2579,61204
-compile_massign_opt_lhs(2621,62222
-compile_massign_opt(2630,62431
-#define MEMORY(2640,62686
-compile_massign(2695,63671
-compile_colon2(2753,65026
-compile_cpath(2780,65852
-defined_expr(2800,66340
-#define BUFSIZE 2999,71426
-make_name_for_block(3002,71462
-push_ensure_entry(3025,71903
-add_ensure_range(3036,72215
-add_ensure_iseq(3054,72592
-setup_args(3089,73513
-iseq_compile_each(3183,75563
-insn_data_length(5271,129222
-calc_sp_depth(5277,129303
-insn_data_line_no(5283,129426
-insn_data_to_s_detail(5289,129510
-dump_disasm_list(5353,131016
-rb_insns_name_array(5400,131977
-register_label(5411,132246
-get_exception_sym2type(5428,132629
-#undef rb_intern5430,132665
-#define rb_intern(5431,132682
-iseq_build_exception(5456,133534
-insn_make_insn_table(5491,134422
-iseq_build_body(5505,134661
-#define CHECK_ARRAY(5634,137879
-#define CHECK_STRING(5635,137951
-#define CHECK_SYMBOL(5636,138025
-static inline VALUE CHECK_INTEGER(5637,138099
-rb_iseq_build_from_ary(5640,138174
-rb_dvar_defined(5716,140365
-rb_local_defined(5741,140909
-rb_parse_in_eval(5760,141226
-rb_parse_in_main(5766,141302
+static int compile_paternmatch_argscat(2270,53876
+static int compile_paternmatch(2302,54950
+compile_patern_array_(2360,56673
+compile_array_(2426,58153
+compile_array(2481,59394
+case_when_optimizable_literal(2487,59550
+paternmatch_setlocal(2503,59845
+when_vals_patern(2568,62022
+when_vals_ar(2590,62591
+when_vals(2623,63338
+compile_massign_lhs(2650,64007
+compile_massign_opt_lhs(2692,65025
+compile_massign_opt(2701,65234
+#define MEMORY(2711,65489
+compile_massign(2766,66474
+compile_colon2(2824,67829
+compile_cpath(2851,68655
+defined_expr(2871,69143
+#define BUFSIZE 3070,74229
+make_name_for_block(3073,74265
+push_ensure_entry(3096,74706
+add_ensure_range(3107,75018
+add_ensure_iseq(3125,75395
+setup_args(3160,76316
+iseq_compile_each(3254,78366
+insn_data_length(5342,132051
+calc_sp_depth(5348,132132
+insn_data_line_no(5354,132255
+insn_data_to_s_detail(5360,132339
+dump_disasm_list(5424,133845
+rb_insns_name_array(5471,134806
+register_label(5482,135075
+get_exception_sym2type(5499,135458
+#undef rb_intern5501,135494
+#define rb_intern(5502,135511
+iseq_build_exception(5527,136363
+insn_make_insn_table(5562,137251
+iseq_build_body(5576,137490
+#define CHECK_ARRAY(5705,140708
+#define CHECK_STRING(5706,140780
+#define CHECK_SYMBOL(5707,140854
+static inline VALUE CHECK_INTEGER(5708,140928
+rb_iseq_build_from_ary(5711,141003
+rb_dvar_defined(5787,143194
+rb_local_defined(5812,143738
+rb_parse_in_eval(5831,144055
+rb_parse_in_main(5837,144131
 
 complex.c,5195
 #define NDEBUG11,185
@@ -2360,7 +2361,7 @@ Init_id(17,309
 #undef rb_intern19,325
 #define rb_intern(20,342
 
-id.h,2891
+id.h,2809
 #define RUBY_ID_H14,306
 #define ID_SCOPE_SHIFT 16,325
 #define ID_SCOPE_MASK 17,350
@@ -2376,108 +2377,106 @@ id.h,2891
 #define symCFUNC 32,676
 #define tLAST_TOKEN 35,758
 enum ruby_method_ids 38,798
-  tUPLUS 40,841
-    tUMINUS 41,857
-    tPOW 42,876
-    tCMP 43,892
-    tEQ 44,908
-    tEQQ 45,923
-    tNEQ 46,939
-    tGEQ 47,955
-    tLEQ 48,971
-    tANDOP 49,987
-    tOROP 50,1005
-    tMATCH 51,1022
-    tNMATCH 52,1040
-    tDOT2 53,1059
-    tDOT3 54,1076
-    tAREF 55,1093
-    tASET 56,1110
-    tLSHFT 57,1127
-    tRSHFT 58,1145
-    tLAMBDA 59,1163
-    idNULL 60,1182
-    idRespond_to 61,1200
-    idIFUNC 62,1224
-    idCFUNC 63,1243
-    idThrowState 64,1262
-    id_core_set_method_alias 65,1286
-    id_core_set_variable_alias 66,1322
-    id_core_undef_method 67,1360
-    id_core_define_method 68,1392
-    id_core_define_singleton_method 69,1425
-    id_core_set_postexe 70,1468
-    tLAST_TOKEN 71,1499
-    idPLUS 73,1529
-    idMINUS 74,1547
-    idMULT 75,1566
-    idDIV 76,1584
-    idMOD 77,1601
-    idLT 78,1618
-    idLTLT 79,1634
-    idLTLT = tLSHFT,79,1634
-    idLE 80,1655
-    idLE = tLEQ,80,1655
-    idGT 81,1672
-    idGE 82,1688
-    idGE = tGEQ,82,1688
-    idEq 83,1705
-    idEq = tEQ,83,1705
-    idEqq 84,1721
-    idEqq = tEQQ,84,1721
-    idNeq 85,1739
-    idNeq = tNEQ,85,1739
-    idNot 86,1757
-    idBackquote 87,1774
-    idEqTilde 88,1797
-    idEqTilde = tMATCH,88,1797
-    idAREF 89,1821
-    idAREF = tAREF,89,1821
-    idASET 90,1841
-    idASET = tASET,90,1841
-    idLAST_TOKEN 91,1861
-    idLAST_TOKEN = tLAST_TOKEN 91,1861
-    idLAST_TOKEN = tLAST_TOKEN >> ID_SCOPE_SHIFT,91,1861
-    tIntern,92,1911
-    tMethodMissing,93,1924
-    tLength,94,1944
-    tGets,95,1957
-    tSucc,96,1968
-    tEach,97,1979
-    tLambda,98,1990
-    tSend,99,2003
-    t__send__,100,2014
-    tInitialize,101,2029
-    tBitblt,103,2063
-    tAnswer,104,2076
-    tLAST_ID,106,2096
-#define TOKEN2ID(107,2110
-    TOKEN2ID(109,2189
-    TOKEN2ID(Bitblt)109,2189
-    TOKEN2ID(110,2211
-    TOKEN2ID(Answer)110,2211
-    TOKEN2ID(112,2240
-    TOKEN2ID(Intern)112,2240
-    TOKEN2ID(113,2262
-    TOKEN2ID(MethodMissing)113,2262
-    TOKEN2ID(114,2291
-    TOKEN2ID(Length)114,2291
-    TOKEN2ID(115,2313
-    TOKEN2ID(Gets)115,2313
-    TOKEN2ID(116,2333
-    TOKEN2ID(Succ)116,2333
-    TOKEN2ID(117,2353
-    TOKEN2ID(Each)117,2353
-    TOKEN2ID(118,2373
-    TOKEN2ID(Lambda)118,2373
-    TOKEN2ID(119,2395
-    TOKEN2ID(Send)119,2395
-    TOKEN2ID(120,2415
-    TOKEN2ID(__send__)120,2415
-    TOKEN2ID(121,2439
-    TOKEN2ID(Initialize)121,2439
-struct ruby_method_ids_check 125,2487
-#define ruby_method_id_check_for(126,2518
+    tUPLUS 40,842
+    tUMINUS 41,860
+    tPOW 42,879
+    tCMP 43,895
+    tEQ 44,911
+    tEQQ 45,926
+    tNEQ 46,942
+    tGEQ 47,958
+    tLEQ 48,974
+    tANDOP 49,990
+    tOROP 50,1008
+    tMATCH 51,1025
+    tNMATCH 52,1043
+    tDOT2 53,1062
+    tDOT3 54,1079
+    tAREF 55,1096
+    tASET 56,1113
+  tLSHFT 57,1130
+    tRSHFT 58,1152
+    tLAMBDA 59,1170
+    idNULL 60,1189
+    idRespond_to 61,1207
+    idIFUNC 62,1231
+    idCFUNC 63,1250
+    idThrowState 64,1269
+    id_core_set_method_alias 65,1293
+    id_core_set_variable_alias 66,1329
+    id_core_undef_method 67,1367
+    id_core_define_method 68,1399
+    id_core_define_singleton_method 69,1432
+    id_core_set_postexe 70,1475
+    tLAST_TOKEN 71,1506
+    idPLUS 73,1540
+    idMINUS 74,1558
+    idMULT 75,1577
+    idDIV 76,1595
+    idMOD 77,1612
+    idLT 78,1629
+    idLTLT 79,1645
+    idLTLT = tLSHFT,79,1645
+    idLE 80,1666
+    idLE = tLEQ,80,1666
+    idGT 81,1683
+    idGE 82,1699
+    idGE = tGEQ,82,1699
+    idEq 83,1716
+    idEq = tEQ,83,1716
+    idEqq 84,1732
+    idEqq = tEQQ,84,1732
+    idNeq 85,1750
+    idNeq = tNEQ,85,1750
+    idNot 86,1768
+    idBackquote 87,1785
+    idEqTilde 88,1808
+    idEqTilde = tMATCH,88,1808
+    idAREF 89,1832
+    idAREF = tAREF,89,1832
+    idASET 90,1852
+    idASET = tASET,90,1852
+    idLAST_TOKEN 91,1872
+    idLAST_TOKEN = tLAST_TOKEN 91,1872
+    idLAST_TOKEN = tLAST_TOKEN >> ID_SCOPE_SHIFT,91,1872
+    tIntern,92,1922
+    tMethodMissing,93,1935
+    tLength,94,1955
+    tGets,95,1968
+    tSucc,96,1979
+    tEach,97,1990
+    tLambda,98,2001
+    tSend,99,2014
+    t__send__,100,2025
+    tInitialize,101,2040
+    tBitblt,103,2074
+    tAnswer,104,2087
+    tLAST_ID,106,2107
+#define TOKEN2ID(107,2121
+    TOKEN2ID(109,2200
+    TOKEN2ID(Bitblt)109,2200
+    TOKEN2ID(110,2222
+    TOKEN2ID(Answer)110,2222
+    TOKEN2ID(112,2251
+    TOKEN2ID(Intern)112,2251
+    TOKEN2ID(113,2273
+    TOKEN2ID(MethodMissing)113,2273
+    TOKEN2ID(114,2302
+    TOKEN2ID(Length)114,2302
+    TOKEN2ID(115,2324
+    TOKEN2ID(Gets)115,2324
+    TOKEN2ID(116,2344
+    TOKEN2ID(Succ)116,2344
+    TOKEN2ID(117,2364
+    TOKEN2ID(Each)117,2364
+    TOKEN2ID(118,2384
+    TOKEN2ID(Lambda)118,2384
+    TOKEN2ID(119,2406
+    TOKEN2ID(Send)119,2406
+    TOKEN2ID(120,2426
+    TOKEN2ID(__send__)120,2426
+    TOKEN2ID(121,2450
+    TOKEN2ID(Initialize)121,2450
 
 inits.c,63
 #define CALL(14,292
@@ -4079,7 +4078,7 @@ static const unsigned long utf8_limits[utf8_limits2115,53344
 utf8_to_uv(2126,53572
 Init_pack(2176,54675
 
-parse.h,6935
+parse.h,6998
 # define YYTOKENTYPE38,1653
    enum yytokentype 41,1777
      keyword_class 42,1799
@@ -4126,209 +4125,211 @@ parse.h,6935
      modifier_until 83,2849
      modifier_rescue 84,2876
      keyword_alias 85,2904
-     keyword_defined 86,2930
-     keyword_BEGIN 87,2958
-     keyword_END 88,2984
-     keyword__LINE__ 89,3008
-     keyword__FILE__ 90,3036
-     keyword__ENCODING__ 91,3064
-     tIDENTIFIER 92,3096
-     tFID 93,3120
-     tGVAR 94,3137
-     tIVAR 95,3155
-     tCONSTANT 96,3173
-     tCVAR 97,3195
-     tLABEL 98,3213
-     tINTEGER 99,3232
-     tFLOAT 100,3253
-     tSTRING_CONTENT 101,3272
-     tCHAR 102,3300
-     tNTH_REF 103,3318
-     tBACK_REF 104,3339
-     tREGEXP_END 105,3361
-     tUPLUS 106,3385
-     tUMINUS 107,3404
-     tPOW 108,3424
-     tCMP 109,3441
-     tEQ 110,3458
-     tEQQ 111,3474
-     tNEQ 112,3491
-     tGEQ 113,3508
-     tLEQ 114,3525
-     tANDOP 115,3542
-     tOROP 116,3561
-     tMATCH 117,3579
-     tNMATCH 118,3598
-     tDOT2 119,3618
-     tDOT3 120,3636
-     tAREF 121,3654
-     tASET 122,3672
-     tLSHFT 123,3690
-     tRSHFT 124,3709
-     tCOLON2 125,3728
-     tCOLON3 126,3748
-     tOP_ASGN 127,3768
-     tASSOC 128,3789
-     tLPAREN 129,3808
-     tLPAREN_ARG 130,3828
-     tRPAREN 131,3852
-     tLBRACK 132,3872
-     tLBRACE 133,3892
-     tLBRACE_ARG 134,3912
-     tSTAR 135,3936
-     tAMPER 136,3954
-     tLAMBDA 137,3973
-     tSYMBEG 138,3993
-     tSTRING_BEG 139,4013
-     tXSTRING_BEG 140,4037
-     tREGEXP_BEG 141,4062
-     tWORDS_BEG 142,4086
-     tQWORDS_BEG 143,4109
-     tSTRING_DBEG 144,4133
-     tSTRING_DVAR 145,4158
-     tSTRING_END 146,4183
-     tLAMBEG 147,4207
-     tLOWEST 148,4227
-     tUMINUS_NUM 149,4247
-     idNULL 150,4271
-     idRespond_to 151,4290
-     idIFUNC 152,4315
-     idCFUNC 153,4335
-     idThrowState 154,4355
-     id_core_set_method_alias 155,4380
-     id_core_set_variable_alias 156,4417
-     id_core_undef_method 157,4456
-     id_core_define_method 158,4489
-     id_core_define_singleton_method 159,4523
-     id_core_set_postexe 160,4567
-     tINFIX_OP 161,4599
-     tLAST_TOKEN 162,4621
-#define keyword_class 166,4672
-#define keyword_module 167,4698
-#define keyword_def 168,4725
-#define keyword_undef 169,4749
-#define keyword_begin 170,4775
-#define keyword_rescue 171,4801
-#define keyword_ensure 172,4828
-#define keyword_end 173,4855
-#define keyword_if 174,4879
-#define keyword_unless 175,4902
-#define keyword_then 176,4929
-#define keyword_elsif 177,4954
-#define keyword_else 178,4980
-#define keyword_case 179,5005
-#define keyword_patern 180,5030
-#define keyword_when 181,5057
-#define keyword_while 182,5082
-#define keyword_until 183,5108
-#define keyword_for 184,5134
-#define keyword_break 185,5158
-#define keyword_next 186,5184
-#define keyword_redo 187,5209
-#define keyword_retry 188,5234
-#define keyword_in 189,5260
-#define keyword_do 190,5283
-#define keyword_do_cond 191,5306
-#define keyword_do_block 192,5334
-#define keyword_do_LAMBDA 193,5363
-#define keyword_return 194,5393
-#define keyword_yield 195,5420
-#define keyword_super 196,5446
-#define keyword_self 197,5472
-#define keyword_nil 198,5497
-#define keyword_true 199,5521
-#define keyword_false 200,5546
-#define keyword_and 201,5572
-#define keyword_or 202,5596
-#define keyword_not 203,5619
-#define modifier_if 204,5643
-#define modifier_unless 205,5667
-#define modifier_while 206,5695
-#define modifier_until 207,5722
-#define modifier_rescue 208,5749
-#define keyword_alias 209,5777
-#define keyword_defined 210,5803
-#define keyword_BEGIN 211,5831
-#define keyword_END 212,5857
-#define keyword__LINE__ 213,5881
-#define keyword__FILE__ 214,5909
-#define keyword__ENCODING__ 215,5937
-#define tIDENTIFIER 216,5969
-#define tFID 217,5993
-#define tGVAR 218,6010
-#define tIVAR 219,6028
-#define tCONSTANT 220,6046
-#define tCVAR 221,6068
-#define tLABEL 222,6086
-#define tINTEGER 223,6105
-#define tFLOAT 224,6126
-#define tSTRING_CONTENT 225,6145
-#define tCHAR 226,6173
-#define tNTH_REF 227,6191
-#define tBACK_REF 228,6212
-#define tREGEXP_END 229,6234
-#define tUPLUS 230,6258
-#define tUMINUS 231,6277
-#define tPOW 232,6297
-#define tCMP 233,6314
-#define tEQ 234,6331
-#define tEQQ 235,6347
-#define tNEQ 236,6364
-#define tGEQ 237,6381
-#define tLEQ 238,6398
-#define tANDOP 239,6415
-#define tOROP 240,6434
-#define tMATCH 241,6452
-#define tNMATCH 242,6471
-#define tDOT2 243,6491
-#define tDOT3 244,6509
-#define tAREF 245,6527
-#define tASET 246,6545
-#define tLSHFT 247,6563
-#define tRSHFT 248,6582
-#define tCOLON2 249,6601
-#define tCOLON3 250,6621
-#define tOP_ASGN 251,6641
-#define tASSOC 252,6662
-#define tLPAREN 253,6681
-#define tLPAREN_ARG 254,6701
-#define tRPAREN 255,6725
-#define tLBRACK 256,6745
-#define tLBRACE 257,6765
-#define tLBRACE_ARG 258,6785
-#define tSTAR 259,6809
-#define tAMPER 260,6827
-#define tLAMBDA 261,6846
-#define tSYMBEG 262,6866
-#define tSTRING_BEG 263,6886
-#define tXSTRING_BEG 264,6910
-#define tREGEXP_BEG 265,6935
-#define tWORDS_BEG 266,6959
-#define tQWORDS_BEG 267,6982
-#define tSTRING_DBEG 268,7006
-#define tSTRING_DVAR 269,7031
-#define tSTRING_END 270,7056
-#define tLAMBEG 271,7080
-#define tLOWEST 272,7100
-#define tUMINUS_NUM 273,7120
-#define idNULL 274,7144
-#define idRespond_to 275,7163
-#define idIFUNC 276,7188
-#define idCFUNC 277,7208
-#define idThrowState 278,7228
-#define id_core_set_method_alias 279,7253
-#define id_core_set_variable_alias 280,7290
-#define id_core_undef_method 281,7329
-#define id_core_define_method 282,7362
-#define id_core_define_singleton_method 283,7396
-#define id_core_set_postexe 284,7440
-#define tINFIX_OP 285,7472
-#define tLAST_TOKEN 286,7494
-typedef union YYSTYPE292,7577
-	YYSTYPE;300,7686
-# define yystype 301,7696
-# define YYSTYPE_IS_DECLARED 302,7758
-# define YYSTYPE_IS_TRIVIAL 303,7789
+     keyword_ialias 86,2930
+     keyword_defined 87,2957
+     keyword_BEGIN 88,2985
+     keyword_END 89,3011
+     keyword__LINE__ 90,3035
+     keyword__FILE__ 91,3063
+     keyword__ENCODING__ 92,3091
+     tIDENTIFIER 93,3123
+     tFID 94,3147
+     tGVAR 95,3164
+     tIVAR 96,3182
+     tCONSTANT 97,3200
+     tCVAR 98,3222
+     tLABEL 99,3240
+     tINTEGER 100,3259
+     tFLOAT 101,3280
+     tSTRING_CONTENT 102,3299
+     tCHAR 103,3327
+     tNTH_REF 104,3345
+     tBACK_REF 105,3366
+     tREGEXP_END 106,3388
+     tUPLUS 107,3412
+     tUMINUS 108,3431
+     tPOW 109,3451
+     tCMP 110,3468
+     tEQ 111,3485
+     tEQQ 112,3501
+     tNEQ 113,3518
+     tGEQ 114,3535
+     tLEQ 115,3552
+     tANDOP 116,3569
+     tOROP 117,3588
+     tMATCH 118,3606
+     tNMATCH 119,3625
+     tDOT2 120,3645
+     tDOT3 121,3663
+     tAREF 122,3681
+     tASET 123,3699
+     tLSHFT 124,3717
+     tRSHFT 125,3736
+     tCOLON2 126,3755
+     tCOLON3 127,3775
+     tOP_ASGN 128,3795
+     tASSOC 129,3816
+     tLPAREN 130,3835
+     tLPAREN_ARG 131,3855
+     tRPAREN 132,3879
+     tLBRACK 133,3899
+     tLBRACE 134,3919
+     tLBRACE_ARG 135,3939
+     tSTAR 136,3963
+     tAMPER 137,3981
+     tLAMBDA 138,4000
+     tSYMBEG 139,4020
+     tSTRING_BEG 140,4040
+     tXSTRING_BEG 141,4064
+     tREGEXP_BEG 142,4089
+     tWORDS_BEG 143,4113
+     tQWORDS_BEG 144,4136
+     tSTRING_DBEG 145,4160
+     tSTRING_DVAR 146,4185
+     tSTRING_END 147,4210
+     tLAMBEG 148,4234
+     tLOWEST 149,4254
+     tINFIX_OP 150,4274
+     tUMINUS_NUM 151,4296
+     idNULL 152,4320
+     idRespond_to 153,4339
+     idIFUNC 154,4364
+     idCFUNC 155,4384
+     idThrowState 156,4404
+     id_core_set_method_alias 157,4429
+     id_core_set_variable_alias 158,4466
+     id_core_undef_method 159,4505
+     id_core_define_method 160,4538
+     id_core_define_singleton_method 161,4572
+     id_core_set_postexe 162,4616
+     tLAST_TOKEN 163,4648
+#define keyword_class 167,4699
+#define keyword_module 168,4725
+#define keyword_def 169,4752
+#define keyword_undef 170,4776
+#define keyword_begin 171,4802
+#define keyword_rescue 172,4828
+#define keyword_ensure 173,4855
+#define keyword_end 174,4882
+#define keyword_if 175,4906
+#define keyword_unless 176,4929
+#define keyword_then 177,4956
+#define keyword_elsif 178,4981
+#define keyword_else 179,5007
+#define keyword_case 180,5032
+#define keyword_patern 181,5057
+#define keyword_when 182,5084
+#define keyword_while 183,5109
+#define keyword_until 184,5135
+#define keyword_for 185,5161
+#define keyword_break 186,5185
+#define keyword_next 187,5211
+#define keyword_redo 188,5236
+#define keyword_retry 189,5261
+#define keyword_in 190,5287
+#define keyword_do 191,5310
+#define keyword_do_cond 192,5333
+#define keyword_do_block 193,5361
+#define keyword_do_LAMBDA 194,5390
+#define keyword_return 195,5420
+#define keyword_yield 196,5447
+#define keyword_super 197,5473
+#define keyword_self 198,5499
+#define keyword_nil 199,5524
+#define keyword_true 200,5548
+#define keyword_false 201,5573
+#define keyword_and 202,5599
+#define keyword_or 203,5623
+#define keyword_not 204,5646
+#define modifier_if 205,5670
+#define modifier_unless 206,5694
+#define modifier_while 207,5722
+#define modifier_until 208,5749
+#define modifier_rescue 209,5776
+#define keyword_alias 210,5804
+#define keyword_ialias 211,5830
+#define keyword_defined 212,5857
+#define keyword_BEGIN 213,5885
+#define keyword_END 214,5911
+#define keyword__LINE__ 215,5935
+#define keyword__FILE__ 216,5963
+#define keyword__ENCODING__ 217,5991
+#define tIDENTIFIER 218,6023
+#define tFID 219,6047
+#define tGVAR 220,6064
+#define tIVAR 221,6082
+#define tCONSTANT 222,6100
+#define tCVAR 223,6122
+#define tLABEL 224,6140
+#define tINTEGER 225,6159
+#define tFLOAT 226,6180
+#define tSTRING_CONTENT 227,6199
+#define tCHAR 228,6227
+#define tNTH_REF 229,6245
+#define tBACK_REF 230,6266
+#define tREGEXP_END 231,6288
+#define tUPLUS 232,6312
+#define tUMINUS 233,6331
+#define tPOW 234,6351
+#define tCMP 235,6368
+#define tEQ 236,6385
+#define tEQQ 237,6401
+#define tNEQ 238,6418
+#define tGEQ 239,6435
+#define tLEQ 240,6452
+#define tANDOP 241,6469
+#define tOROP 242,6488
+#define tMATCH 243,6506
+#define tNMATCH 244,6525
+#define tDOT2 245,6545
+#define tDOT3 246,6563
+#define tAREF 247,6581
+#define tASET 248,6599
+#define tLSHFT 249,6617
+#define tRSHFT 250,6636
+#define tCOLON2 251,6655
+#define tCOLON3 252,6675
+#define tOP_ASGN 253,6695
+#define tASSOC 254,6716
+#define tLPAREN 255,6735
+#define tLPAREN_ARG 256,6755
+#define tRPAREN 257,6779
+#define tLBRACK 258,6799
+#define tLBRACE 259,6819
+#define tLBRACE_ARG 260,6839
+#define tSTAR 261,6863
+#define tAMPER 262,6881
+#define tLAMBDA 263,6900
+#define tSYMBEG 264,6920
+#define tSTRING_BEG 265,6940
+#define tXSTRING_BEG 266,6964
+#define tREGEXP_BEG 267,6989
+#define tWORDS_BEG 268,7013
+#define tQWORDS_BEG 269,7036
+#define tSTRING_DBEG 270,7060
+#define tSTRING_DVAR 271,7085
+#define tSTRING_END 272,7110
+#define tLAMBEG 273,7134
+#define tLOWEST 274,7154
+#define tINFIX_OP 275,7174
+#define tUMINUS_NUM 276,7196
+#define idNULL 277,7220
+#define idRespond_to 278,7239
+#define idIFUNC 279,7264
+#define idCFUNC 280,7284
+#define idThrowState 281,7304
+#define id_core_set_method_alias 282,7329
+#define id_core_set_variable_alias 283,7366
+#define id_core_undef_method 284,7405
+#define id_core_define_method 285,7438
+#define id_core_define_singleton_method 286,7472
+#define id_core_set_postexe 287,7516
+#define tLAST_TOKEN 288,7548
+typedef union YYSTYPE294,7631
+	YYSTYPE;302,7740
+# define yystype 303,7750
+# define YYSTYPE_IS_DECLARED 304,7812
+# define YYSTYPE_IS_TRIVIAL 305,7843
 
 prelude.c,347
 static const char prelude_name0[prelude_name04,45
@@ -8207,58 +8208,58 @@ rb_iter_break(903,19515
 static st_table *vm_opt_method_table vm_opt_method_table910,19614
 rb_vm_check_redefinition_opt_method(913,19669
 add_opt_method(923,19861
-vm_init_redefined_flag(938,20256
-#define OP(945,20362
-#define C(946,20453
-#undef C962,21124
-#undef OP963,21133
-vm_exec(1070,23856
-rb_iseq_eval(1270,28376
-rb_iseq_eval_main(1284,28627
-rb_thread_method_id_and_class(1298,28878
-rb_frame_method_id_and_class(1328,29517
-rb_thread_current_status(1334,29650
-rb_vm_call_cfunc(1358,30223
-vm_free(1378,30718
-vm_mark_each_thread_func(1395,31046
-mark_event_hooks(1403,31214
-rb_vm_mark(1412,31334
-vm_init2(1447,32209
-#define USE_THREAD_DATA_RECYCLE 1455,32312
-#define RECYCLE_MAX 1458,32375
-static VALUE *thread_recycle_stack_slot[thread_recycle_stack_slot1459,32398
-static int thread_recycle_stack_count 1460,32452
-thread_recycle_stack(1463,32511
-#define thread_recycle_stack(1474,32712
-rb_thread_recycle_stack_release(1478,32783
-thread_recycle_struct(1491,33072
-thread_free(1500,33216
-rb_thread_mark(1548,34116
-thread_alloc(1605,35621
-th_init2(1619,35960
-th_init(1642,36466
-ruby_thread_init(1648,36545
-rb_thread_alloc(1663,36791
-vm_define_method(1671,36920
-#define REWIND_CFP(1712,37958
-m_core_define_method(1718,38094
-m_core_define_singleton_method(1727,38305
-m_core_set_method_alias(1736,38526
-m_core_set_variable_alias(1745,38705
-m_core_undef_method(1754,38875
-m_core_set_postexe(1764,39047
-sdr(1795,39738
-nsdr(1802,39806
-#define MAX_NATIVE_TRACE 1807,39890
-Init_VM(1826,40242
-Init_BareVM(1945,44049
-main_to_s(1972,44609
-rb_vm_top_self(1978,44673
-Init_top_self(1984,44735
-ruby_vm_verbose_ptr(1996,44999
-ruby_vm_debug_ptr(2002,45070
-rb_ruby_verbose_ptr(2008,45137
-rb_ruby_debug_ptr(2014,45218
+vm_init_redefined_flag(938,20254
+#define OP(945,20360
+#define C(946,20451
+#undef C962,21122
+#undef OP963,21131
+vm_exec(1070,23854
+rb_iseq_eval(1270,28374
+rb_iseq_eval_main(1284,28625
+rb_thread_method_id_and_class(1298,28876
+rb_frame_method_id_and_class(1328,29515
+rb_thread_current_status(1334,29648
+rb_vm_call_cfunc(1358,30221
+vm_free(1378,30716
+vm_mark_each_thread_func(1395,31044
+mark_event_hooks(1403,31212
+rb_vm_mark(1412,31332
+vm_init2(1447,32207
+#define USE_THREAD_DATA_RECYCLE 1455,32310
+#define RECYCLE_MAX 1458,32373
+static VALUE *thread_recycle_stack_slot[thread_recycle_stack_slot1459,32396
+static int thread_recycle_stack_count 1460,32450
+thread_recycle_stack(1463,32509
+#define thread_recycle_stack(1474,32710
+rb_thread_recycle_stack_release(1478,32781
+thread_recycle_struct(1491,33070
+thread_free(1500,33214
+rb_thread_mark(1548,34114
+thread_alloc(1605,35619
+th_init2(1619,35958
+th_init(1642,36464
+ruby_thread_init(1648,36543
+rb_thread_alloc(1663,36789
+vm_define_method(1671,36918
+#define REWIND_CFP(1712,37956
+m_core_define_method(1718,38092
+m_core_define_singleton_method(1727,38303
+m_core_set_method_alias(1736,38524
+m_core_set_variable_alias(1745,38703
+m_core_undef_method(1754,38873
+m_core_set_postexe(1764,39045
+sdr(1795,39736
+nsdr(1802,39804
+#define MAX_NATIVE_TRACE 1807,39888
+Init_VM(1826,40240
+Init_BareVM(1945,44047
+main_to_s(1972,44607
+rb_vm_top_self(1978,44671
+Init_top_self(1984,44733
+ruby_vm_verbose_ptr(1996,44997
+ruby_vm_debug_ptr(2002,45068
+rb_ruby_verbose_ptr(2008,45135
+rb_ruby_debug_ptr(2014,45216
 
 vm_core.h,4509
 #define RUBY_VM_CORE_H13,282
@@ -8748,7 +8749,7 @@ struct kwtable 2,
 hash 24,
 rb_reserved_word 79,
 
-parse.c,11052
+parse.c,11128
 #define YYBISON 47,2141
 #define YYBISON_VERSION 50,2182
 #define YYSKELETON_NAME 53,2235
@@ -8800,321 +8801,323 @@ parse.c,11052
      modifier_until 110,3589
      modifier_rescue 111,3616
      keyword_alias 112,3644
-     keyword_defined 113,3670
-     keyword_BEGIN 114,3698
-     keyword_END 115,3724
-     keyword__LINE__ 116,3748
-     keyword__FILE__ 117,3776
-     keyword__ENCODING__ 118,3804
-     tIDENTIFIER 119,3836
-     tFID 120,3860
-     tGVAR 121,3877
-     tIVAR 122,3895
-     tCONSTANT 123,3913
-     tCVAR 124,3935
-     tLABEL 125,3953
-     tINTEGER 126,3972
-     tFLOAT 127,3993
-     tSTRING_CONTENT 128,4012
-     tCHAR 129,4040
-     tNTH_REF 130,4058
-     tBACK_REF 131,4079
-     tREGEXP_END 132,4101
-     tUPLUS 133,4125
-     tUMINUS 134,4144
-     tPOW 135,4164
-     tCMP 136,4181
-     tEQ 137,4198
-     tEQQ 138,4214
-     tNEQ 139,4231
-     tGEQ 140,4248
-     tLEQ 141,4265
-     tANDOP 142,4282
-     tOROP 143,4301
-     tMATCH 144,4319
-     tNMATCH 145,4338
-     tDOT2 146,4358
-     tDOT3 147,4376
-     tAREF 148,4394
-     tASET 149,4412
-     tLSHFT 150,4430
-     tRSHFT 151,4449
-     tCOLON2 152,4468
-     tCOLON3 153,4488
-     tOP_ASGN 154,4508
-     tASSOC 155,4529
-     tLPAREN 156,4548
-     tLPAREN_ARG 157,4568
-     tRPAREN 158,4592
-     tLBRACK 159,4612
-     tLBRACE 160,4632
-     tLBRACE_ARG 161,4652
-     tSTAR 162,4676
-     tAMPER 163,4694
-     tLAMBDA 164,4713
-     tSYMBEG 165,4733
-     tSTRING_BEG 166,4753
-     tXSTRING_BEG 167,4777
-     tREGEXP_BEG 168,4802
-     tWORDS_BEG 169,4826
-     tQWORDS_BEG 170,4849
-     tSTRING_DBEG 171,4873
-     tSTRING_DVAR 172,4898
-     tSTRING_END 173,4923
-     tLAMBEG 174,4947
-     tLOWEST 175,4967
-     tUMINUS_NUM 176,4987
-     idNULL 177,5011
-     idRespond_to 178,5030
-     idIFUNC 179,5055
-     idCFUNC 180,5075
-     idThrowState 181,5095
-     id_core_set_method_alias 182,5120
-     id_core_set_variable_alias 183,5157
-     id_core_undef_method 184,5196
-     id_core_define_method 185,5229
-     id_core_define_singleton_method 186,5263
-     id_core_set_postexe 187,5307
-     tINFIX_OP 188,5339
-     tLAST_TOKEN 189,5361
-#define keyword_class 193,5412
-#define keyword_module 194,5438
-#define keyword_def 195,5465
-#define keyword_undef 196,5489
-#define keyword_begin 197,5515
-#define keyword_rescue 198,5541
-#define keyword_ensure 199,5568
-#define keyword_end 200,5595
-#define keyword_if 201,5619
-#define keyword_unless 202,5642
-#define keyword_then 203,5669
-#define keyword_elsif 204,5694
-#define keyword_else 205,5720
-#define keyword_case 206,5745
-#define keyword_patern 207,5770
-#define keyword_when 208,5797
-#define keyword_while 209,5822
-#define keyword_until 210,5848
-#define keyword_for 211,5874
-#define keyword_break 212,5898
-#define keyword_next 213,5924
-#define keyword_redo 214,5949
-#define keyword_retry 215,5974
-#define keyword_in 216,6000
-#define keyword_do 217,6023
-#define keyword_do_cond 218,6046
-#define keyword_do_block 219,6074
-#define keyword_do_LAMBDA 220,6103
-#define keyword_return 221,6133
-#define keyword_yield 222,6160
-#define keyword_super 223,6186
-#define keyword_self 224,6212
-#define keyword_nil 225,6237
-#define keyword_true 226,6261
-#define keyword_false 227,6286
-#define keyword_and 228,6312
-#define keyword_or 229,6336
-#define keyword_not 230,6359
-#define modifier_if 231,6383
-#define modifier_unless 232,6407
-#define modifier_while 233,6435
-#define modifier_until 234,6462
-#define modifier_rescue 235,6489
-#define keyword_alias 236,6517
-#define keyword_defined 237,6543
-#define keyword_BEGIN 238,6571
-#define keyword_END 239,6597
-#define keyword__LINE__ 240,6621
-#define keyword__FILE__ 241,6649
-#define keyword__ENCODING__ 242,6677
-#define tIDENTIFIER 243,6709
-#define tFID 244,6733
-#define tGVAR 245,6750
-#define tIVAR 246,6768
-#define tCONSTANT 247,6786
-#define tCVAR 248,6808
-#define tLABEL 249,6826
-#define tINTEGER 250,6845
-#define tFLOAT 251,6866
-#define tSTRING_CONTENT 252,6885
-#define tCHAR 253,6913
-#define tNTH_REF 254,6931
-#define tBACK_REF 255,6952
-#define tREGEXP_END 256,6974
-#define tUPLUS 257,6998
-#define tUMINUS 258,7017
-#define tPOW 259,7037
-#define tCMP 260,7054
-#define tEQ 261,7071
-#define tEQQ 262,7087
-#define tNEQ 263,7104
-#define tGEQ 264,7121
-#define tLEQ 265,7138
-#define tANDOP 266,7155
-#define tOROP 267,7174
-#define tMATCH 268,7192
-#define tNMATCH 269,7211
-#define tDOT2 270,7231
-#define tDOT3 271,7249
-#define tAREF 272,7267
-#define tASET 273,7285
-#define tLSHFT 274,7303
-#define tRSHFT 275,7322
-#define tCOLON2 276,7341
-#define tCOLON3 277,7361
-#define tOP_ASGN 278,7381
-#define tASSOC 279,7402
-#define tLPAREN 280,7421
-#define tLPAREN_ARG 281,7441
-#define tRPAREN 282,7465
-#define tLBRACK 283,7485
-#define tLBRACE 284,7505
-#define tLBRACE_ARG 285,7525
-#define tSTAR 286,7549
-#define tAMPER 287,7567
-#define tLAMBDA 288,7586
-#define tSYMBEG 289,7606
-#define tSTRING_BEG 290,7626
-#define tXSTRING_BEG 291,7650
-#define tREGEXP_BEG 292,7675
-#define tWORDS_BEG 293,7699
-#define tQWORDS_BEG 294,7722
-#define tSTRING_DBEG 295,7746
-#define tSTRING_DVAR 296,7771
-#define tSTRING_END 297,7796
-#define tLAMBEG 298,7820
-#define tLOWEST 299,7840
-#define tUMINUS_NUM 300,7860
-#define idNULL 301,7884
-#define idRespond_to 302,7903
-#define idIFUNC 303,7928
-#define idCFUNC 304,7948
-#define idThrowState 305,7968
-#define id_core_set_method_alias 306,7993
-#define id_core_set_variable_alias 307,8030
-#define id_core_undef_method 308,8069
-#define id_core_define_method 309,8102
-#define id_core_define_singleton_method 310,8136
-#define id_core_set_postexe 311,8180
-#define tINFIX_OP 312,8212
-#define tLAST_TOKEN 313,8234
-	YYSTYPE;934,29742
-# define yystype 935,29772
-# define YYSTYPE_IS_DECLARED 936,29834
-# define YYSTYPE_IS_TRIVIAL 937,29865
-# undef short949,30018
-typedef YYTYPE_UINT8 yytype_uint8;953,30060
-typedef unsigned char yytype_uint8;955,30101
-typedef YYTYPE_INT8 yytype_int8;959,30164
-typedef signed char yytype_int8;962,30297
-typedef short int yytype_int8;964,30336
-typedef YYTYPE_UINT16 yytype_uint16;968,30396
-typedef unsigned short int yytype_uint16;970,30439
-typedef YYTYPE_INT16 yytype_int16;974,30509
-typedef short int yytype_int16;976,30550
-#  define YYSIZE_T 981,30629
-#  define YYSIZE_T 983,30684
-#  define YYSIZE_T 987,30890
-#  define YYSIZE_T 989,30923
-#define YYSIZE_MAXIMUM 993,30971
-#   define YY_(999,31117
-#  define YY_(1003,31203
-# define YYUSE(1009,31340
-# define YYUSE(1011,31377
-# define YYID(1016,31507
-YYID 1021,31643
-#    define YYSTACK_ALLOC 1039,31915
-#    define YYSTACK_ALLOC 1043,32078
-#    define alloca 1046,32198
-#    define YYSTACK_ALLOC 1048,32234
-#      define _STDLIB_H 1053,32498
-#  define YYSTACK_FREE(1062,32645
-#   define YYSTACK_ALLOC_MAXIMUM 1068,33042
-#  define YYSTACK_ALLOC 1071,33124
-#  define YYSTACK_FREE 1072,33157
-#   define YYSTACK_ALLOC_MAXIMUM 1074,33219
-#    define _STDLIB_H 1081,33503
-#   define YYMALLOC 1085,33565
-#   define YYFREE 1092,33832
-union yyalloc1107,34315
-# define YYSTACK_GAP_MAXIMUM 1114,34449
-# define YYSTACK_BYTES(1118,34597
-#   define YYCOPY(1126,34857
-#   define YYCOPY(1129,34964
-# define YYSTACK_RELOCATE(1145,35455
-#define YYFINAL 1159,35853
-#define YYLAST 1161,35912
-#define YYNTOKENS 1164,35977
-#define YYNNTS 1166,36041
-#define YYNRULES 1168,36097
-#define YYNSTATES 1170,36156
-#define YYUNDEFTOK 1173,36253
-#define YYMAXUTOK 1174,36275
-#define YYTRANSLATE(1176,36300
-static const yytype_uint8 yytranslate[yytranslate1180,36476
-static const yytype_uint16 yyprhs[yyprhs1225,39386
-static const yytype_int16 yyrhs[yyrhs1288,43671
-static const yytype_uint16 yyrline[yyrline1470,56668
-static const char *const yytname[yytname1536,61088
-static const yytype_uint16 yytoknum[yytoknum1603,65327
-static const yytype_uint16 yyr1[yyr11625,66552
-static const yytype_uint8 yyr2[yyr21688,70855
-static const yytype_uint16 yydefact[yydefact1753,75252
-static const yytype_int16 yydefgoto[yydefgoto1858,82570
-#define YYPACT_NINF 1882,83993
-static const yytype_int16 yypact[yypact1883,84018
-static const yytype_int16 yypgoto[yypgoto1988,91331
-#define YYTABLE_NINF 2014,92899
-static const yytype_int16 yytable[yytable2015,92925
-static const yytype_int16 yycheck[yycheck3096,171533
-static const yytype_uint16 yystos[yystos4179,250238
-#define yyerrok	4283,257525
-#define yyclearin	4284,257560
-#define YYEMPTY	4285,257597
-#define YYEOF	4286,257619
-#define YYACCEPT	4288,257637
-#define YYABORT	4289,257671
-#define YYERROR	4290,257704
-#define YYFAIL	4297,257942
-#define YYRECOVERING(4299,257973
-#define YYBACKUP(4301,258014
-#define YYTERROR	4319,258457
-#define YYERRCODE	4320,258476
-#define YYRHSLOC(4327,258682
-# define YYLLOC_DEFAULT(4329,258741
-#  define YY_LOCATION_PRINT(4355,259654
-#  define YY_LOCATION_PRINT(4360,259834
-# define YYLEX 4368,259979
-# define YYLEX 4370,260029
-#  define YYFPRINTF 4378,260194
-# define YYDPRINTF(4381,260231
-# define YY_SYMBOL_PRINT(4387,260338
-yy_symbol_value_print 4407,260888
-yy_symbol_print 4441,261646
-yy_stack_print 4468,262572
-# define YY_STACK_PRINT(4482,262874
-yy_reduce_print 4496,263284
-# define YY_REDUCE_PRINT(4521,263964
-int yydebug;4530,264217
-# define YYDPRINTF(4533,264258
-# define YY_SYMBOL_PRINT(4534,264283
-# define YY_STACK_PRINT(4535,264338
-# define YY_REDUCE_PRINT(4536,264375
-# define YYINITDEPTH 4542,264509
-# define YYMAXDEPTH 4553,264865
-#   define yystrlen 4562,264986
-yystrlen 4568,265170
-#   define yystpcpy 4585,265465
-yystpcpy 4592,265701
-yytnamerr 4620,266442
-yysyntax_error 4667,267501
-      enum { YYERROR_VERBOSE_ARGS_MAXIMUM 4680,267849
-yydestruct 4777,270670
-yyparse 4832,271652
-#define YYPOPSTACK(4893,273032
-#  undef YYSTACK_RELOCATE4981,275449
+     keyword_ialias 113,3670
+     keyword_defined 114,3697
+     keyword_BEGIN 115,3725
+     keyword_END 116,3751
+     keyword__LINE__ 117,3775
+     keyword__FILE__ 118,3803
+     keyword__ENCODING__ 119,3831
+     tIDENTIFIER 120,3863
+     tFID 121,3887
+     tGVAR 122,3904
+     tIVAR 123,3922
+     tCONSTANT 124,3940
+     tCVAR 125,3962
+     tLABEL 126,3980
+     tINTEGER 127,3999
+     tFLOAT 128,4020
+     tSTRING_CONTENT 129,4039
+     tCHAR 130,4067
+     tNTH_REF 131,4085
+     tBACK_REF 132,4106
+     tREGEXP_END 133,4128
+     tUPLUS 134,4152
+     tUMINUS 135,4171
+     tPOW 136,4191
+     tCMP 137,4208
+     tEQ 138,4225
+     tEQQ 139,4241
+     tNEQ 140,4258
+     tGEQ 141,4275
+     tLEQ 142,4292
+     tANDOP 143,4309
+     tOROP 144,4328
+     tMATCH 145,4346
+     tNMATCH 146,4365
+     tDOT2 147,4385
+     tDOT3 148,4403
+     tAREF 149,4421
+     tASET 150,4439
+     tLSHFT 151,4457
+     tRSHFT 152,4476
+     tCOLON2 153,4495
+     tCOLON3 154,4515
+     tOP_ASGN 155,4535
+     tASSOC 156,4556
+     tLPAREN 157,4575
+     tLPAREN_ARG 158,4595
+     tRPAREN 159,4619
+     tLBRACK 160,4639
+     tLBRACE 161,4659
+     tLBRACE_ARG 162,4679
+     tSTAR 163,4703
+     tAMPER 164,4721
+     tLAMBDA 165,4740
+     tSYMBEG 166,4760
+     tSTRING_BEG 167,4780
+     tXSTRING_BEG 168,4804
+     tREGEXP_BEG 169,4829
+     tWORDS_BEG 170,4853
+     tQWORDS_BEG 171,4876
+     tSTRING_DBEG 172,4900
+     tSTRING_DVAR 173,4925
+     tSTRING_END 174,4950
+     tLAMBEG 175,4974
+     tLOWEST 176,4994
+     tINFIX_OP 177,5014
+     tUMINUS_NUM 178,5036
+     idNULL 179,5060
+     idRespond_to 180,5079
+     idIFUNC 181,5104
+     idCFUNC 182,5124
+     idThrowState 183,5144
+     id_core_set_method_alias 184,5169
+     id_core_set_variable_alias 185,5206
+     id_core_undef_method 186,5245
+     id_core_define_method 187,5278
+     id_core_define_singleton_method 188,5312
+     id_core_set_postexe 189,5356
+     tLAST_TOKEN 190,5388
+#define keyword_class 194,5439
+#define keyword_module 195,5465
+#define keyword_def 196,5492
+#define keyword_undef 197,5516
+#define keyword_begin 198,5542
+#define keyword_rescue 199,5568
+#define keyword_ensure 200,5595
+#define keyword_end 201,5622
+#define keyword_if 202,5646
+#define keyword_unless 203,5669
+#define keyword_then 204,5696
+#define keyword_elsif 205,5721
+#define keyword_else 206,5747
+#define keyword_case 207,5772
+#define keyword_patern 208,5797
+#define keyword_when 209,5824
+#define keyword_while 210,5849
+#define keyword_until 211,5875
+#define keyword_for 212,5901
+#define keyword_break 213,5925
+#define keyword_next 214,5951
+#define keyword_redo 215,5976
+#define keyword_retry 216,6001
+#define keyword_in 217,6027
+#define keyword_do 218,6050
+#define keyword_do_cond 219,6073
+#define keyword_do_block 220,6101
+#define keyword_do_LAMBDA 221,6130
+#define keyword_return 222,6160
+#define keyword_yield 223,6187
+#define keyword_super 224,6213
+#define keyword_self 225,6239
+#define keyword_nil 226,6264
+#define keyword_true 227,6288
+#define keyword_false 228,6313
+#define keyword_and 229,6339
+#define keyword_or 230,6363
+#define keyword_not 231,6386
+#define modifier_if 232,6410
+#define modifier_unless 233,6434
+#define modifier_while 234,6462
+#define modifier_until 235,6489
+#define modifier_rescue 236,6516
+#define keyword_alias 237,6544
+#define keyword_ialias 238,6570
+#define keyword_defined 239,6597
+#define keyword_BEGIN 240,6625
+#define keyword_END 241,6651
+#define keyword__LINE__ 242,6675
+#define keyword__FILE__ 243,6703
+#define keyword__ENCODING__ 244,6731
+#define tIDENTIFIER 245,6763
+#define tFID 246,6787
+#define tGVAR 247,6804
+#define tIVAR 248,6822
+#define tCONSTANT 249,6840
+#define tCVAR 250,6862
+#define tLABEL 251,6880
+#define tINTEGER 252,6899
+#define tFLOAT 253,6920
+#define tSTRING_CONTENT 254,6939
+#define tCHAR 255,6967
+#define tNTH_REF 256,6985
+#define tBACK_REF 257,7006
+#define tREGEXP_END 258,7028
+#define tUPLUS 259,7052
+#define tUMINUS 260,7071
+#define tPOW 261,7091
+#define tCMP 262,7108
+#define tEQ 263,7125
+#define tEQQ 264,7141
+#define tNEQ 265,7158
+#define tGEQ 266,7175
+#define tLEQ 267,7192
+#define tANDOP 268,7209
+#define tOROP 269,7228
+#define tMATCH 270,7246
+#define tNMATCH 271,7265
+#define tDOT2 272,7285
+#define tDOT3 273,7303
+#define tAREF 274,7321
+#define tASET 275,7339
+#define tLSHFT 276,7357
+#define tRSHFT 277,7376
+#define tCOLON2 278,7395
+#define tCOLON3 279,7415
+#define tOP_ASGN 280,7435
+#define tASSOC 281,7456
+#define tLPAREN 282,7475
+#define tLPAREN_ARG 283,7495
+#define tRPAREN 284,7519
+#define tLBRACK 285,7539
+#define tLBRACE 286,7559
+#define tLBRACE_ARG 287,7579
+#define tSTAR 288,7603
+#define tAMPER 289,7621
+#define tLAMBDA 290,7640
+#define tSYMBEG 291,7660
+#define tSTRING_BEG 292,7680
+#define tXSTRING_BEG 293,7704
+#define tREGEXP_BEG 294,7729
+#define tWORDS_BEG 295,7753
+#define tQWORDS_BEG 296,7776
+#define tSTRING_DBEG 297,7800
+#define tSTRING_DVAR 298,7825
+#define tSTRING_END 299,7850
+#define tLAMBEG 300,7874
+#define tLOWEST 301,7894
+#define tINFIX_OP 302,7914
+#define tUMINUS_NUM 303,7936
+#define idNULL 304,7960
+#define idRespond_to 305,7979
+#define idIFUNC 306,8004
+#define idCFUNC 307,8024
+#define idThrowState 308,8044
+#define id_core_set_method_alias 309,8069
+#define id_core_set_variable_alias 310,8106
+#define id_core_undef_method 311,8145
+#define id_core_define_method 312,8178
+#define id_core_define_singleton_method 313,8212
+#define id_core_set_postexe 314,8256
+#define tLAST_TOKEN 315,8288
+	YYSTYPE;978,30859
+# define yystype 979,30889
+# define YYSTYPE_IS_DECLARED 980,30951
+# define YYSTYPE_IS_TRIVIAL 981,30982
+# undef short993,31135
+typedef YYTYPE_UINT8 yytype_uint8;997,31177
+typedef unsigned char yytype_uint8;999,31218
+typedef YYTYPE_INT8 yytype_int8;1003,31281
+typedef signed char yytype_int8;1006,31414
+typedef short int yytype_int8;1008,31453
+typedef YYTYPE_UINT16 yytype_uint16;1012,31513
+typedef unsigned short int yytype_uint16;1014,31556
+typedef YYTYPE_INT16 yytype_int16;1018,31626
+typedef short int yytype_int16;1020,31667
+#  define YYSIZE_T 1025,31746
+#  define YYSIZE_T 1027,31801
+#  define YYSIZE_T 1031,32007
+#  define YYSIZE_T 1033,32040
+#define YYSIZE_MAXIMUM 1037,32088
+#   define YY_(1043,32234
+#  define YY_(1047,32320
+# define YYUSE(1053,32457
+# define YYUSE(1055,32494
+# define YYID(1060,32624
+YYID 1065,32760
+#    define YYSTACK_ALLOC 1083,33032
+#    define YYSTACK_ALLOC 1087,33195
+#    define alloca 1090,33315
+#    define YYSTACK_ALLOC 1092,33351
+#      define _STDLIB_H 1097,33615
+#  define YYSTACK_FREE(1106,33762
+#   define YYSTACK_ALLOC_MAXIMUM 1112,34159
+#  define YYSTACK_ALLOC 1115,34241
+#  define YYSTACK_FREE 1116,34274
+#   define YYSTACK_ALLOC_MAXIMUM 1118,34336
+#    define _STDLIB_H 1125,34620
+#   define YYMALLOC 1129,34682
+#   define YYFREE 1136,34949
+union yyalloc1151,35432
+# define YYSTACK_GAP_MAXIMUM 1158,35566
+# define YYSTACK_BYTES(1162,35714
+#   define YYCOPY(1170,35974
+#   define YYCOPY(1173,36081
+# define YYSTACK_RELOCATE(1189,36572
+#define YYFINAL 1203,36970
+#define YYLAST 1205,37029
+#define YYNTOKENS 1208,37094
+#define YYNNTS 1210,37158
+#define YYNRULES 1212,37214
+#define YYNSTATES 1214,37273
+#define YYUNDEFTOK 1217,37370
+#define YYMAXUTOK 1218,37392
+#define YYTRANSLATE(1220,37417
+static const yytype_uint8 yytranslate[yytranslate1224,37593
+static const yytype_uint16 yyprhs[yyprhs1269,40510
+static const yytype_int16 yyrhs[yyrhs1332,44823
+static const yytype_uint16 yyrline[yyrline1515,57914
+static const char *const yytname[yytname1581,62362
+static const yytype_uint16 yytoknum[yytoknum1648,66619
+static const yytype_uint16 yyr1[yyr11670,67851
+static const yytype_uint8 yyr2[yyr21733,72182
+static const yytype_uint16 yydefact[yydefact1798,76607
+static const yytype_int16 yydefgoto[yydefgoto1903,83967
+#define YYPACT_NINF 1927,85390
+static const yytype_int16 yypact[yypact1928,85415
+static const yytype_int16 yypgoto[yypgoto2033,92770
+#define YYTABLE_NINF 2059,94338
+static const yytype_int16 yytable[yytable2060,94364
+static const yytype_int16 yycheck[yycheck3141,172993
+static const yytype_uint16 yystos[yystos4224,251719
+#define yyerrok	4328,259048
+#define yyclearin	4329,259083
+#define YYEMPTY	4330,259120
+#define YYEOF	4331,259142
+#define YYACCEPT	4333,259160
+#define YYABORT	4334,259194
+#define YYERROR	4335,259227
+#define YYFAIL	4342,259465
+#define YYRECOVERING(4344,259496
+#define YYBACKUP(4346,259537
+#define YYTERROR	4364,259980
+#define YYERRCODE	4365,259999
+#define YYRHSLOC(4372,260205
+# define YYLLOC_DEFAULT(4374,260264
+#  define YY_LOCATION_PRINT(4400,261177
+#  define YY_LOCATION_PRINT(4405,261357
+# define YYLEX 4413,261502
+# define YYLEX 4415,261552
+#  define YYFPRINTF 4423,261717
+# define YYDPRINTF(4426,261754
+# define YY_SYMBOL_PRINT(4432,261861
+yy_symbol_value_print 4452,262411
+yy_symbol_print 4486,263169
+yy_stack_print 4513,264095
+# define YY_STACK_PRINT(4527,264397
+yy_reduce_print 4541,264807
+# define YY_REDUCE_PRINT(4566,265487
+int yydebug;4575,265740
+# define YYDPRINTF(4578,265781
+# define YY_SYMBOL_PRINT(4579,265806
+# define YY_STACK_PRINT(4580,265861
+# define YY_REDUCE_PRINT(4581,265898
+# define YYINITDEPTH 4587,266032
+# define YYMAXDEPTH 4598,266388
+#   define yystrlen 4607,266509
+yystrlen 4613,266693
+#   define yystpcpy 4630,266988
+yystpcpy 4637,267224
+yytnamerr 4665,267965
+yysyntax_error 4712,269024
+      enum { YYERROR_VERBOSE_ARGS_MAXIMUM 4725,269372
+yydestruct 4822,272193
+yyparse 4877,273175
+#define YYPOPSTACK(4938,274555
+#  undef YYSTACK_RELOCATE5026,276972
 
-parse.y,13908
+parse.y,14107
 #define YYDEBUG 14,
 #define YYERROR_VERBOSE 15,
 #define YYSTACK_USE_ALLOCA 16,
@@ -9164,491 +9167,498 @@ typedef unsigned long stack_type;75,
 #define CMDARG_P(91,
 struct vtable 93,
 struct local_vars 100,
-#define DVARS_INHERIT 106,
-#define DVARS_TOPSCOPE 107,
-#define DVARS_SPECIAL_P(108,
-#define POINTER_P(109,
-vtable_size(113,
-#define VTBL_DEBUG 123,
-vtable_alloc(126,
-vtable_free(138,
-vtable_add(150,
-vtable_included(165,
-typedef struct token_info 180,
-} token_info;186,
-struct parser_params 198,
-#define UTF8_ENC(266,
-#define STR_NEW(268,
-#define STR_NEW0(269,
-#define STR_NEW2(270,
-#define STR_NEW3(271,
-#define ENC_SINGLE(272,
-#define TOK_INTERN(273,
-#define yyerror(283,
-#define YYLEX_PARAM 285,
-#define lex_strterm	287,
-#define lex_state	288,
-#define cond_stack	289,
-#define cmdarg_stack	290,
-#define class_nest	291,
-#define paren_nest	292,
-#define lpar_beg	293,
-#define in_single	294,
-#define in_def	295,
-#define compile_for_eval	296,
-#define cur_mid	297,
-#define in_defined	298,
-#define tokenbuf	299,
-#define tokidx	300,
-#define toksiz	301,
-#define lex_input	302,
-#define lex_lastline	303,
-#define lex_nextline	304,
-#define lex_pbeg	305,
-#define lex_p	306,
-#define lex_pend	307,
-#define heredoc_end	308,
-#define command_start	309,
-#define deferred_nodes	310,
-#define lex_gets_ptr	311,
-#define lex_gets	312,
-#define lvtbl	313,
-#define ruby__end__seen	314,
-#define ruby_sourceline	315,
-#define ruby_sourcefile	316,
-#define yydebug	317,
-#define ruby_eval_tree	320,
-#define ruby_eval_tree_begin	321,
-#define ruby_debug_lines	322,
-#define ruby_coverage	323,
-#define yyparse 329,
-#define rb_node_newnode(332,
-#define cond(335,
-#define logop(337,
-#define value_expr(345,
-#define void_expr0(346,
-#define void_expr(347,
-#define void_stmts(349,
-#define reduce_nodes(351,
-#define block_dup_check(353,
-#define block_append(356,
-#define list_append(358,
-#define list_concat(360,
-#define arg_append(362,
-#define arg_concat(364,
-#define literal_concat(366,
-#define new_evstr(368,
-#define evstr2dstr(370,
-#define call_bin_op(374,
-#define call_uni_op(376,
-#define new_args(379,
-#define shadowing_lvar(381,
-#define ret_args(385,
-#define new_yield(388,
-#define gettable(391,
-#define assignable(393,
-#define new_bv(395,
-#define aryset(397,
-#define attrset(399,
-#define rb_backref_error(402,
-#define node_assign(404,
-#define match_op(407,
-#define local_push(410,
-#define local_pop(412,
-#define local_var(414,
-#define arg_var(416,
-#define local_id(418,
-#define local_tbl(420,
-#define internal_id(422,
-#define dyna_push(425,
-#define dyna_pop(427,
-#define dyna_in_block(429,
-#define dyna_var(430,
-#define dvar_defined(432,
-#define dvar_curr(434,
-#define reg_compile(444,
-#define reg_fragment_setenc(446,
-#define reg_fragment_check(448,
-#define reg_named_capture_assign(450,
-#define remove_begin(453,
-#define lvar_defined(456,
-#define RE_OPTION_ONCE 458,
-#define RE_OPTION_ENCODING_SHIFT 459,
-#define RE_OPTION_ENCODING(460,
-#define RE_OPTION_ENCODING_IDX(461,
-#define RE_OPTION_ENCODING_NONE(462,
-#define RE_OPTION_MASK 463,
-#define RE_OPTION_ARG_ENCODING_NONE 464,
-#define NODE_STRTERM 466,
-#define NODE_HEREDOC 467,
-#define SIGN_EXTEND(468,
-#define nd_func 469,
-#define nd_term(471,
-#define nd_term(473,
-#define nd_paren(475,
-#define nd_nest 476,
-int patern_match_set=477,
-#define RIPPER_VERSION 481,
-static ID ripper_id_gets;485,
-#define dispatch0(494,
-#define dispatch1(495,
-#define dispatch2(496,
-#define dispatch3(497,
-#define dispatch4(498,
-#define dispatch5(499,
-#define yyparse 501,
-#define ripper_id2sym(506,
-#define arg_new(510,
-#define arg_add(511,
-#define arg_prepend(512,
-#define arg_add_star(513,
-#define arg_add_block(514,
-#define arg_add_optblock(515,
-#define bare_assoc(516,
-#define arg_add_assocs(517,
-#define args2mrhs(519,
-#define mrhs_new(520,
-#define mrhs_add(521,
-#define mrhs_add_star(522,
-#define mlhs_new(524,
-#define mlhs_add(525,
-#define mlhs_add_star(526,
-#define params_new(528,
-#define blockvar_new(531,
-#define blockvar_add_star(532,
-#define blockvar_add_block(533,
-#define method_optarg(535,
-#define method_arg(536,
-#define method_add_block(537,
-#define escape_Qundef(539,
-#define FIXME 541,
-# define ifndef_ripper(546,
-# define ifndef_ripper(548,
-# define rb_warn0(552,
-# define rb_warnI(553,
-# define rb_warnS(554,
-# define rb_warning0(555,
-# define rb_warningS(556,
-# define rb_warn0(558,
-# define rb_warnI(559,
-# define rb_warnS(560,
-# define rb_warning0(561,
-# define rb_warningS(562,
-# define rb_compile_error 574,
-# define compile_error 575,
-# define PARSER_ARG 576,
-# define compile_error 578,
-# define PARSER_ARG 579,
-#define YYMAXDEPTH 587,
-# define YYDEBUG 599,
-# undef YYERROR_VERBOSE604,
-# define YYERROR_VERBOSE 605,
-# define YYERROR_VERBOSE 607,
-# define YYTOKEN_TABLE 612,
-typedef union YYSTYPE616,
-# undef parser4848,
-# undef yylex4849,
-# undef yylval4850,
-# define yylval 4851,
-# define nextc(4860,
-# define pushback(4861,
-# define newtok(4862,
-# define tokspace(4863,
-# define tokadd(4864,
-# define tok_hex(4865,
-# define read_escape(4866,
-# define tokadd_escape(4867,
-# define regx_options(4868,
-# define tokadd_string(4869,
-# define parse_string(4870,
-# define tokaddmbc(4871,
-# define here_document(4872,
-# define heredoc_identifier(4873,
-# define heredoc_restore(4874,
-# define whole_match_p(4875,
-# define local_id(4879,
-# define dyna_in_block(4880,
-# define set_yylval_str(4884,
-# define set_yylval_num(4885,
-# define set_yylval_id(4886,
-# define set_yylval_literal(4887,
-# define set_yylval_node(4888,
-# define yylval_id(4889,
-# define set_yylval_str(4891,
-# define set_yylval_num(4892,
-# define set_yylval_id(4893,
-# define set_yylval_literal(4894,
-# define set_yylval_node(4895,
-# define yylval_id(4896,
-#define ripper_flush(4900,
-ripper_dispatch_scan_event(4903,
-ripper_dispatch_delayed_token(4915,
-#undef SIGN_EXTEND_CHAR4936,
-# define SIGN_EXTEND_CHAR(4938,
-# define SIGN_EXTEND_CHAR(4941,
-#define parser_encoding_name(4944,
-#define parser_mbclen(4945,
-#define parser_precise_mbclen(4946,
-#define is_identchar(4947,
-#define parser_is_identchar(4948,
-#define parser_isascii(4950,
-token_info_get_column(4954,
-token_info_has_nonspaces(4968,
-token_info_push(4980,
-token_info_pop(4996,
-parser_yyerror(5023,
-debug_lines(5089,
-coverage(5104,
-e_option_supplied(5122,
-yycompile0(5130,
-yycompile(5183,
-lex_get_str(5192,
-lex_getline(5211,
-rb_compile_string(5227,
-rb_parser_compile_string(5235,
-rb_compile_cstr(5255,
-rb_parser_compile_cstr(5261,
-lex_io_gets(5267,
-rb_compile_file(5273,
-rb_parser_compile_file(5281,
-#define STR_FUNC_ESCAPE 5300,
-#define STR_FUNC_EXPAND 5301,
-#define STR_FUNC_REGEXP 5302,
-#define STR_FUNC_QWORDS 5303,
-#define STR_FUNC_SYMBOL 5304,
-#define STR_FUNC_INDENT 5305,
-enum string_type 5307,
-    str_squote 5308,
-    str_dquote 5309,
-    str_dquote = (STR_FUNC_EXPAND)5309,
-    str_xquote 5310,
-    str_xquote = (STR_FUNC_EXPAND)5310,
-    str_regexp 5311,
-    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_REGEXP5311,
-    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_ESCAPE|STR_FUNC_ESCAPE5311,
-    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_ESCAPE|STR_FUNC_EXPAND)STR_FUNC_EXPAND5311,
-    str_sword 5312,
-    str_sword  = (STR_FUNC_QWORDS)5312,
-    str_dword 5313,
-    str_dword  = (STR_FUNC_QWORDS|STR_FUNC_QWORDS5313,
-    str_dword  = (STR_FUNC_QWORDS|STR_FUNC_EXPAND)STR_FUNC_EXPAND5313,
-    str_ssym 5314,
-    str_ssym   = (STR_FUNC_SYMBOL)5314,
-    str_dsym 5315,
-    str_dsym   = (STR_FUNC_SYMBOL|STR_FUNC_SYMBOL5315,
-    str_dsym   = (STR_FUNC_SYMBOL|STR_FUNC_EXPAND)STR_FUNC_EXPAND5315,
-parser_str_new(5319,
-#define lex_goto_eol(5335,
-#define peek(5336,
-parser_nextc(5339,
-parser_pushback(5396,
-#define was_bol(5405,
-#define tokfix(5407,
-#define tok(5408,
-#define toklen(5409,
-#define toklast(5410,
-parser_newtok(5413,
-parser_tokspace(5428,
-parser_tokadd(5440,
-parser_tok_hex(5450,
-#define tokcopy(5463,
-parser_tokadd_utf8(5466,
-#define ESCAPE_CONTROL 5547,
-#define ESCAPE_META 5548,
-parser_read_escape(5551,
-parser_tokaddmbc(5646,
-parser_tokadd_escape(5653,
-parser_regx_options(5735,
-dispose_string(5764,
-parser_tokadd_mbchar(5773,
-#define tokadd_mbchar(5786,
-parser_tokadd_string(5789,
-#define mixed_error(5799,
-#define mixed_escape(5809,
-#define NEW_STRTERM(5915,
-parser_parse_string(5919,
-parser_heredoc_identifier(5980,
-parser_heredoc_restore(6044,
-parser_whole_match_p(6069,
-parser_here_document(6085,
-arg_ambiguous_gen(6177,
-arg_ambiguous_gen(6183,
-#define arg_ambiguous(6188,
-lvar_defined_gen(6191,
-parser_encode_length(6202,
-parser_set_encode(6220,
-comment_at_top(6246,
-typedef int (*rb_magic_comment_length_t)rb_magic_comment_length_t6258,
-typedef void (*rb_magic_comment_setter_t)rb_magic_comment_setter_t6259,
-magic_comment_encoding(6262,
-struct magic_comment 6272,
-static const struct magic_comment magic_comments[magic_comments6278,
-magic_comment_marker(6285,
-parser_magic_comment(6318,
-#define str_copy(6322,
-set_file_encoding(6410,
-parser_prepare(6453,
-#define IS_ARG(6477,
-#define IS_BEG(6478,
-parser_yylex(6481,
-yylex(7770,
-node_newnode(7797,
-nodetype(7805,
-nodeline(7811,
-newline_node(7817,
-fixpos(7827,
-parser_warning(7836,
-#define parser_warning(7840,
-parser_warn(7843,
-#define parser_warn(7847,
-block_append_gen(7850,
-list_append_gen(7904,
-list_concat_gen(7924,
-literal_concat0(7948,
-literal_concat_gen(7964,
-evstr2dstr_gen(8019,
-new_evstr_gen(8028,
-call_bin_op_gen(8042,
-call_uni_op_gen(8050,
-match_op_gen(8057,
-gettable_gen(8091,
-assignable_gen(8153,
-shadowing_lvar_gen(8227,
-new_bv_gen(8250,
-aryset_gen(8263,
-block_dup_check_gen(8271,
-rb_id_attrset(8279,
-attrset_gen(8287,
-rb_backref_error_gen(8295,
-arg_concat_gen(8308,
-arg_append_gen(8330,
-splat_array(8348,
-node_assign_gen(8356,
-value_expr_gen(8387,
-void_expr_gen(8449,
-void_stmts_gen(8538,
-remove_begin(8552,
-reduce_nodes_gen(8562,
-#define subnodes(8570,
-#undef subnodes8611,
-assign_in_cond(8615,
-warn_unless_e_option(8654,
-warning_unless_e_option(8660,
-fixup_nodes(8666,
-range_op(8697,
-literal_node(8713,
-cond0(8734,
-cond_gen(8791,
-logop_gen(8798,
-no_blockarg(8813,
-ret_args_gen(8821,
-new_yield_gen(8838,
-negate_lit(8855,
-arg_blk_pass(8874,
-new_args_gen(8884,
-local_push_gen(8909,
-local_pop_gen(8921,
-vtable_tblcpy(8931,
-local_tbl_gen(8946,
-arg_var_gen(8960,
-local_var_gen(8967,
-local_id_gen(8974,
-dyna_push_gen(8996,
-dyna_pop_gen(9003,
-dyna_in_block_gen(9016,
-dvar_defined_gen(9022,
-dvar_curr_gen(9048,
-reg_fragment_setenc_gen(9058,
-reg_fragment_check_gen(9097,
-} reg_named_capture_assign_t;9115,
-reg_named_capture_assign_iter(9118,
-reg_named_capture_assign_gen(9157,
-reg_compile_gen(9189,
-rb_gc_mark_parser(9213,
-rb_parser_append_print(9218,
-rb_parser_while_loop(9250,
-} op_tbl[op_tbl9293,
-#define op_tbl_count 9316,
-static struct symbols 9318,
-} global_symbols 9325,
-static const struct st_hash_type symhash 9327,
-struct ivar2_key 9332,
-ivar2_cmp(9338,
-ivar2_hash(9347,
-static const struct st_hash_type ivar2_hash_type 9352,
-Init_sym(9358,
-rb_gc_mark_symbols(9369,
-internal_id_gen(9377,
-is_special_global_name(9385,
-rb_symname_p(9416,
-rb_enc_symname_p(9422,
-rb_enc_symname2_p(9428,
-register_symid(9511,
-rb_intern3(9521,
-rb_intern2(9636,
-#undef rb_intern9641,
-rb_intern(9643,
-rb_intern_str(9649,
-rb_id2str(9666,
-rb_id2name(9727,
-symbols_i(9736,
-rb_sym_all_symbols(9759,
-rb_is_const_id(9768,
-rb_is_class_id(9775,
-rb_is_instance_id(9782,
-rb_is_local_id(9789,
-rb_is_junk_id(9796,
-parser_initialize(9805,
-#define parser_mark 9852,
-#define parser_free 9853,
-parser_mark(9857,
-parser_free(9883,
-parser_new(9907,
-rb_parser_new(9918,
-rb_parser_end_seen_p(9933,
-rb_parser_encoding(9948,
-rb_parser_get_yydebug(9963,
-rb_parser_set_yydebug(9978,
-#define HEAPCNT(9988,
-#define NEWHEAP(9989,
-#define ADD2HEAP(9990,
-rb_parser_malloc(9994,
-rb_parser_calloc(10004,
-rb_parser_realloc(10014,
-rb_parser_free(10034,
-ripper_validate_object(10057,
-#define validate(10085,
-ripper_dispatch0(10088,
-ripper_dispatch1(10094,
-ripper_dispatch2(10101,
-ripper_dispatch3(10109,
-ripper_dispatch4(10118,
-ripper_dispatch5(10128,
-static const struct kw_assoc 10138,
-} keyword_to_name[keyword_to_name10141,
-keyword_id_to_str(10195,
-#undef ripper_id2sym10206,
-ripper_id2sym(10208,
-ripper_intern(10239,
-ripper_compile_error(10245,
-ripper_warn0(10257,
-ripper_warnI(10263,
-ripper_warnS(10271,
-ripper_warning0(10279,
-ripper_warningS(10285,
-ripper_lex_get_generic(10292,
-ripper_s_allocate(10298,
-#define ripper_initialized_p(10310,
-ripper_initialize(10323,
-struct ripper_args 10356,
-ripper_parse0(10363,
-ripper_ensure(10374,
-ripper_parse(10390,
-ripper_column(10418,
-ripper_lineno(10440,
-ripper_assert_Qundef(10455,
-ripper_value(10466,
-Init_ripper(10473,
+struct infix_ops 105,
+   infix_ops_add(111,
+  infix_ops_add2(121,
+ static ID serch_infix_ops(130,
+#define DVARS_INHERIT 141,
+#define DVARS_TOPSCOPE 142,
+#define DVARS_SPECIAL_P(143,
+#define POINTER_P(144,
+vtable_size(148,
+#define VTBL_DEBUG 158,
+vtable_alloc(161,
+vtable_free(173,
+vtable_add(185,
+vtable_included(200,
+typedef struct token_info 215,
+} token_info;221,
+struct parser_params 233,
+#define UTF8_ENC(304,
+#define STR_NEW(306,
+#define STR_NEW0(307,
+#define STR_NEW2(308,
+#define STR_NEW3(309,
+#define ENC_SINGLE(310,
+#define TOK_INTERN(311,
+#define yyerror(321,
+#define YYLEX_PARAM 323,
+#define lex_strterm	325,
+#define lex_state	326,
+#define pre_lex_state 327,
+#define cond_stack	328,
+#define cmdarg_stack	329,
+#define class_nest	330,
+#define paren_nest	331,
+#define lpar_beg	332,
+#define in_single	333,
+#define in_def	334,
+#define compile_for_eval	335,
+#define cur_mid	336,
+#define in_defined	337,
+#define tokenbuf	338,
+#define tokidx	339,
+#define toksiz	340,
+#define lex_input	341,
+#define lex_lastline	342,
+#define lex_nextline	343,
+#define lex_pbeg	344,
+#define lex_p	345,
+#define lex_pend	346,
+#define heredoc_end	347,
+#define command_start	348,
+#define deferred_nodes	349,
+#define lex_gets_ptr	350,
+#define lex_gets	351,
+#define lvtbl	352,
+#define ruby__end__seen	353,
+#define ruby_sourceline	354,
+#define ruby_sourcefile	355,
+#define yydebug	356,
+#define ruby_eval_tree	359,
+#define ruby_eval_tree_begin	360,
+#define ruby_debug_lines	361,
+#define ruby_coverage	362,
+#define infix_add_table 364,
+#define top_infix_table 365,
+#define yyparse 370,
+#define rb_node_newnode(373,
+#define cond(376,
+#define logop(378,
+#define value_expr(386,
+#define void_expr0(387,
+#define void_expr(388,
+#define void_stmts(390,
+#define reduce_nodes(392,
+#define block_dup_check(394,
+#define block_append(397,
+#define list_append(399,
+#define list_concat(401,
+#define arg_append(403,
+#define arg_concat(405,
+#define literal_concat(407,
+#define new_evstr(409,
+#define evstr2dstr(411,
+#define call_bin_op(415,
+#define call_uni_op(417,
+#define new_args(420,
+#define shadowing_lvar(422,
+#define ret_args(426,
+#define new_yield(429,
+#define gettable(432,
+#define assignable(434,
+#define new_bv(436,
+#define aryset(438,
+#define attrset(440,
+#define rb_backref_error(443,
+#define node_assign(445,
+#define match_op(448,
+#define local_push(451,
+#define local_pop(453,
+#define local_var(455,
+#define arg_var(457,
+#define local_id(459,
+#define local_tbl(461,
+#define internal_id(463,
+#define dyna_push(466,
+#define dyna_pop(468,
+#define dyna_in_block(470,
+#define dyna_var(471,
+#define dvar_defined(473,
+#define dvar_curr(475,
+#define reg_compile(485,
+#define reg_fragment_setenc(487,
+#define reg_fragment_check(489,
+#define reg_named_capture_assign(491,
+#define remove_begin(494,
+#define lvar_defined(497,
+#define RE_OPTION_ONCE 499,
+#define RE_OPTION_ENCODING_SHIFT 500,
+#define RE_OPTION_ENCODING(501,
+#define RE_OPTION_ENCODING_IDX(502,
+#define RE_OPTION_ENCODING_NONE(503,
+#define RE_OPTION_MASK 504,
+#define RE_OPTION_ARG_ENCODING_NONE 505,
+#define NODE_STRTERM 507,
+#define NODE_HEREDOC 508,
+#define SIGN_EXTEND(509,
+#define nd_func 510,
+#define nd_term(512,
+#define nd_term(514,
+#define nd_paren(516,
+#define nd_nest 517,
+int patern_match_set=518,
+#define RIPPER_VERSION 523,
+static ID ripper_id_gets;527,
+#define dispatch0(536,
+#define dispatch1(537,
+#define dispatch2(538,
+#define dispatch3(539,
+#define dispatch4(540,
+#define dispatch5(541,
+#define yyparse 543,
+#define ripper_id2sym(548,
+#define arg_new(552,
+#define arg_add(553,
+#define arg_prepend(554,
+#define arg_add_star(555,
+#define arg_add_block(556,
+#define arg_add_optblock(557,
+#define bare_assoc(558,
+#define arg_add_assocs(559,
+#define args2mrhs(561,
+#define mrhs_new(562,
+#define mrhs_add(563,
+#define mrhs_add_star(564,
+#define mlhs_new(566,
+#define mlhs_add(567,
+#define mlhs_add_star(568,
+#define params_new(570,
+#define blockvar_new(573,
+#define blockvar_add_star(574,
+#define blockvar_add_block(575,
+#define method_optarg(577,
+#define method_arg(578,
+#define method_add_block(579,
+#define escape_Qundef(581,
+#define FIXME 583,
+# define ifndef_ripper(588,
+# define ifndef_ripper(590,
+# define rb_warn0(594,
+# define rb_warnI(595,
+# define rb_warnS(596,
+# define rb_warning0(597,
+# define rb_warningS(598,
+# define rb_warn0(600,
+# define rb_warnI(601,
+# define rb_warnS(602,
+# define rb_warning0(603,
+# define rb_warningS(604,
+# define rb_compile_error 616,
+# define compile_error 617,
+# define PARSER_ARG 618,
+# define compile_error 620,
+# define PARSER_ARG 621,
+#define YYMAXDEPTH 629,
+# define YYDEBUG 641,
+# undef YYERROR_VERBOSE646,
+# define YYERROR_VERBOSE 647,
+# define YYERROR_VERBOSE 649,
+# define YYTOKEN_TABLE 654,
+typedef union YYSTYPE658,
+# undef parser4907,
+# undef yylex4908,
+# undef yylval4909,
+# define yylval 4910,
+# define nextc(4919,
+# define pushback(4920,
+# define newtok(4921,
+# define tokspace(4922,
+# define tokadd(4923,
+# define tok_hex(4924,
+# define read_escape(4925,
+# define tokadd_escape(4926,
+# define regx_options(4927,
+# define tokadd_string(4928,
+# define parse_string(4929,
+# define tokaddmbc(4930,
+# define here_document(4931,
+# define heredoc_identifier(4932,
+# define heredoc_restore(4933,
+# define whole_match_p(4934,
+# define local_id(4938,
+# define dyna_in_block(4939,
+# define set_yylval_str(4943,
+# define set_yylval_num(4944,
+# define set_yylval_id(4945,
+# define set_yylval_literal(4946,
+# define set_yylval_node(4947,
+# define yylval_id(4948,
+# define set_yylval_str(4950,
+# define set_yylval_num(4951,
+# define set_yylval_id(4952,
+# define set_yylval_literal(4953,
+# define set_yylval_node(4954,
+# define yylval_id(4955,
+#define ripper_flush(4959,
+ripper_dispatch_scan_event(4962,
+ripper_dispatch_delayed_token(4974,
+#undef SIGN_EXTEND_CHAR4995,
+# define SIGN_EXTEND_CHAR(4997,
+# define SIGN_EXTEND_CHAR(5000,
+#define parser_encoding_name(5003,
+#define parser_mbclen(5004,
+#define parser_precise_mbclen(5005,
+#define is_identchar(5006,
+#define parser_is_identchar(5007,
+#define parser_isascii(5009,
+token_info_get_column(5013,
+token_info_has_nonspaces(5027,
+token_info_push(5039,
+token_info_pop(5055,
+parser_yyerror(5082,
+debug_lines(5148,
+coverage(5163,
+e_option_supplied(5181,
+yycompile0(5189,
+yycompile(5242,
+lex_get_str(5251,
+lex_getline(5270,
+rb_compile_string(5286,
+rb_parser_compile_string(5294,
+rb_compile_cstr(5314,
+rb_parser_compile_cstr(5320,
+lex_io_gets(5326,
+rb_compile_file(5332,
+rb_parser_compile_file(5340,
+#define STR_FUNC_ESCAPE 5359,
+#define STR_FUNC_EXPAND 5360,
+#define STR_FUNC_REGEXP 5361,
+#define STR_FUNC_QWORDS 5362,
+#define STR_FUNC_SYMBOL 5363,
+#define STR_FUNC_INDENT 5364,
+enum string_type 5366,
+    str_squote 5367,
+    str_dquote 5368,
+    str_dquote = (STR_FUNC_EXPAND)5368,
+    str_xquote 5369,
+    str_xquote = (STR_FUNC_EXPAND)5369,
+    str_regexp 5370,
+    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_REGEXP5370,
+    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_ESCAPE|STR_FUNC_ESCAPE5370,
+    str_regexp = (STR_FUNC_REGEXP|STR_FUNC_ESCAPE|STR_FUNC_EXPAND)STR_FUNC_EXPAND5370,
+    str_sword 5371,
+    str_sword  = (STR_FUNC_QWORDS)5371,
+    str_dword 5372,
+    str_dword  = (STR_FUNC_QWORDS|STR_FUNC_QWORDS5372,
+    str_dword  = (STR_FUNC_QWORDS|STR_FUNC_EXPAND)STR_FUNC_EXPAND5372,
+    str_ssym 5373,
+    str_ssym   = (STR_FUNC_SYMBOL)5373,
+    str_dsym 5374,
+    str_dsym   = (STR_FUNC_SYMBOL|STR_FUNC_SYMBOL5374,
+    str_dsym   = (STR_FUNC_SYMBOL|STR_FUNC_EXPAND)STR_FUNC_EXPAND5374,
+parser_str_new(5378,
+#define lex_goto_eol(5394,
+#define peek(5395,
+parser_nextc(5398,
+parser_pushback(5455,
+#define was_bol(5464,
+#define tokfix(5466,
+#define tok(5467,
+#define toklen(5468,
+#define toklast(5469,
+parser_newtok(5472,
+parser_tokspace(5487,
+parser_tokadd(5499,
+parser_tok_hex(5509,
+#define tokcopy(5522,
+parser_tokadd_utf8(5525,
+#define ESCAPE_CONTROL 5606,
+#define ESCAPE_META 5607,
+parser_read_escape(5610,
+parser_tokaddmbc(5705,
+parser_tokadd_escape(5712,
+parser_regx_options(5794,
+dispose_string(5823,
+parser_tokadd_mbchar(5832,
+#define tokadd_mbchar(5845,
+parser_tokadd_string(5848,
+#define mixed_error(5858,
+#define mixed_escape(5868,
+#define NEW_STRTERM(5974,
+parser_parse_string(5978,
+parser_heredoc_identifier(6039,
+parser_heredoc_restore(6103,
+parser_whole_match_p(6128,
+parser_here_document(6144,
+arg_ambiguous_gen(6236,
+arg_ambiguous_gen(6242,
+#define arg_ambiguous(6247,
+lvar_defined_gen(6250,
+parser_encode_length(6261,
+parser_set_encode(6279,
+comment_at_top(6305,
+typedef int (*rb_magic_comment_length_t)rb_magic_comment_length_t6317,
+typedef void (*rb_magic_comment_setter_t)rb_magic_comment_setter_t6318,
+magic_comment_encoding(6321,
+struct magic_comment 6331,
+static const struct magic_comment magic_comments[magic_comments6337,
+magic_comment_marker(6344,
+parser_magic_comment(6377,
+#define str_copy(6381,
+set_file_encoding(6469,
+parser_prepare(6512,
+#define IS_ARG(6536,
+#define IS_BEG(6537,
+parser_yylex(6540,
+yylex(7858,
+node_newnode(7885,
+nodetype(7893,
+nodeline(7899,
+newline_node(7905,
+fixpos(7915,
+parser_warning(7924,
+#define parser_warning(7928,
+parser_warn(7931,
+#define parser_warn(7935,
+block_append_gen(7938,
+list_append_gen(7992,
+list_concat_gen(8012,
+literal_concat0(8036,
+literal_concat_gen(8052,
+evstr2dstr_gen(8107,
+new_evstr_gen(8116,
+call_bin_op_gen(8130,
+call_uni_op_gen(8138,
+match_op_gen(8145,
+gettable_gen(8179,
+assignable_gen(8240,
+shadowing_lvar_gen(8314,
+new_bv_gen(8337,
+aryset_gen(8350,
+block_dup_check_gen(8358,
+rb_id_attrset(8366,
+attrset_gen(8374,
+rb_backref_error_gen(8382,
+arg_concat_gen(8395,
+arg_append_gen(8418,
+splat_array(8436,
+node_assign_gen(8444,
+value_expr_gen(8475,
+void_expr_gen(8537,
+void_stmts_gen(8626,
+remove_begin(8640,
+reduce_nodes_gen(8650,
+#define subnodes(8658,
+#undef subnodes8699,
+assign_in_cond(8703,
+warn_unless_e_option(8742,
+warning_unless_e_option(8748,
+fixup_nodes(8754,
+range_op(8785,
+literal_node(8801,
+cond0(8822,
+cond_gen(8879,
+logop_gen(8886,
+no_blockarg(8901,
+ret_args_gen(8909,
+new_yield_gen(8926,
+negate_lit(8943,
+arg_blk_pass(8962,
+new_args_gen(8972,
+local_push_gen(8997,
+local_pop_gen(9009,
+vtable_tblcpy(9019,
+local_tbl_gen(9034,
+arg_var_gen(9048,
+local_var_gen(9055,
+local_id_gen(9062,
+dyna_push_gen(9084,
+dyna_pop_gen(9091,
+dyna_in_block_gen(9104,
+dvar_defined_gen(9110,
+dvar_curr_gen(9136,
+reg_fragment_setenc_gen(9146,
+reg_fragment_check_gen(9185,
+} reg_named_capture_assign_t;9203,
+reg_named_capture_assign_iter(9206,
+reg_named_capture_assign_gen(9245,
+reg_compile_gen(9277,
+rb_gc_mark_parser(9301,
+rb_parser_append_print(9306,
+rb_parser_while_loop(9338,
+} op_tbl[op_tbl9381,
+#define op_tbl_count 9404,
+static struct symbols 9406,
+} global_symbols 9413,
+static const struct st_hash_type symhash 9415,
+struct ivar2_key 9420,
+ivar2_cmp(9426,
+ivar2_hash(9435,
+static const struct st_hash_type ivar2_hash_type 9440,
+Init_sym(9446,
+rb_gc_mark_symbols(9457,
+internal_id_gen(9465,
+is_special_global_name(9473,
+rb_symname_p(9504,
+rb_enc_symname_p(9510,
+rb_enc_symname2_p(9516,
+register_symid(9599,
+rb_intern3(9609,
+rb_intern2(9724,
+#undef rb_intern9729,
+rb_intern(9731,
+rb_intern_str(9737,
+rb_id2str(9754,
+rb_id2name(9815,
+symbols_i(9824,
+rb_sym_all_symbols(9847,
+rb_is_const_id(9856,
+rb_is_class_id(9863,
+rb_is_instance_id(9870,
+rb_is_local_id(9877,
+rb_is_junk_id(9884,
+parser_initialize(9893,
+#define parser_mark 9943,
+#define parser_free 9944,
+parser_mark(9948,
+parser_free(9974,
+parser_new(9998,
+rb_parser_new(10009,
+rb_parser_end_seen_p(10024,
+rb_parser_encoding(10039,
+rb_parser_get_yydebug(10054,
+rb_parser_set_yydebug(10069,
+#define HEAPCNT(10079,
+#define NEWHEAP(10080,
+#define ADD2HEAP(10081,
+rb_parser_malloc(10085,
+rb_parser_calloc(10095,
+rb_parser_realloc(10105,
+rb_parser_free(10125,
+ripper_validate_object(10148,
+#define validate(10176,
+ripper_dispatch0(10179,
+ripper_dispatch1(10185,
+ripper_dispatch2(10192,
+ripper_dispatch3(10200,
+ripper_dispatch4(10209,
+ripper_dispatch5(10219,
+static const struct kw_assoc 10229,
+} keyword_to_name[keyword_to_name10232,
+keyword_id_to_str(10288,
+#undef ripper_id2sym10299,
+ripper_id2sym(10301,
+ripper_intern(10332,
+ripper_compile_error(10338,
+ripper_warn0(10350,
+ripper_warnI(10356,
+ripper_warnS(10364,
+ripper_warning0(10372,
+ripper_warningS(10378,
+ripper_lex_get_generic(10385,
+ripper_s_allocate(10391,
+#define ripper_initialized_p(10403,
+ripper_initialize(10416,
+struct ripper_args 10449,
+ripper_parse0(10456,
+ripper_ensure(10467,
+ripper_parse(10483,
+ripper_column(10511,
+ripper_lineno(10533,
+ripper_assert_Qundef(10548,
+ripper_value(10559,
+Init_ripper(10566,
 
 transdb.h,0
 
