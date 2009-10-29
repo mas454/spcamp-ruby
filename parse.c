@@ -110,7 +110,7 @@
      modifier_until = 299,
      modifier_rescue = 300,
      keyword_alias = 301,
-     keyword_ialias = 302,
+     keyword_operator = 302,
      keyword_defined = 303,
      keyword_BEGIN = 304,
      keyword_END = 305,
@@ -235,7 +235,7 @@
 #define modifier_until 299
 #define modifier_rescue 300
 #define keyword_alias 301
-#define keyword_ialias 302
+#define keyword_operator 302
 #define keyword_defined 303
 #define keyword_BEGIN 304
 #define keyword_END 305
@@ -1589,7 +1589,7 @@ static const char *const yytname[] =
   "keyword_yield", "keyword_super", "keyword_self", "keyword_nil",
   "keyword_true", "keyword_false", "keyword_and", "keyword_or",
   "keyword_not", "modifier_if", "modifier_unless", "modifier_while",
-  "modifier_until", "modifier_rescue", "keyword_alias", "keyword_ialias",
+  "modifier_until", "modifier_rescue", "keyword_alias", "keyword_operator",
   "keyword_defined", "keyword_BEGIN", "keyword_END", "keyword__LINE__",
   "keyword__FILE__", "keyword__ENCODING__", "tIDENTIFIER", "tFID", "tGVAR",
   "tIVAR", "tCONSTANT", "tCVAR", "tLABEL", "tINTEGER", "tFLOAT",
@@ -13148,7 +13148,7 @@ parser_yylex(struct parser_params *parser)
 		    return '%';
 		  /*
 		   case '>':
-                    return '&';
+                    return '>';
                       .
                       .
                       .		       
@@ -15675,14 +15675,13 @@ static const struct kw_assoc {
     {modifier_until,	"until"},
     {modifier_rescue,	"rescue"},
     {keyword_alias,	"alias"},
-    {keyword_ialias,	"ialias"},
+    {keyword_operator,	"operator"},
     {keyword_defined,	"defined?"},
     {keyword_BEGIN,	"BEGIN"},
     {keyword_END,	"END"},
     {keyword__LINE__,	"__LINE__"},
     {keyword__FILE__,	"__FILE__"},
     {keyword__ENCODING__, "__ENCODING__"},
-    //{keyword_ialias,	"ialias"},
     {0, NULL}
 };
 

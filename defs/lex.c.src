@@ -12,7 +12,7 @@ __FILE__, {keyword__FILE__, keyword__FILE__}, EXPR_END
 BEGIN, {keyword_BEGIN, keyword_BEGIN}, EXPR_END
 END, {keyword_END, keyword_END}, EXPR_END
 alias, {keyword_alias, keyword_alias}, EXPR_FNAME
-ialias,{keyword_ialias, keyword_ialias}, EXPR_FNAME
+operator,{keyword_operator, keyword_operator}, EXPR_FNAME
 and, {keyword_and, keyword_and}, EXPR_VALUE
 begin, {keyword_begin, keyword_begin}, EXPR_BEG
 break, {keyword_break, keyword_break}, EXPR_MID

@@ -63,13 +63,13 @@ hash (str, len)
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
-      49, 49, 49, 21, 49, 49, 14, 49, 17,  9,
+      49, 49, 49, 35, 49, 49, 14, 49, 17,  9,
       12, 14, 49, 49, 49, 49, 11, 49, 14, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
-      49, 49, 49, 49, 49, 12, 49,  4,  2, 26,
-      15,  1,  4, 34,  9, 25, 49,  1,  1, 18,
-       1,  1, 16, 49,  5,  4,  9,  9, 49,  1,
-       5,  8, 49, 49, 49, 49, 49, 49, 49, 49,
+      49, 49, 49, 49, 49, 12, 49,  5, 17, 23,
+       1,  1,  4, 12,  1, 17, 49, 16,  4, 29,
+       7, 19, 17, 49, 12,  1,  7,  5, 49, 15,
+      12,  1, 49, 49, 49, 49, 49, 49, 49, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
       49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
@@ -113,80 +113,80 @@ rb_reserved_word (str, len)
   static const struct kwtable wordlist[] =
     {
       {""}, {""}, {""}, {""}, {""}, {""},
-#line 35 "defs/keywords"
-      {"nil", {keyword_nil, keyword_nil}, EXPR_END},
-#line 49 "defs/keywords"
-      {"when", {keyword_when, keyword_when}, EXPR_VALUE},
-#line 37 "defs/keywords"
-      {"or", {keyword_or, keyword_or}, EXPR_VALUE},
-#line 18 "defs/keywords"
-      {"break", {keyword_break, keyword_break}, EXPR_MID},
+#line 27 "defs/keywords"
+      {"end", {keyword_end, keyword_end}, EXPR_END},
 #line 25 "defs/keywords"
       {"else", {keyword_else, keyword_else}, EXPR_BEG},
-#line 29 "defs/keywords"
-      {"false", {keyword_false, keyword_false}, EXPR_END},
+#line 51 "defs/keywords"
+      {"yield", {keyword_yield, keyword_yield}, EXPR_ARG},
 #line 28 "defs/keywords"
       {"ensure", {keyword_ensure, keyword_ensure}, EXPR_BEG},
-#line 42 "defs/keywords"
-      {"self", {keyword_self, keyword_self}, EXPR_END},
+#line 16 "defs/keywords"
+      {"and", {keyword_and, keyword_and}, EXPR_VALUE},
 #line 26 "defs/keywords"
       {"elsif", {keyword_elsif, keyword_elsif}, EXPR_VALUE},
+#line 22 "defs/keywords"
+      {"def", {keyword_def, keyword_def}, EXPR_FNAME},
+#line 42 "defs/keywords"
+      {"self", {keyword_self, keyword_self}, EXPR_END},
+#line 29 "defs/keywords"
+      {"false", {keyword_false, keyword_false}, EXPR_END},
+#line 46 "defs/keywords"
+      {"undef", {keyword_undef, keyword_undef}, EXPR_FNAME},
+#line 47 "defs/keywords"
+      {"unless", {keyword_unless, modifier_unless}, EXPR_VALUE},
+#line 45 "defs/keywords"
+      {"true", {keyword_true, keyword_true}, EXPR_END},
+#line 35 "defs/keywords"
+      {"nil", {keyword_nil, keyword_nil}, EXPR_END},
 #line 44 "defs/keywords"
       {"then", {keyword_then, keyword_then}, EXPR_BEG},
 #line 39 "defs/keywords"
       {"rescue", {keyword_rescue, modifier_rescue}, EXPR_MID},
-#line 30 "defs/keywords"
-      {"for", {keyword_for, keyword_for}, EXPR_VALUE},
-#line 24 "defs/keywords"
-      {"do", {keyword_do, keyword_do}, EXPR_BEG},
-#line 34 "defs/keywords"
-      {"next", {keyword_next, keyword_next}, EXPR_MID},
-#line 47 "defs/keywords"
-      {"unless", {keyword_unless, modifier_unless}, EXPR_VALUE},
-#line 41 "defs/keywords"
-      {"return", {keyword_return, keyword_return}, EXPR_MID},
-#line 36 "defs/keywords"
-      {"not", {keyword_not, keyword_not}, EXPR_ARG},
-#line 45 "defs/keywords"
-      {"true", {keyword_true, keyword_true}, EXPR_END},
 #line 48 "defs/keywords"
       {"until", {keyword_until, modifier_until}, EXPR_VALUE},
-#line 38 "defs/keywords"
-      {"redo", {keyword_redo, keyword_redo}, EXPR_END},
-#line 22 "defs/keywords"
-      {"def", {keyword_def, keyword_def}, EXPR_FNAME},
+#line 24 "defs/keywords"
+      {"do", {keyword_do, keyword_do}, EXPR_BEG},
+#line 31 "defs/keywords"
+      {"if", {keyword_if, modifier_if}, EXPR_VALUE},
+#line 36 "defs/keywords"
+      {"not", {keyword_not, keyword_not}, EXPR_ARG},
 #line 40 "defs/keywords"
       {"retry", {keyword_retry, keyword_retry}, EXPR_END},
 #line 32 "defs/keywords"
       {"in", {keyword_in, keyword_in}, EXPR_VALUE},
-#line 51 "defs/keywords"
-      {"yield", {keyword_yield, keyword_yield}, EXPR_ARG},
-#line 43 "defs/keywords"
-      {"super", {keyword_super, keyword_super}, EXPR_ARG},
-#line 31 "defs/keywords"
-      {"if", {keyword_if, modifier_if}, EXPR_VALUE},
-#line 50 "defs/keywords"
-      {"while", {keyword_while, modifier_while}, EXPR_VALUE},
-#line 46 "defs/keywords"
-      {"undef", {keyword_undef, keyword_undef}, EXPR_FNAME},
-#line 27 "defs/keywords"
-      {"end", {keyword_end, keyword_end}, EXPR_END},
-#line 19 "defs/keywords"
-      {"case", {keyword_case, keyword_case}, EXPR_VALUE},
-#line 15 "defs/keywords"
-      {"ialias",{keyword_ialias, keyword_ialias}, EXPR_FNAME},
-#line 16 "defs/keywords"
-      {"and", {keyword_and, keyword_and}, EXPR_VALUE},
+#line 49 "defs/keywords"
+      {"when", {keyword_when, keyword_when}, EXPR_VALUE},
 #line 14 "defs/keywords"
       {"alias", {keyword_alias, keyword_alias}, EXPR_FNAME},
+#line 19 "defs/keywords"
+      {"case", {keyword_case, keyword_case}, EXPR_VALUE},
+#line 34 "defs/keywords"
+      {"next", {keyword_next, keyword_next}, EXPR_MID},
+#line 30 "defs/keywords"
+      {"for", {keyword_for, keyword_for}, EXPR_VALUE},
+#line 41 "defs/keywords"
+      {"return", {keyword_return, keyword_return}, EXPR_MID},
+#line 37 "defs/keywords"
+      {"or", {keyword_or, keyword_or}, EXPR_VALUE},
 #line 21 "defs/keywords"
       {"class", {keyword_class, keyword_class}, EXPR_CLASS},
+#line 43 "defs/keywords"
+      {"super", {keyword_super, keyword_super}, EXPR_ARG},
+#line 38 "defs/keywords"
+      {"redo", {keyword_redo, keyword_redo}, EXPR_END},
 #line 33 "defs/keywords"
       {"module", {keyword_module, keyword_module}, EXPR_VALUE},
-#line 20 "defs/keywords"
-      {"match", {keyword_patern, keyword_patern}, EXPR_VALUE},
+#line 50 "defs/keywords"
+      {"while", {keyword_while, modifier_while}, EXPR_VALUE},
+#line 18 "defs/keywords"
+      {"break", {keyword_break, keyword_break}, EXPR_MID},
+#line 15 "defs/keywords"
+      {"operator",{keyword_operator, keyword_operator}, EXPR_FNAME},
 #line 17 "defs/keywords"
       {"begin", {keyword_begin, keyword_begin}, EXPR_BEG},
+#line 20 "defs/keywords"
+      {"match", {keyword_patern, keyword_patern}, EXPR_VALUE},
 #line 10 "defs/keywords"
       {"__LINE__", {keyword__LINE__, keyword__LINE__}, EXPR_END},
 #line 11 "defs/keywords"

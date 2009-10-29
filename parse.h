@@ -83,7 +83,7 @@
      modifier_until = 299,
      modifier_rescue = 300,
      keyword_alias = 301,
-     keyword_ialias = 302,
+     keyword_operator = 302,
      keyword_defined = 303,
      keyword_BEGIN = 304,
      keyword_END = 305,
@@ -208,7 +208,7 @@
 #define modifier_until 299
 #define modifier_rescue 300
 #define keyword_alias 301
-#define keyword_ialias 302
+#define keyword_operator 302
 #define keyword_defined 303
 #define keyword_BEGIN 304
 #define keyword_END 305

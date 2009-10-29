@@ -693,7 +693,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 	modifier_until
 	modifier_rescue
 	keyword_alias
-        keyword_ialias
+        keyword_operator
         keyword_defined
 	keyword_BEGIN
 	keyword_END
@@ -1018,13 +1018,13 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
 			$$ = dispatch1(alias_error, $$);
 		    %*/
 		    }
-                | keyword_ialias fname
+                | keyword_operator fname
                        {
 			 
 			 infix_add_table = infix_ops_add(infix_add_table, $2);
 			 $$ = NEW_BEGIN(0);
 		       }
-                | keyword_ialias fname fname
+                | keyword_operator fname fname
                        {
 			 infix_add_table = infix_ops_add2(infix_add_table, $2, $3);
 			 $$ = NEW_BEGIN(0);
@@ -1899,7 +1899,7 @@ op		: '|'		{ ifndef_ripper($$ = '|'); }
 
 reswords	: keyword__LINE__ | keyword__FILE__ | keyword__ENCODING__
 		| keyword_BEGIN | keyword_END
-		| keyword_alias | keyword_ialias | keyword_and | keyword_begin
+		| keyword_alias | keyword_operator | keyword_and | keyword_begin
 		| keyword_break | keyword_case| keyword_patern | keyword_class 
                 | keyword_def
 		| keyword_defined | keyword_do | keyword_else | keyword_elsif
@@ -10269,14 +10269,13 @@ static const struct kw_assoc {
     {modifier_until,	"until"},
     {modifier_rescue,	"rescue"},
     {keyword_alias,	"alias"},
-    {keyword_ialias,	"ialias"},
+    {keyword_operator,	"operator"},
     {keyword_defined,	"defined?"},
     {keyword_BEGIN,	"BEGIN"},
     {keyword_END,	"END"},
     {keyword__LINE__,	"__LINE__"},
     {keyword__FILE__,	"__FILE__"},
     {keyword__ENCODING__, "__ENCODING__"},
-    //{keyword_ialias,	"ialias"},
     {0, NULL}
 };
 

@@ -128,8 +128,6 @@ static struct infix_ops *
    return next;
  }
  static ID serch_infix_ops(struct infix_ops *n, ID id){
-   //struct infix_ops *n; 
-   //n = parser->top_infix_op_table;
    while(n != 0){
      if(n->key == id){
        return n->data;
@@ -714,7 +712,7 @@ static void token_info_pop(struct parser_params*, const char *token);
 %type <node> words qwords word_list qword_list word
 %type <node> literal numeric dsym cpath
 %type <node> top_compstmt top_stmts top_stmt
-%type <node> bodystmt compstmt stmts stmt expr parg  arg testarg mprimary primary command command_call method_call
+%type <node> bodystmt compstmt stmts stmt expr parg  arg  mprimary primary command command_call method_call //testarg
 %type <node> expr_value parg_value arg_value primary_value
 %type <node> if_tail opt_else patern_body matches case_body cases opt_rescue exc_list exc_var opt_ensure k_patern_when
 %type <node> args call_args opt_call_args patern_args
@@ -1024,9 +1022,7 @@ stmt		: keyword_alias fitem {lex_state = EXPR_FNAME;} fitem
                        {
 			 
 			 infix_add_table = infix_ops_add(infix_add_table, $2);
-			 //printf("id: %s\n", rb_id2name($2));
-			 $$ = NEW_LIT(ID2SYM($2));
-			 //$$ = NEW_BEGIN(0);
+			 $$ = NEW_BEGIN(0);
 		       }
                 | keyword_ialias fname fname
                        {
@@ -1920,13 +1916,13 @@ parg            : mprimary
 			$$ = $1;
 		    }
 		;
-testarg        : arg
+/*testarg        : arg
                    {
 		     pre_lex_state = lex_state;
 		     lex_state = EXPR_INFIX;
 		     $$ = $1;
 		   }
-               ; 
+		   ; */
 arg		: lhs '=' arg
 		    {
 		    /*%%%*/
@@ -7744,6 +7740,13 @@ parser_yylex(struct parser_params *parser)
 		    return '/';
 		  case '%':
 		    return '%';
+		  /*
+		   case '>':
+                    return '>';
+                      .
+                      .
+                      .		       
+		  */
 		  default:
 		    set_yylval_id(data);
 		    return tINFIX_OP;
