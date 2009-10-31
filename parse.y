@@ -7724,7 +7724,7 @@ parser_yylex(struct parser_params *parser)
 		result = tFID;
 	    }
 	    else {
-	      if(1){
+	      if(lex_state != EXPR_FNAME && lex_state != EXPR_DOT){
 		ID id = TOK_INTERN(!ENC_SINGLE(mb));
 		ID data = serch_infix_ops(top_infix_table,id);
 		if( data != 0){
