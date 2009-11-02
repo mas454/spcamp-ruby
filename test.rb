@@ -5,7 +5,7 @@ class Fixnum
      self / y
    end
 end
-operator ÷
+operator × *
 
 
-puts 4.÷(2)
+puts (2 + 2) × (1 + 1)

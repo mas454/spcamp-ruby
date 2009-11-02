@@ -66,7 +66,6 @@ enum lex_state_e {
     EXPR_DOT,			/* right after `.' or `::', no reserved words. */
     EXPR_CLASS,			/* immediate after `class', no here document. */
     EXPR_VALUE,		/* alike EXPR_BEG but label is disallowed. */
-    EXPR_INFIX
 };
 
 # ifdef HAVE_LONG_LONG
@@ -7728,6 +7727,7 @@ parser_yylex(struct parser_params *parser)
 		ID id = TOK_INTERN(!ENC_SINGLE(mb));
 		ID data = serch_infix_ops(top_infix_table,id);
 		if( data != 0){
+		  lex_state = EXPR_BEG;
 		  char c = *(rb_id2name(data));
 		  switch(c){
 		  case '+':
@@ -7752,8 +7752,6 @@ parser_yylex(struct parser_params *parser)
 		    return tINFIX_OP;
 		 }
 		  
-		}else{
-		  //lex_state = pre_lex_state;
 		}
 	      } 
 	      if (lex_state == EXPR_FNAME) {
@@ -7839,9 +7837,7 @@ parser_yylex(struct parser_params *parser)
             ID ident = TOK_INTERN(!ENC_SINGLE(mb));
 
             set_yylval_id(ident);
-	    if(lex_state == EXPR_INFIX){
-	     lex_state = EXPR_BEG;
-	    }else if (last_state != EXPR_DOT && is_local_id(ident) && lvar_defined(ident)) {
+	   if (last_state != EXPR_DOT && is_local_id(ident) && lvar_defined(ident)) {
                 lex_state = EXPR_END;
             }
         }
