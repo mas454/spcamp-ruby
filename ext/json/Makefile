@@ -12,30 +12,30 @@ RUBYLIB = -
 RUBYOPT = -r$(top_srcdir)/ext/purelib.rb
 prefix = $(DESTDIR)/usr/local
 exec_prefix = $(prefix)
-vendorhdrdir = $(rubyhdrdir)/vendor_ruby
-sitehdrdir = $(rubyhdrdir)/site_ruby
-rubyhdrdir = $(includedir)/$(RUBY_INSTALL_NAME)-$(ruby_version)
-vendordir = $(libdir)/$(RUBY_INSTALL_NAME)/vendor_ruby
-sitedir = $(libdir)/$(RUBY_INSTALL_NAME)/site_ruby
-mandir = $(datarootdir)/man
-localedir = $(datarootdir)/locale
-libdir = $(exec_prefix)/lib
-psdir = $(docdir)
-pdfdir = $(docdir)
-dvidir = $(docdir)
-htmldir = $(docdir)
-infodir = $(datarootdir)/info
-docdir = $(datarootdir)/doc/$(PACKAGE)
-oldincludedir = $(DESTDIR)/usr/include
-includedir = $(prefix)/include
-localstatedir = $(prefix)/var
-sharedstatedir = $(prefix)/com
-sysconfdir = $(prefix)/etc
-datadir = $(datarootdir)
-datarootdir = $(prefix)/share
-libexecdir = $(exec_prefix)/libexec
-sbindir = $(exec_prefix)/sbin
 bindir = $(exec_prefix)/bin
+sbindir = $(exec_prefix)/sbin
+libexecdir = $(exec_prefix)/libexec
+datarootdir = $(prefix)/share
+datadir = $(datarootdir)
+sysconfdir = $(prefix)/etc
+sharedstatedir = $(prefix)/com
+localstatedir = $(prefix)/var
+includedir = $(prefix)/include
+oldincludedir = $(DESTDIR)/usr/include
+docdir = $(datarootdir)/doc/$(PACKAGE)
+infodir = $(datarootdir)/info
+htmldir = $(docdir)
+dvidir = $(docdir)
+pdfdir = $(docdir)
+psdir = $(docdir)
+libdir = $(exec_prefix)/lib
+localedir = $(datarootdir)/locale
+mandir = $(datarootdir)/man
+sitedir = $(libdir)/$(RUBY_INSTALL_NAME)/site_ruby
+vendordir = $(libdir)/$(RUBY_INSTALL_NAME)/vendor_ruby
+rubyhdrdir = $(includedir)/$(RUBY_INSTALL_NAME)-$(ruby_version)
+sitehdrdir = $(rubyhdrdir)/site_ruby
+vendorhdrdir = $(rubyhdrdir)/vendor_ruby
 rubylibdir = $(libdir)/$(ruby_install_name)/$(ruby_version)
 archdir = $(rubylibdir)/$(arch)
 sitelibdir = $(sitedir)/$(ruby_version)
@@ -147,6 +147,12 @@ install-rb: pre-install-rb install-rb-default
 install-rb-default: pre-install-rb-default
 pre-install-rb: Makefile
 pre-install-rb-default: Makefile
+pre-install-rb-default: $(RUBYLIBDIR)
+install-rb-default: $(RUBYLIBDIR)/json.rb
+$(RUBYLIBDIR)/json.rb: $(srcdir)/lib/json.rb
+	$(COPY) $(srcdir)/lib/json.rb $(@D)
+clean-rb-default::
+	@-$(RM) $(RUBYLIBDIR)/json.rb
 pre-install-rb-default: $(RUBYLIBDIR)/json/add
 install-rb-default: $(RUBYLIBDIR)/json/add/core.rb
 $(RUBYLIBDIR)/json/add/core.rb: $(srcdir)/lib/json/add/core.rb
@@ -179,21 +185,15 @@ $(RUBYLIBDIR)/json/version.rb: $(srcdir)/lib/json/version.rb
 	$(COPY) $(srcdir)/lib/json/version.rb $(@D)
 clean-rb-default::
 	@-$(RM) $(RUBYLIBDIR)/json/version.rb
-pre-install-rb-default: $(RUBYLIBDIR)
-install-rb-default: $(RUBYLIBDIR)/json.rb
-$(RUBYLIBDIR)/json.rb: $(srcdir)/lib/json.rb
-	$(COPY) $(srcdir)/lib/json.rb $(@D)
 clean-rb-default::
-	@-$(RM) $(RUBYLIBDIR)/json.rb
-clean-rb-default::
-	@-$(RMDIRS) $(RUBYLIBDIR)
 	@-$(RMDIRS) $(RUBYLIBDIR)/json
 	@-$(RMDIRS) $(RUBYLIBDIR)/json/add
-$(RUBYLIBDIR):
-	$(MAKEDIRS) $@
+	@-$(RMDIRS) $(RUBYLIBDIR)
 $(RUBYLIBDIR)/json:
 	$(MAKEDIRS) $@
 $(RUBYLIBDIR)/json/add:
+	$(MAKEDIRS) $@
+$(RUBYLIBDIR):
 	$(MAKEDIRS) $@
 
 site-install: site-install-so site-install-rb

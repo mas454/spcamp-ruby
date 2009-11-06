@@ -2327,6 +2327,23 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	      ADD_INSN(ret, line, dup);
               ADD_INSN1(ret, line, putobject, INT2FIX(i));
 	      ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
+	      //ADD_INSN(ret, line, dup);
+
+	      LABEL *lstart = NEW_LABEL(nd_line(node));
+	      LABEL *lend = NEW_LABEL(nd_line(node));	      
+	      ADD_LABEL(ret, lstart);
+	      ADD_INSN2(ret, nd_line(node), getinlinecache, 0, lend);
+	      ADD_INSN1(ret, line, getconstant, ID2SYM(rb_intern("Array")));
+	      ADD_INSN1(ret, nd_line(node), setinlinecache, lstart);
+	      ADD_LABEL(ret, lend);
+	      ADD_SEND(ret, line, ID2SYM(rb_intern("kind_of?")), INT2FIX(1));
+	      ADD_INSNL(ret, line, branchunless, nextl);
+
+	      ADD_INSN(ret, line, dup);
+	      ADD_INSN1(ret, line, putobject, INT2FIX(i));
+	      ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
+	      //ADD_INSN(ret, line, dup);
+
 	      compile_paternmatch(iseq, ret, node->nd_head,nextl,0);
 	      ADD_INSN(ret, line, pop);
 	      break;
@@ -3377,9 +3394,10 @@ iseq_compile_each(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE * node, int poped)
 		rb_bug("NODE_PATERN: must be NODE_ARRAY, but 0");
 	    }
 	    ADD_LABEL(cond_seq, next);
-	    //ADD_LABEL(body_seq, l1);
+	    //ADD_INSN(cond_seq, nd_line(node), pop);
+	   
 	    ADD_LABEL(body_seq, body_label);
-	    //ADD_INSN(body_seq, nd_line(node), pop);
+
 	    paternmatch_setlocal(iseq, body_seq, vals->nd_head);
 	    COMPILE_(body_seq, "when body", node->nd_body, poped);
 	    ADD_INSNL(body_seq, nd_line(node), jump, endlabel);
