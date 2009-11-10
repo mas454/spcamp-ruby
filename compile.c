@@ -2300,7 +2300,7 @@ static int compile_paternmatch_argscat(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* 
     return len;
 }
 static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_root,
-			       LABEL *nextl, LABEL *body_label)
+			       LABEL *nextl, LABEL *body_label,int pops)
 {
   NODE *node = node_root;
     int len = node->nd_alen, line = nd_line(node), i=0;
@@ -2336,6 +2336,7 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	      ADD_INSN1(ret, line, getconstant, ID2SYM(rb_intern("Array")));
 	      ADD_INSN1(ret, nd_line(node), setinlinecache, lstart);
 	      ADD_LABEL(ret, lend);
+
 	      ADD_SEND(ret, line, ID2SYM(rb_intern("kind_of?")), INT2FIX(1));
 	      ADD_INSNL(ret, line, branchunless, nextl);
 
@@ -2344,7 +2345,7 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	      ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
 	      //ADD_INSN(ret, line, dup);
 
-	      compile_paternmatch(iseq, ret, node->nd_head,nextl,0);
+	      compile_paternmatch(iseq, ret, node->nd_head,nextl,0,pops+1);
 	      ADD_INSN(ret, line, pop);
 	      break;
 	     default:
@@ -2353,7 +2354,19 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	       ADD_SEND(ret, line, ID2SYM(idAREF), INT2FIX(1));
 	       COMPILE_(ret, "array element", node->nd_head, 0);
 	       ADD_SEND(ret, line, ID2SYM(idEq), INT2FIX(1));
-	       ADD_INSNL(ret, line, branchunless, nextl);
+	       if(pops == 0){
+		 ADD_INSNL(ret, line, branchunless, nextl); 
+	       }else{
+		LABEL *npopl = NEW_LABEL(nd_line(node));
+		int i;
+		ADD_INSNL(ret,line,branchif, npopl);
+		for(i=0;i<pops;i++){
+		  ADD_INSN(ret, line, pop);
+		}
+		ADD_INSNL(ret, line, jump, nextl);
+		ADD_LABEL(ret, npopl);
+	       }
+	       
 	    }
 	    i++;
 	    node = node->nd_next;
@@ -2592,7 +2605,7 @@ when_vals_patern(rb_iseq_t *iseq, LINK_ANCHOR *cond_seq, NODE *vals, LABEL *next
 
 	if(nd_type(val)== NODE_ARRAY){
 	  //compile_patern_array_(iseq, cond_seq, val, Qtrue, 0);
-	  compile_paternmatch(iseq, cond_seq, val, next, body_label);
+	  compile_paternmatch(iseq, cond_seq, val, next, body_label,0);
 	}else if(nd_type(val)==NODE_ARGSCAT){
 	  compile_paternmatch_argscat(iseq, cond_seq, val, next, body_label);
 	}else{
