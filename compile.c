@@ -2338,7 +2338,19 @@ static int compile_paternmatch(rb_iseq_t *iseq, LINK_ANCHOR *ret, NODE* node_roo
 	      ADD_LABEL(ret, lend);
 
 	      ADD_SEND(ret, line, ID2SYM(rb_intern("kind_of?")), INT2FIX(1));
-	      ADD_INSNL(ret, line, branchunless, nextl);
+	      //ADD_INSNL(ret, line, branchunless, nextl);
+	      if(pops == 0){
+		 ADD_INSNL(ret, line, branchunless, nextl); 
+	      }else{
+		LABEL *npopl = NEW_LABEL(nd_line(node));
+		int i;
+		ADD_INSNL(ret,line,branchif, npopl);
+		for(i=0;i<pops;i++){
+		  ADD_INSN(ret, line, pop);
+		}
+		ADD_INSNL(ret, line, jump, nextl);
+		ADD_LABEL(ret, npopl);
+	      }
 
 	      ADD_INSN(ret, line, dup);
 	      ADD_INSN1(ret, line, putobject, INT2FIX(i));
